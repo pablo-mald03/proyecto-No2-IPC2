@@ -1,0 +1,475 @@
+#Mapeo Fisico de la base de datos CinemaApp
+
+#Autenticacion de usuario en sql
+mysql -u admindba -p 
+
+#Creacion de la base de datos
+
+CREATE DATABASE cinemappdb;
+
+#Acceder hacia la base de datos desde la terminal
+USE cinemappdb;
+
+
+#Tabla para poder gestionar los roles que posee cada usuario en la web
+
+CREATE TABLE rol(
+
+codigo VARCHAR(30) NOT NULL,
+nombre VARCHAR(40) NOT NULL,
+
+CONSTRAINT pk_rol PRIMARY KEY (codigo)
+
+);
+
+#Tabla para poder gestionar los usuarios registrados de la web
+
+CREATE TABLE usuario(
+
+id VARCHAR(150) NOT NULL,
+correo VARCHAR(150) NOT NULL,
+nombre VARCHAR(150) NOT NULL,
+foto LONGBLOB NOT NULL,
+password VARCHAR(200) NOT NULL,
+
+telefono VARCHAR(35) NOT NULL, 
+pais VARCHAR(120) NOT NULL,	
+identificacion VARCHAR(120) NOT NULL, 
+
+codigo_rol VARCHAR(30) NOT NULL, 
+
+
+CONSTRAINT pk_usuario PRIMARY KEY (id),
+
+CONSTRAINT fk_usuario_rol FOREIGN KEY (codigo_rol) REFERENCES rol(codigo)
+
+);
+
+
+
+#Tabla para que cada usuario maneje su propia billitera digital en la web
+
+CREATE TABLE billetera_digital(
+
+id INT NOT NULL AUTO_INCREMENT,
+saldo DECIMAL(10,3) NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+
+CONSTRAINT pk_billetera_digital PRIMARY KEY (id),
+CONSTRAINT fk_billetera_digital_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+
+);
+
+
+#Tabla que sirve para asignarle un tipo al anuncio y gestionar su configuracion
+
+CREATE TABLE configuracion_anuncio(
+
+codigo INT NOT NULL,
+tipo VARCHAR(50) NOT NULL,
+precio DECIMAL(10,3) NOT NULL,
+
+CONSTRAINT pk_configuracion_anuncio PRIMARY KEY (codigo)
+);
+
+
+#Tabla para poder gestionar los anuncios registrados de la web
+
+CREATE TABLE anuncio(
+
+codigo VARCHAR(35) NOT NULL,
+
+estado BOOLEAN NOT NULL,
+
+nombre VARCHAR(150) NOT NULL,
+
+caducacion BOOLEAN NOT NULL,
+
+fecha_expiracion DATETIME NOT NULL,
+
+fecha_compra DATETIME NOT NULL,
+
+url VARCHAR(1500) NULL, 
+texto VARCHAR(600) NULL,	
+foto LONGBLOB NULL, 
+
+codigo_tipo INT NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+
+
+CONSTRAINT pk_anuncio PRIMARY KEY (codigo),
+
+CONSTRAINT fk_anuncio_configuracion_anuncio FOREIGN KEY (codigo_tipo) REFERENCES configuracion_anuncio(codigo),
+
+CONSTRAINT fk_anuncio_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+
+);
+
+
+
+#Tabla que sirve para asignarle una vigencia al anuncio y gestionar los tiempos de vigencias y
+
+CREATE TABLE vigencia_anuncio(
+
+codigo INT NOT NULL,
+contexto VARCHAR(100) NOT NULL,
+precio DECIMAL(10,3) NOT NULL,
+duracion DECIMAL(10,3) NOT NULL,
+
+CONSTRAINT pk_vigencia_anuncio PRIMARY KEY (codigo)
+);
+
+
+
+
+#Tabla para poder gestionar los pagos hacia los anuncios
+
+CREATE TABLE pago_anuncio(
+
+numero INT NOT NULL AUTO_INCREMENT,
+
+monto DECIMAL(10,3) NOT NULL,
+
+fecha_pago DATE NOT NULL,
+
+id_usuario VARCHAR(150) NOT NULL,
+
+
+CONSTRAINT pk_pago_anuncio PRIMARY KEY (numero),
+
+CONSTRAINT fk_pago_anuncio_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+);
+
+
+
+#Tabla para poder gestionar los cines registrados en la web
+
+CREATE TABLE cine(
+
+codigo VARCHAR(35) NOT NULL,
+
+nombre VARCHAR(140) NOT NULL,
+
+estado_anuncios BOOLEAN NOT NULL,
+
+monto_ocultacion DECIMAL(10,3) NOT NULL,
+
+fecha_creacion DATETIME NOT NULL,
+
+descripcion VARCHAR(500) NULL,	
+ubicacion VARCHAR(100) NOT NULL,
+
+CONSTRAINT pk_cine PRIMARY KEY (codigo)
+);
+
+
+#Tabla para que cada cine maneje su propia billitera digital en la web
+
+CREATE TABLE billetera_cine(
+
+id INT NOT NULL AUTO_INCREMENT,
+saldo DECIMAL(10,3) NOT NULL,
+codigo_cine VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_billetera_cine PRIMARY KEY (id),
+CONSTRAINT fk_billetera_cine_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo)
+);
+
+
+
+#Tabla para que cada administrador de cine maneje los cines a los que esta relacionado en la web
+
+CREATE TABLE gestion_cine(
+
+id INT NOT NULL AUTO_INCREMENT,
+
+id_usuario VARCHAR(150) NOT NULL,
+codigo_cine VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_gestion_cine PRIMARY KEY (id),
+
+CONSTRAINT fk_gestion_cine_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo),
+
+CONSTRAINT fk_gestion_cine_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+);
+
+
+
+#Tabla para que cada administrador de cine pueda pagar el monto de ocultacion de anuncios
+
+CREATE TABLE pago_ocultacion_cine(
+
+numero INT NOT NULL AUTO_INCREMENT,
+monto DECIMAL(10,3) NOT NULL,
+fecha_pago DATE NOT NULL,
+codigo_cine VARCHAR(35) NOT NULL,
+
+
+CONSTRAINT pk_pago_ocultacion_cine PRIMARY KEY (numero),
+
+CONSTRAINT fk_pago_ocultacion_cine_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo)
+);
+
+
+
+#Tabla para que cada administrador de sistema configure el costo de cine por dia a partir de una fecha
+
+CREATE TABLE costo_cine(
+
+codigo INT NOT NULL AUTO_INCREMENT,
+
+costo DECIMAL(10,3) NOT NULL,
+fecha_modificacion DATE NOT NULL,
+
+codigo_cine VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_costo_cine PRIMARY KEY (codigo),
+
+CONSTRAINT fk_costo_cine_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo)
+);
+
+
+
+
+#Tabla para poder gestionar las salas de cine registrados en la web
+
+CREATE TABLE sala(
+
+codigo VARCHAR(35) NOT NULL,
+
+nombre VARCHAR(140) NOT NULL,
+
+estado_anuncios BOOLEAN NOT NULL,
+
+filas INT NOT NULL,
+columnas INT NOT NULL,
+
+ubicacion VARCHAR(120) NOT NULL,
+
+bloqueo_comentarios BOOLEAN NOT NULL,
+
+bloqueo_calificacion BOOLEAN NOT NULL,
+
+codigo_cine VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_sala PRIMARY KEY (codigo),
+
+CONSTRAINT fk_sala_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo)
+
+);
+
+
+
+#Tabla para poder gestionar los comentarios en las salas de cine registrados en la web
+
+CREATE TABLE comentario_sala(
+
+codigo INT NOT NULL AUTO_INCREMENT,
+
+contenido VARCHAR(400) NOT NULL,
+
+fecha_posteo DATE NOT NULL,
+
+codigo_sala VARCHAR(35) NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+
+
+CONSTRAINT pk_comentario_sala PRIMARY KEY (codigo),
+
+CONSTRAINT fk_comentario_sala_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo),
+
+CONSTRAINT fk_comentario_sala_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+
+);
+
+
+
+
+#Tabla para poder gestionar la valoracion en las salas de cine registrados en la web
+
+CREATE TABLE valoracion_sala(
+
+codigo INT NOT NULL AUTO_INCREMENT,
+
+calificacion INT NOT NULL,
+
+fecha_posteo DATE NOT NULL,
+
+codigo_sala VARCHAR(35) NOT NULL,
+
+id_usuario VARCHAR(150) NOT NULL,
+
+
+CONSTRAINT pk_valoracion_sala PRIMARY KEY (codigo),
+
+CONSTRAINT fk_valoracion_sala_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo),
+
+CONSTRAINT fk_valoracion_sala_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+
+);
+
+
+
+#Tabla para poder gestionar las peliculas de cine registrados en la web
+
+CREATE TABLE pelicula(
+
+codigo VARCHAR(35) NOT NULL,
+
+poster LONGBLOB NOT NULL,
+
+sinopsis VARCHAR(500) NOT NULL,
+
+cast VARCHAR(400) NOT NULL,
+
+fecha_estreno DATE NOT NULL,
+
+director VARCHAR(200) NOT NULL,
+
+precio DECIMAL(10,3) NOT NULL,
+
+clasificacion VARCHAR(70) NOT NULL,
+
+duracion DECIMAL(10,3) NOT NULL,
+
+CONSTRAINT pk_pelicula PRIMARY KEY (codigo)
+);
+
+
+#Tabla para que cada pelicula posea diversas categorias
+
+CREATE TABLE categoria(
+
+numero INT NOT NULL AUTO_INCREMENT,
+
+nombre VARCHAR(50) NOT NULL,
+
+codigo_pelicula VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_categoria PRIMARY KEY (numero),
+
+CONSTRAINT fk_categoria_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo)
+);
+
+
+#Tabla para que cada sala de cine posea diversas peliculas
+
+CREATE TABLE peliculas_sala(
+
+id INT NOT NULL AUTO_INCREMENT,
+
+fecha_proyeccion DATE NOT NULL,
+
+codigo_pelicula VARCHAR(35) NOT NULL,
+
+codigo_sala VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_peliculas_sala PRIMARY KEY (id),
+
+CONSTRAINT fk_peliculas_sala_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
+
+CONSTRAINT fk_peliculas_sala_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+
+);
+
+
+
+#Tabla para poder gestionar los comentarios en las peliculas publicadas en las salas de cine
+
+CREATE TABLE comentario_pelicula(
+
+codigo INT NOT NULL AUTO_INCREMENT,
+
+contenido VARCHAR(400) NOT NULL,
+
+fecha_posteo DATE NOT NULL,
+
+codigo_pelicula VARCHAR(35) NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+codigo_sala VARCHAR(35) NOT NULL,
+
+
+CONSTRAINT pk_comentario_pelicula PRIMARY KEY (codigo),
+
+CONSTRAINT fk_comentario_pelicula_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
+
+CONSTRAINT fk_comentario_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+
+CONSTRAINT fk_comentario_pelicula_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+
+);
+
+
+#Tabla para poder gestionar las valoraciones en las peliculas publicadas en las salas de cine
+
+CREATE TABLE valoracion_pelicula(
+
+codigo INT NOT NULL AUTO_INCREMENT,
+
+calificacion INT NOT NULL,
+
+fecha_posteo DATE NOT NULL,
+
+codigo_pelicula VARCHAR(35) NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+codigo_sala VARCHAR(35) NOT NULL,
+
+
+CONSTRAINT pk_valoracion_pelicula PRIMARY KEY (codigo),
+
+CONSTRAINT fk_valoracion_pelicula_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
+
+CONSTRAINT fk_valoracion_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+
+CONSTRAINT fk_valoracion_pelicula_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+
+);
+
+
+#Tabla para que cada usuario pueda pagar el boleto de ocultacion de anuncios
+
+CREATE TABLE pago_boleto(
+
+numero INT NOT NULL AUTO_INCREMENT,
+monto DECIMAL(10,3) NOT NULL,
+fecha_pago DATE NOT NULL,
+
+
+codigo_pelicula VARCHAR(35) NOT NULL,
+id_usuario VARCHAR(150) NOT NULL,
+codigo_sala VARCHAR(35) NOT NULL,
+
+
+CONSTRAINT pk_pago_boleto_cine PRIMARY KEY (numero),
+
+CONSTRAINT fk_pago_boleto_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
+
+CONSTRAINT fk_pago_boleto_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+
+CONSTRAINT fk_pago_boleto_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+);
+
+
+#Tabla para llevar a cabo la verificacion del bloqueo del anuncio
+
+CREATE TABLE bloqueo_anuncio(
+
+numero INT NOT NULL AUTO_INCREMENT,
+estado BOOLEAN NOT NULL,
+fecha_inicio DATE NOT NULL,
+fecha_fin DATE NOT NULL,
+codigo_cine VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_bloqueo_anuncio PRIMARY KEY (numero),
+
+CONSTRAINT fk_bloqueo_anuncio_cine FOREIGN KEY (codigo_cine) REFERENCES cine(codigo)
+);
+
+
+
+
+
+
+
+
+
