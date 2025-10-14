@@ -8,11 +8,12 @@ import jakarta.ws.rs.core.Response;
  *
  * @author 
  */
-@Path("jakartaee11")
+@Path("inicio")
 public class JakartaEE11Resource {
     
     @GET
     public Response ping(){
+        
         return Response
                 .ok("ping Jakarta EE")
                 .build();
