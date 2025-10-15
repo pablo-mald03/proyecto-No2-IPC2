@@ -1,0 +1,152 @@
+<form [formGroup]="nuevoRegistroFormulario" (submit)="submit()">
+    <div class="row g-3">
+        <div class="col-sm-6">
+            <label for="firstName" class="form-label">Nombre Completo</label>
+
+            <input type="text" class="form-control" name="nombre" id="nombre" autocomplete="off" placeholder="Tu Nombre"
+                formControlName="nombre"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['nombre'].dirty && nuevoRegistroFormulario.controls['nombre'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['nombre'].invalid &&
+            nuevoRegistroFormulario.controls['nombre'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese un nombre valido
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="col-sm-6">
+            <label for="lastName" class="form-label">Identificacion/Pasaporte</label>
+
+            <input type="text" class="form-control" name="identificacion" id="identificacion"
+                placeholder="Ingresa tu identificación personal" formControlName="identificacion"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['identificacion'].dirty && nuevoRegistroFormulario.controls['identificacion'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['identificacion'].invalid &&
+            nuevoRegistroFormulario.controls['identificacion'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese una identificaion valida
+                </div>
+            </div>
+            }
+
+
+        </div>
+
+        <div class="col-12">
+            <label for="username" class="form-label">Contaseña</label>
+            <div class="input-group has-validation">
+                <span class="input-group-text">*</span>
+                <input type="password" class="form-control" name="password" id="password" autocomplete="off"
+                    placeholder="Ingresar Contraseña" formControlName="password"
+                    [class.is-invalid]="nuevoRegistroFormulario.controls['password'].dirty && nuevoRegistroFormulario.controls['password'].invalid">
+
+                @if (nuevoRegistroFormulario.controls['password'].invalid &&
+                nuevoRegistroFormulario.controls['password'].touched) {
+                <div class="invalid-feedback">
+                    <div>
+                        Ingrese una contraseña con 8 caracteres minimo
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="username" class="form-label">Confirmar Contaseña</label>
+            <div class="input-group has-validation">
+                <span class="input-group-text">*</span>
+                <input type="password" class="form-control" name="confirmpassword" id="confirmpassword"
+                    placeholder="Confirmar Contraseña" formControlName="confirmpassword"
+                    [class.is-invalid]="nuevoRegistroFormulario.controls['confirmpassword'].dirty && nuevoRegistroFormulario.controls['confirmpassword'].invalid">
+
+                @if (nuevoRegistroFormulario.controls['confirmpassword'].invalid &&
+                nuevoRegistroFormulario.controls['confirmpassword'].touched) {
+                <div class="invalid-feedback">
+                    <div>
+                        Ingrese una contraseña con 8 caracteres minimo
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="email" class="form-label">Correo Electronico</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="tunombre@ejemplo.com"
+                autocomplete="off" formControlName="email"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['email'].dirty && nuevoRegistroFormulario.controls['email'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['email'].invalid &&
+            nuevoRegistroFormulario.controls['email'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese un correo electronico valido
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="col-12">
+            <label for="telefono" class="form-label">Numero de Telefono</label>
+            <input type="tel" class="form-control" name="telefono" id="telefono" placeholder="58630000"
+                formControlName="telefono"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['telefono'].dirty && nuevoRegistroFormulario.controls['telefono'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['telefono'].invalid &&
+            nuevoRegistroFormulario.controls['telefono'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese un numero telefonico valido
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="col-12">
+            <label for="institucion" class="form-label">Pais de Procedencia</label>
+            <input type="text" class="form-control" name="pais" id="pais" autocomplete="off" placeholder="Guatemala"
+                formControlName="pais"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['pais'].dirty && nuevoRegistroFormulario.controls['pais'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['pais'].invalid &&
+            nuevoRegistroFormulario.controls['pais'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese un pais valido
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="col-12">
+            <label for="fotoperfil" class="form-label">Seleccione su foto de perfil</label>
+            <input class="form-control" type="file" id="fotoperfil" name="fotoperfil" accept=".png, .jpg, .jpeg, image/png, image/jpeg">
+        </div>
+
+
+    </div>
+
+    <hr class="my-4">
+
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="save-info">
+        <label class="form-check-label" for="save-info" required>Aceptar Politicas de Privacidad</label>
+    </div>
+
+    <br>
+    <div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+        <button class="btn btn-secondary me-md-2" type="button" (click)="reset()">Limpiar</button>
+
+        <button class=" btn bg-success bg-gradient text-white px-4" [disabled]="nuevoRegistroFormulario.invalid">Registrarse
+            en CinemaApp</button>
+
+    </div>
+    <br>
+
+
+</form>

@@ -33,6 +33,7 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
+    
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
         <url-pattern>/*</url-pattern>
