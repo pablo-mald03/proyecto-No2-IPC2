@@ -42,6 +42,23 @@ export class FormLoginComponent implements OnInit {
           error: (error: any) => {
               console.log(error);
           }
+
+ i    f (this.nuevoRegistroFormulario.valid) {
+
+
+      this.nuevoRegistro = this.nuevoRegistroFormulario.value as Usuario;
+
+      this.usuarioService.crearNuevoUsuario(this.nuevoRegistro).subscribe({
+        next: () => this.reset(),
+        error: (error: any) => console.log(error)
+      });
+
+      console.log(this.nuevoRegistro);
+
+      
+    }
+
+
       });*/
 
       console.log(this.usuarioCredenciales);
