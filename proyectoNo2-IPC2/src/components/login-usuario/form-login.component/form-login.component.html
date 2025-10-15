@@ -1,0 +1,55 @@
+<form class="text-center" [formGroup]="loginFormulario" (submit)="submit()">
+
+    <a routerLink="/" routerLinkActive="active">
+        <img class="mb-4 " src="icons-app/cinemaAppIcon.png" alt="" width="100" height="100">
+    </a>
+
+    <h1 class="h3 mb-3 fw-bold">Iniciar Sesion</h1>
+
+    <div class="form-floating">
+        <input type="email" class="form-control" id="correo" name="correo" placeholder="tucorreo@ejemplo.com"
+            formControlName="correo"
+            [class.is-invalid]="loginFormulario.controls['correo'].dirty && loginFormulario.controls['correo'].invalid">
+
+        @if (loginFormulario.controls['correo'].invalid &&
+        loginFormulario.controls['correo'].touched) {
+        <div class="invalid-feedback">
+            <div>
+                Ingrese un correo valido
+            </div>
+        </div>
+        }
+
+        <label for="floatingInput">Correo Electronico</label>
+    </div>
+    <br>
+    <div class="form-floating">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+            formControlName="password"
+            [class.is-invalid]="loginFormulario.controls['password'].dirty && loginFormulario.controls['password'].invalid">
+
+        @if (loginFormulario.controls['password'].invalid &&
+        loginFormulario.controls['password'].touched) {
+        <div class="invalid-feedback">
+            <div>
+                Ingrese una contraseña valida
+            </div>
+        </div>
+        }
+        <label for="floatingPassword">Contraseña</label>
+    </div>
+
+    <br>
+
+    <button class="btn  bg-success bg-gradient text-white  w-100 py-2" [disabled]="loginFormulario.invalid">Iniciar Sesion</button>
+
+    <br>
+    <br>
+
+    <p class="text-body-black">¿Eres nuevo en CinemaApp? <a class="text-success" routerLink="/registro"
+            routerLinkActive="active">Crear una cuenta</a>
+    </p>
+
+    <hr class="my-4">
+    <p class="mt-5 mb-3 text-body-secondary">© CinemaApp 2025–2026</p>
+</form>
