@@ -1,1 +1,49 @@
-<p>header.component works!</p>
+<header class="py-3 px-4 border-bottom bg-light shadow-sm">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+
+    <div class="d-flex align-items-center gap-2">
+      <img src="icons-app/cinemaAppIcon.png" 
+           alt="Logo" width="45" height="45">
+      <span class="fw-semibold fs-5 text-dark">CinemaApp</span>
+    </div>
+
+    <nav class="d-none d-md-flex align-items-center gap-4">
+      <a href="#" class="text-dark text-decoration-none fw-semibold">Inicio</a>
+      <a href="#" class="text-dark text-decoration-none fw-semibold">Películas</a>
+      <a href="#" class="text-dark text-decoration-none fw-semibold">Series</a>
+      <div class="dropdown">
+        <a href="#" class="text-dark text-decoration-none fw-semibold dropdown-toggle" 
+           data-bs-toggle="dropdown" aria-expanded="false">Más</a>
+        <ul class="dropdown-menu shadow border-0 rounded-3">
+          <li><a class="dropdown-item" href="#">Ofertas</a></li>
+          <li><a class="dropdown-item" href="#">Suscripciones</a></li>
+          <li><a class="dropdown-item" href="#">Ayuda</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Configuración</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3">
+      <form class="d-none d-lg-block" role="search">
+        <input type="search" class="form-control form-control-sm rounded-pill px-3" 
+               placeholder="Buscar..." aria-label="Search">
+      </form>
+
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" 
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="icons-app/defalutUser.png" alt="profile" 
+               width="40" height="40" class="rounded-circle me-2">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+          <li><a class="dropdown-item" href="#">Mi cuenta</a></li>
+          <li><a class="dropdown-item" href="#">Billetera Digital</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</header>
