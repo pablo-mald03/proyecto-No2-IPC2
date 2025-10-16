@@ -2,6 +2,8 @@ import { KeyValuePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLinkActive, RouterModule } from '@angular/router';
+import { LoginDTO } from '../../../models/usuarios/login-dto';
+import { LoginService } from '../../../services/usuarios-service/login.sercive';
 
 @Component({
   selector: 'app-form-login',
@@ -12,10 +14,11 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
 export class FormLoginComponent implements OnInit {
 
   loginFormulario!: FormGroup;
-  usuarioCredenciales!: Event;
+  usuarioCredenciales!: LoginDTO;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private loginService: LoginService
   ) {
 
   }
@@ -33,35 +36,12 @@ export class FormLoginComponent implements OnInit {
 
   submit(): void {
     if (this.loginFormulario.valid) {
-      this.usuarioCredenciales = this.loginFormulario.value as Event;
+      this.usuarioCredenciales = this.loginFormulario.value as LoginDTO;
 
-      /*this.eventsService.createNewEvent(this.newEvent).subscribe({
-          next: () => {
-              this.reset();
-          },
-          error: (error: any) => {
-              console.log(error);
-          }
-
- i    f (this.nuevoRegistroFormulario.valid) {
-
-
-      this.nuevoRegistro = this.nuevoRegistroFormulario.value as Usuario;
-
-      this.usuarioService.crearNuevoUsuario(this.nuevoRegistro).subscribe({
+      this.loginService.autenticarUsuario(this.usuarioCredenciales).subscribe({
         next: () => this.reset(),
         error: (error: any) => console.log(error)
       });
-
-      console.log(this.nuevoRegistro);
-
-      
-    }
-
-
-      });*/
-
-      console.log(this.usuarioCredenciales);
     }
   }
 

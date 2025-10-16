@@ -34,6 +34,7 @@ export class FormRegistroComponent implements OnInit {
       {
         nombre: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         identificacion: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
+        userid: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         password: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
         confirmpassword: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
         email: [null, [Validators.required, Validators.maxLength(150), Validators.email]],
@@ -47,8 +48,6 @@ export class FormRegistroComponent implements OnInit {
 
   submit(): void {
     if (this.nuevoRegistroFormulario.valid) {
-
-      const formData = new FormData();
 
       this.nuevoRegistro = this.nuevoRegistroFormulario.value as Usuario;
 

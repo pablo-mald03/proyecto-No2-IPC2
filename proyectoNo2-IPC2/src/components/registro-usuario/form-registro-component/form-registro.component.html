@@ -35,6 +35,22 @@
 
 
         </div>
+        
+        <div class="col-12">
+            <label for="institucion" class="form-label">Identificador de usuario</label>
+            <input type="text" class="form-control" name="userid" id="userid" autocomplete="off" placeholder="nombre-00"
+                formControlName="userid"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['userid'].dirty && nuevoRegistroFormulario.controls['userid'].invalid">
+
+            @if (nuevoRegistroFormulario.controls['userid'].invalid &&
+            nuevoRegistroFormulario.controls['userid'].touched) {
+            <div class="invalid-feedback">
+                <div>
+                    Ingrese un Identificador de usuario valido
+                </div>
+            </div>
+            }
+        </div>
 
         <div class="col-12">
             <label for="username" class="form-label">Contaseña</label>
