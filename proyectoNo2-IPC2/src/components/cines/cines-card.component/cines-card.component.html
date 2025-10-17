@@ -1,14 +1,24 @@
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
-  <div class="col" *ngFor="let cinema of cinemas">
-    <div class="cinema-card">
-      <div class="cinema-img">
-        <img [src]="cinema.image" [alt]="cinema.name" />
+<div class="col">
+  <div class="cine-card mt-2" role="article" aria-label="{{ cine.nombre }}">
+    <div
+      class="cine-img"
+      [attr.data-initial]="getInitial(cine.nombre)"
+      [ngStyle]="{'background-image': getGradient(cine.codigo)}"
+      aria-hidden="true"
+    >
+      <div class="cine-img-overlay">
+        <div class="cine-icon">🎞️</div>
+        <div class="cine-short">{{ cine.nombre }}</div>
       </div>
-      <div class="cinema-body">
-        <h5 class="cinema-title">{{ cinema.name }}</h5>
-        <p class="cinema-location"><i class="bi bi-geo-alt-fill me-1"></i>{{ cinema.location }}</p>
-        <p class="cinema-desc">{{ cinema.description }}</p>
-        <button class="btn-view">Ver detalles</button>
+    </div>
+
+    <div class="cine-body">
+      <h5 class="cine-title">{{ cine.nombre }}</h5>
+      <p class="cine-desc">{{ cine.descripcion }}</p>
+      <p class="cine-ubicacion"><i class="bi bi-geo-alt-fill"></i> {{ cine.ubicacion }}</p>
+      <div class="cine-extra">
+        <small>Monto Ocultación: {{ cine.montoOcultacion | currency:'GTQ':'symbol-narrow' }}</small><br>
+        <small>Creado el {{ cine.fechaCreacion | date:'longDate' }}</small>
       </div>
     </div>
   </div>

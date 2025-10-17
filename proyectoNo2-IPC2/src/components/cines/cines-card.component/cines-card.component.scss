@@ -1,72 +1,138 @@
-.cinema-card {
-  background: rgba(20, 20, 20, 0.85);
-  border-radius: 18px;
+:host { display: block; }
+
+.cine-card {
+  background: rgba(15, 15, 15, 0.9);
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.28s cubic-bezier(.2,.9,.3,1), box-shadow 0.28s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
-.cinema-card:hover {
+.cine-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(255, 0, 80, 0.25);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.6);
 }
 
-.cinema-img {
+/* ---- imagen como fondo CSS ---- */
+.cine-img {
   position: relative;
-  overflow: hidden;
-  height: 200px;
-}
-
-.cinema-img img {
+  height: 180px;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.cinema-card:hover .cinema-img img {
-  transform: scale(1.1);
-}
-
-.cinema-body {
-  padding: 1rem 1.25rem;
-  color: #fff;
-  text-align: left;
-}
-
-.cinema-title {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-.cinema-location {
-  font-size: 0.9rem;
-  color: #f4b400;
-  margin-bottom: 0.5rem;
-}
-
-.cinema-desc {
-  font-size: 0.85rem;
-  color: #bbb;
-  margin-bottom: 1rem;
-}
-
-.btn-view {
-  background: linear-gradient(90deg, #ff1744, #f50057);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 12px;
   color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  /* background image is set inline via ngStyle (linear-gradient) */
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
-.btn-view:hover {
-  background: linear-gradient(90deg, #f50057, #d500f9);
-  transform: scale(1.05);
+/* subtle texture: diagonal lines using repeating-linear-gradient over the gradient */
+.cine-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 1px,
+    rgba(0,0,0,0.03) 1px,
+    rgba(0,0,0,0.03) 6px
+  );
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* initial circle top-left */
+.cine-img::after {
+  content: attr(data-initial);
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
+  color: rgba(255,255,255,0.95);
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* overlay content (name short + icon) bottom-left */
+.cine-img-overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 72px; /* leave space for initial */
+}
+
+.cine-icon {
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.cine-short {
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  color: #fff;
+}
+
+/* hover effects (subtle) */
+.cine-card:hover .cine-icon {
+  transform: translateY(-4px) scale(1.04);
+}
+
+/* cuerpo de la card */
+.cine-body {
+  padding: 1rem;
+  color: #fff;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.cine-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.cine-desc {
+  font-size: 0.88rem;
+  color: #d0d0d4;
+  margin: 0;
+  flex: 1 0 auto;
+}
+
+.cine-ubicacion {
+  color: #f4b400;
+  font-size: 0.9rem;
+  margin: 0.35rem 0 0;
+}
+
+.cine-extra {
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 0.6rem;
 }

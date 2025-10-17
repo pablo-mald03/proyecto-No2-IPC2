@@ -50,11 +50,25 @@
   <main class="mx-auto" style="max-width: 820px;">
     <div class="p-2 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
       <h2 class="fw-bold mb-4 fs-2">🎬 Cines Asociados</h2>
-
-
       <p class="text-white">Visita nuestras mejores compañías de cine</p>
 
-      
+      <div class="d-flex flex-column align-items-center mt-5 cines-container">
+        @for (cine of cinesMostrados; track cine.codigo) {
+        <app-cines-card class="w-100" [cine]="cine"></app-cines-card>
+        }
+        @empty {
+        <div class="text-center text-light mt-5">
+          <h5>No hay cines registrados actualmente</h5>
+        </div>
+        }
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-outline-light px-4 py-2 rounded-pill" (click)="cargarMasCines()"
+          [disabled]="todosCargados">
+          {{ todosCargados ? 'No hay más cines' : 'Cargar más' }}
+        </button>
+      </div>
     </div>
   </main>
 </div>

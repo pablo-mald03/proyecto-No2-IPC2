@@ -27,3 +27,41 @@
 .ad-img:hover {
   transform: scale(1.05);
 }
+
+.cines-container {
+  width: 100%;
+  max-height: 70vh;        
+  min-height: 200px;        
+  overflow-y: auto;          
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;             
+  padding: 1rem;            
+  box-sizing: border-box;    
+  scroll-behavior: smooth;   
+  border-radius: 1rem;      
+  background-color: rgba(0,0,0,0.1); 
+}
+
+/* Opcional: scrollbar bonito */
+.cines-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cines-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.cines-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:host {
+  display: block;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

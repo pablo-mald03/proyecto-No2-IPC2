@@ -30,10 +30,5 @@ export const routes: Routes = [
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
         canActivate: [authGuard],
-        //especificar childrens
-
-
     },
-
-
 ];
