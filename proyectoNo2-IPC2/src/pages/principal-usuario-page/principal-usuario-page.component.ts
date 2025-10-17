@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
-import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-principal-usuario-page',
-  imports: [HeaderComponent, FooterComponent, NgFor, NgIf],
+  imports: [HeaderComponent, FooterComponent],
   templateUrl: './principal-usuario-page.component.html',
   styleUrl: './principal-usuario-page.component.scss'
 })

@@ -1,0 +1,72 @@
+.cinema-card {
+  background: rgba(20, 20, 20, 0.85);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cinema-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(255, 0, 80, 0.25);
+}
+
+.cinema-img {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.cinema-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.cinema-card:hover .cinema-img img {
+  transform: scale(1.1);
+}
+
+.cinema-body {
+  padding: 1rem 1.25rem;
+  color: #fff;
+  text-align: left;
+}
+
+.cinema-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cinema-location {
+  font-size: 0.9rem;
+  color: #f4b400;
+  margin-bottom: 0.5rem;
+}
+
+.cinema-desc {
+  font-size: 0.85rem;
+  color: #bbb;
+  margin-bottom: 1rem;
+}
+
+.btn-view {
+  background: linear-gradient(90deg, #ff1744, #f50057);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-view:hover {
+  background: linear-gradient(90deg, #f50057, #d500f9);
+  transform: scale(1.05);
+}

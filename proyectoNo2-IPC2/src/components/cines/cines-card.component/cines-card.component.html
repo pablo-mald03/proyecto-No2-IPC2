@@ -1,0 +1,15 @@
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+  <div class="col" *ngFor="let cinema of cinemas">
+    <div class="cinema-card">
+      <div class="cinema-img">
+        <img [src]="cinema.image" [alt]="cinema.name" />
+      </div>
+      <div class="cinema-body">
+        <h5 class="cinema-title">{{ cinema.name }}</h5>
+        <p class="cinema-location"><i class="bi bi-geo-alt-fill me-1"></i>{{ cinema.location }}</p>
+        <p class="cinema-desc">{{ cinema.description }}</p>
+        <button class="btn-view">Ver detalles</button>
+      </div>
+    </div>
+  </div>
+</div>

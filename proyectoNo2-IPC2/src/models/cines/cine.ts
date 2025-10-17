@@ -1,4 +1,4 @@
-export interface cine{
+export interface Cine{
     codigo: string,
     nombre: string, 
     estadoAnuncio: boolean,

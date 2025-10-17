@@ -4,6 +4,7 @@ import { LoginPageComponent } from '../pages/login-page/login-page.component';
 import { RegistroPageComponent } from '../pages/registro-page/registro-page.component';
 import { PrincipalUsuarioPageComponent } from '../pages/principal-usuario-page/principal-usuario-page.component';
 import { NgModule } from '@angular/core';
+import { authGuard } from './guards/auth-guard';
 
 
 export const routes: Routes = [
@@ -28,6 +29,9 @@ export const routes: Routes = [
     {
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
+        canActivate: [authGuard],
+        //especificar childrens
+
 
     },
 

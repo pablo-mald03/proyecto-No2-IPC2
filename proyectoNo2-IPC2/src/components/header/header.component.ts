@@ -11,19 +11,16 @@ import { Master } from '../../services/masterLog/master';
 export class HeaderComponent {
 
 
-   loggedUsuario: string = '';
+  loggedUsuario: string = '';
 
-   router = inject(Router);
+  router = inject(Router);
 
   constructor(private masterSercive: Master) {
 
     this.readDatosLoggeados();
     this.masterSercive.onLogin.subscribe(res => {
-
       this.readDatosLoggeados();
     })
-
-
 
   }
 
@@ -37,7 +34,7 @@ export class HeaderComponent {
     }
   }
 
-    onLogOutUsuario(){
+  onLogOutUsuario() {
     localStorage.removeItem("angularUserCinema");
     this.readDatosLoggeados();
     this.loggedUsuario = '';

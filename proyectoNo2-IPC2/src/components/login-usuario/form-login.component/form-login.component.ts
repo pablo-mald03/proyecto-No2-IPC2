@@ -18,7 +18,7 @@ export class FormLoginComponent implements OnInit {
   usuarioCredenciales!: LoginDTO;
 
   router = inject(Router);
-  masterService = inject(Master)
+  masterService = inject(Master);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,6 +28,8 @@ export class FormLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    localStorage.removeItem("angularUserCinema");
 
     this.loginFormulario = this.formBuilder.group(
       {
@@ -40,15 +42,21 @@ export class FormLoginComponent implements OnInit {
 
   submit(): void {
     if (this.loginFormulario.valid) {
+      
       this.usuarioCredenciales = this.loginFormulario.value as LoginDTO;
 
       /*this.loginService.autenticarUsuario(this.usuarioCredenciales).subscribe({
         next: () => this.reset(),
-        error: (error: any) => console.log(error)
-      });*/
-      localStorage.setItem("angularUserCinema",'admin');
-      this.masterService.onLogin.next(true);
 
+
+        error: (error: any) => console.log(error)
+
+
+      });*/
+
+      //PENDIENTE SETEAR EL RESULTADO
+      localStorage.setItem("angularUserCinema", 'pablo-01');
+      this.masterService.onLogin.next(true);
       this.router.navigateByUrl("/menu-principal");
     }
   }

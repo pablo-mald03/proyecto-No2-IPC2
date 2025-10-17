@@ -4,33 +4,57 @@
 <div class="container-fluid position-relative py-4 text-white" style="min-height: 100vh; background-color: #0e0e0e;">
 
   <div class="ad-column position-absolute top-0 start-0 h-100 d-none d-lg-flex flex-column p-2">
-    <div class="ad-box" *ngIf="showAd1">
+
+    @if(showAd1){
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-1">
     </div>
-    <div class="ad-box" *ngIf="showAd2">
+    }
+
+    @if (showAd2) {
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-2">
     </div>
-    <div class="ad-box" *ngIf="showAd3">
+    }
+    @if(showAd3){
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-3">
     </div>
+    }
+
+
   </div>
 
   <div class="ad-column position-absolute top-0 end-0 h-100 d-none d-lg-flex flex-column p-2">
-    <div class="ad-box" *ngIf="showAd4">
+
+    @if (showAd4) {
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-4">
     </div>
-    <div class="ad-box" *ngIf="showAd5">
+    }
+    @if(showAd5){
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-5">
     </div>
-    <div class="ad-box" *ngIf="showAd6">
+
+    }
+    @if(showAd6){
+    <div class="ad-box">
       <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-6">
     </div>
+
+    }
+
   </div>
 
   <main class="mx-auto" style="max-width: 820px;">
     <div class="p-2 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
-      <h2 class="fw-bold mb-4 fs-2">🎬 Contenido Principal</h2>
+      <h2 class="fw-bold mb-4 fs-2">🎬 Cines Asociados</h2>
+
+
       <p class="text-white">Visita nuestras mejores compañías de cine</p>
+
+      
     </div>
   </main>
 </div>
