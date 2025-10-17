@@ -5,6 +5,8 @@ import { Router, RouterLinkActive, RouterModule } from '@angular/router';
 import { LoginDTO } from '../../../models/usuarios/login-dto';
 import { LoginService } from '../../../services/usuarios-service/login.sercive';
 import { Master } from '../../../services/masterLog/master';
+import { UserLoggedDTO } from '../../../models/usuarios/user-logged-dto';
+import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
 
 @Component({
   selector: 'app-form-login',
@@ -16,13 +18,15 @@ export class FormLoginComponent implements OnInit {
 
   loginFormulario!: FormGroup;
   usuarioCredenciales!: LoginDTO;
+  usuarioLogged?: UserLoggedDTO;
 
   router = inject(Router);
   masterService = inject(Master);
 
   constructor(
     private formBuilder: FormBuilder,
-    private loginService: LoginService
+    private loginService: LoginService,
+
   ) {
 
   }
@@ -42,7 +46,7 @@ export class FormLoginComponent implements OnInit {
 
   submit(): void {
     if (this.loginFormulario.valid) {
-      
+
       this.usuarioCredenciales = this.loginFormulario.value as LoginDTO;
 
       /*this.loginService.autenticarUsuario(this.usuarioCredenciales).subscribe({
@@ -54,10 +58,36 @@ export class FormLoginComponent implements OnInit {
 
       });*/
 
+
+
+      this.usuarioLogged = {
+        id: "tilinsin-01",
+        //rol: "ADMINISTRADOR DE SISTEMA"
+        rol: "USUARIO"
+      }
+
       //PENDIENTE SETEAR EL RESULTADO
-      localStorage.setItem("angularUserCinema", 'pablo-01');
-      this.masterService.onLogin.next(true);
-      this.router.navigateByUrl("/menu-principal");
+      localStorage.setItem("angularUserCinema", JSON.stringify(this.usuarioLogged));
+
+      const usuarioStr = localStorage.getItem("angularUserCinema");
+
+      if (usuarioStr) {
+        const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
+
+        this.masterService.onLogin.next(true);
+        // Comparar como texto usando el enum
+        if (usuario.rol === TipoUsuarioEnum.USUARIO) {
+
+          this.router.navigateByUrl("/menu-principal");
+        } else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
+
+          this.router.navigateByUrl("/dashboard-admin-cine");
+        }
+
+      }
+
+
+
     }
   }
 

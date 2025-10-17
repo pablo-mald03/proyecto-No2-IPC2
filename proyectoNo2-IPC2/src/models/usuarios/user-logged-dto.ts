@@ -1,5 +1,5 @@
 export interface UserLoggedDTO{
 
-    id: string;
-    rol: string;
+    id: string,
+    rol: string,
 }

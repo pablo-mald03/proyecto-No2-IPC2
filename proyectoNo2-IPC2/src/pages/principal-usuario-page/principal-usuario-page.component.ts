@@ -74,7 +74,7 @@ export class PrincipalUsuarioPageComponent implements OnInit {
     this.cargarMasCines(); // carga inicial
   }
 
-   cargarMasCines(): void {
+  cargarMasCines(): void {
     const siguienteBloque = this.cines.slice(
       this.indiceActual,
       this.indiceActual + this.cantidadPorCarga
