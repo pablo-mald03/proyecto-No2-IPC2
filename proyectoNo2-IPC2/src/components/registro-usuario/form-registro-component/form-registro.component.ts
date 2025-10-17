@@ -8,7 +8,7 @@ import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
 
 @Component({
   selector: 'app-form-registro',
-  imports: [FormsModule, ReactiveFormsModule, KeyValuePipe, NgFor],
+  imports: [FormsModule, ReactiveFormsModule, NgFor],
   templateUrl: './form-registro.component.html',
   styleUrl: './form-registro.component.scss'
 })

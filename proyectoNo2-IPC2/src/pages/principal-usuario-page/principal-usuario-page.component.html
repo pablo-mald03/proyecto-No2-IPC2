@@ -3,51 +3,36 @@
 
 <div class="container-fluid position-relative py-4 text-white" style="min-height: 100vh; background-color: #0e0e0e;">
 
-  <div class="position-absolute top-0 start-0 h-100 d-none d-lg-flex flex-column justify-content-center align-items-center p-3" style="width: 160px;">
-    <div class="ad-box mb-3">
-      <img src="https://source.unsplash.com/random/120x600?movie" class="img-fluid rounded shadow" alt="Ad 1">
+  <div class="ad-column position-absolute top-0 start-0 h-100 d-none d-lg-flex flex-column p-2">
+    <div class="ad-box" *ngIf="showAd1">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-1">
     </div>
-    <div class="ad-box mb-3">
-      <img src="https://source.unsplash.com/random/120x600?cinema" class="img-fluid rounded shadow" alt="Ad 2">
+    <div class="ad-box" *ngIf="showAd2">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-2">
     </div>
-    <div class="ad-box">
-      <img src="https://source.unsplash.com/random/120x600?poster" class="img-fluid rounded shadow" alt="Ad 3">
-    </div>
-  </div>
-
-  <div class="position-absolute top-0 end-0 h-100 d-none d-lg-flex flex-column justify-content-center align-items-center p-3" style="width: 160px;">
-    <div class="ad-box mb-3">
-      <img src="https://source.unsplash.com/random/120x600?film" class="img-fluid rounded shadow" alt="Ad 4">
-    </div>
-    <div class="ad-box mb-3">
-      <img src="https://source.unsplash.com/random/120x600?trailer" class="img-fluid rounded shadow" alt="Ad 5">
-    </div>
-    <div class="ad-box">
-      <img src="https://source.unsplash.com/random/120x600?camera" class="img-fluid rounded shadow" alt="Ad 6">
+    <div class="ad-box" *ngIf="showAd3">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-3">
     </div>
   </div>
 
-  <main class="mx-auto" style="max-width: 900px;">
-    <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
-      <h2 class="fw-bold mb-4">🎬 Contenido Principal</h2>
-      <p class="text-secondary">
-        Aquí irá tu componente dinámico (cards, grids, películas, etc.)
-      </p>
+  <div class="ad-column position-absolute top-0 end-0 h-100 d-none d-lg-flex flex-column p-2">
+    <div class="ad-box" *ngIf="showAd4">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-4">
+    </div>
+    <div class="ad-box" *ngIf="showAd5">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-5">
+    </div>
+    <div class="ad-box" *ngIf="showAd6">
+      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-6">
+    </div>
+  </div>
 
-      <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-        <div class="col" *ngFor="let item of cards">
-          <div class="card bg-dark text-light border-0 shadow-sm">
-            <img src="https://source.unsplash.com/random/300x400?movie" class="card-img-top rounded-top">
-            <div class="card-body">
-              <h6 class="card-title">Título de ejemplo</h6>
-              <p class="card-text text-secondary small">Descripción breve del contenido.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <main class="mx-auto" style="max-width: 820px;">
+    <div class="p-2 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
+      <h2 class="fw-bold mb-4 fs-2">🎬 Contenido Principal</h2>
+      <p class="text-white">Visita nuestras mejores compañías de cine</p>
     </div>
   </main>
-
 </div>
 
 
