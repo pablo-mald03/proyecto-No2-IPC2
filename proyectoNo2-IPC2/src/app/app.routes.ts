@@ -6,6 +6,8 @@ import { PrincipalUsuarioPageComponent } from '../pages/principal-usuario-page/p
 import { NgModule } from '@angular/core';
 import { authGuard } from './guards/auth-guard';
 import { AdminSistemaPageComponent } from '../pages/admin-sistema-page/admin-sistema-page.component';
+import { AdministracionUsuariosComponent } from '../components/administrador-sistema/administracion-usuarios/administracion-usuarios.component';
+import { AdminsReqSistemaComponent } from '../components/administrador-sistema/admins-req-sistema/admins-req-sistema.component';
 
 
 export const routes: Routes = [
@@ -36,5 +38,27 @@ export const routes: Routes = [
         path: 'menu-admin-sistema',
         component: AdminSistemaPageComponent,
         canActivate: [authGuard],
+
+        children: [
+
+            //Van todas las URL relacionadas a la pagina de admin
+
+            {
+                path: 'usuarios',
+                component: AdministracionUsuariosComponent,
+            },
+            {
+                path: 'admins-sistema',
+                component: AdminsReqSistemaComponent,
+            },
+
+            {
+                path: '',
+                redirectTo: 'usuarios',
+                pathMatch: 'full'
+            },
+
+
+        ]
     },
 ];

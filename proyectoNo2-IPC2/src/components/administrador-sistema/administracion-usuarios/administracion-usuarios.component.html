@@ -1,0 +1,26 @@
+<main class="mx-auto gestion-usuarios-container">
+  <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
+    <h2 class="fw-bold mb-4 fs-2">Gestión de Usuarios</h2>
+    <p class="text-white mb-5">Selecciona el tipo de administrador que quieres consultar</p>
+
+    <div class="d-flex justify-content-center flex-wrap gap-4">
+      <div class="user-card bg-gradient text-light p-4 rounded-4 shadow-lg">
+        <div class="card-icon mb-3">
+          <i class="bi bi-gear-fill fs-1"></i>
+        </div>
+        <h4 class="fw-bold mb-2">Administradores del Sistema</h4>
+        <p class="text-light-50 mb-4">Gestiona quienes pueden acceder a la configuración general y parámetros del sistema.</p>
+        <button class="btn btn-outline-light rounded-pill px-4" routerLink="/menu-admin-sistema/admins-sistema" routerLinkActive="active">Acceder</button>
+      </div>
+
+      <div class="user-card bg-gradient text-light p-4 rounded-4 shadow-lg">
+        <div class="card-icon mb-3">
+          <i class="bi bi-film fs-1"></i>
+        </div>
+        <h4 class="fw-bold mb-2">Administradores de Cine</h4>
+        <p class="text-light-50 mb-4">Gestiona los administradores de cines asociados a las respectivas compañias del sistema.</p>
+        <button class="btn btn-outline-light rounded-pill px-4" routerLink="" >Acceder</button>
+      </div>
+    </div>
+  </div>
+</main>

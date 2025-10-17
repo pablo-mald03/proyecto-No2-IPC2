@@ -1,0 +1,32 @@
+<main class="mx-auto admin-sistema-container">
+  <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
+    <div class="d-flex justify-content-between flex-column align-items-center mb-4">
+      <h2 class="fw-bold fs-2 mb-2"><i class="bi bi-people me-2"></i>  Administradores del Sistema</h2>
+
+      <button class="btn btn-warning fw-semibold rounded-pill px-4 mt-2 mb-2">
+        <i class="bi bi-person-plus-fill me-2"></i> Crear Administrador
+      </button>
+    </div>
+
+    <!-- 🔹 Zona donde se inyectarán las cards -->
+    <div class="d-flex flex-wrap justify-content-center gap-4 mt-4 admin-cards-container">
+      <!--   @for (admin of administradoresMostrados; track admin.id) {
+        <app-admin-card [admin]="admin"></app-admin-card>
+      }
+      @empty {
+        <div class="text-center text-light mt-5">
+          <h5>No hay administradores registrados actualmente</h5>
+        </div>
+      } -->
+    </div>
+
+    <div class="text-center mt-5">
+
+      <!--  <button class="btn btn-outline-light px-4 py-2 rounded-pill" (click)="cargarMasAdministradores()"
+        [disabled]="todosCargados">
+        {{ todosCargados ? 'No hay más administradores' : 'Cargar más' }}
+      </button> -->
+
+    </div>
+  </div>
+</main>
