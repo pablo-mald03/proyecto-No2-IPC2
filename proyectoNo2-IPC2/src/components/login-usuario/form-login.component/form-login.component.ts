@@ -62,8 +62,8 @@ export class FormLoginComponent implements OnInit {
 
       this.usuarioLogged = {
         id: "tilinsin-01",
-        //rol: "ADMINISTRADOR DE SISTEMA"
-        rol: "USUARIO"
+        rol: "ADMINISTRADOR DE SISTEMA"
+        //rol: "USUARIO"
       }
 
       //PENDIENTE SETEAR EL RESULTADO
@@ -82,6 +82,9 @@ export class FormLoginComponent implements OnInit {
         } else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
 
           this.router.navigateByUrl("/dashboard-admin-cine");
+        } else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_SISTEMA) {
+
+          this.router.navigateByUrl("/menu-admin-sistema");
         }
 
       }

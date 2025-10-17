@@ -5,6 +5,7 @@ import { RegistroPageComponent } from '../pages/registro-page/registro-page.comp
 import { PrincipalUsuarioPageComponent } from '../pages/principal-usuario-page/principal-usuario-page.component';
 import { NgModule } from '@angular/core';
 import { authGuard } from './guards/auth-guard';
+import { AdminSistemaPageComponent } from '../pages/admin-sistema-page/admin-sistema-page.component';
 
 
 export const routes: Routes = [
@@ -29,6 +30,11 @@ export const routes: Routes = [
     {
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'menu-admin-sistema',
+        component: AdminSistemaPageComponent,
         canActivate: [authGuard],
     },
 ];

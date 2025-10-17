@@ -2,23 +2,28 @@
   <div class="cine-card mt-2" role="article" aria-label="{{ cine.nombre }}">
     <div
       class="cine-img"
-      [attr.data-initial]="getInitial(cine.nombre)"
+      [attr.data-initial]="getInicial(cine.nombre)"
       [ngStyle]="{'background-image': getGradient(cine.codigo)}"
       aria-hidden="true"
     >
-      <div class="cine-img-overlay">
-        <div class="cine-icon">🎞️</div>
-        <div class="cine-short">{{ cine.nombre }}</div>
+      <div class="cine-img-overlay fs-3">
+        <i class="bi bi-camera-reels"></i>
+        <div class="cine-short fs-4">{{ cine.nombre }}</div>
       </div>
     </div>
 
     <div class="cine-body">
-      <h5 class="cine-title">{{ cine.nombre }}</h5>
-      <p class="cine-desc">{{ cine.descripcion }}</p>
+      <h5 class="cine-title fs-5">{{ cine.nombre }}</h5>
+      <p class="cine-desc ">{{ cine.descripcion }}</p>
       <p class="cine-ubicacion"><i class="bi bi-geo-alt-fill"></i> {{ cine.ubicacion }}</p>
-      <div class="cine-extra">
-        <small>Monto Ocultación: {{ cine.montoOcultacion | currency:'GTQ':'symbol-narrow' }}</small><br>
-        <small>Creado el {{ cine.fechaCreacion | date:'longDate' }}</small>
+      <div class="cine-extra fs-5">
+        <small>Se unió el {{ cine.fechaCreacion | date:'longDate' }}</small>
+      </div>
+
+      <div class="mt-3 text-center">
+        <button
+          class="btn btn-outline-light px-4 py-2 rounded-pill" (click)="visitarCine(cine.codigo)">Visitar
+        </button>
       </div>
     </div>
   </div>

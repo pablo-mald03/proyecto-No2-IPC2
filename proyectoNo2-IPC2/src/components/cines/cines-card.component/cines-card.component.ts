@@ -38,9 +38,15 @@ export class CinesCardComponent {
     return `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
   }
 
-  // inicial para mostrar encima
-  getInitial(name?: string) {
+  getInicial(name?: string) {
     return name ? name.trim().charAt(0).toUpperCase() : '';
+  }
+
+
+   visitarCine(codigo: string) {
+    //PENDIENTE REEMPLAZAR CON UN GET
+    console.log('Visitar cine con código:', codigo);
+
   }
 
 }
