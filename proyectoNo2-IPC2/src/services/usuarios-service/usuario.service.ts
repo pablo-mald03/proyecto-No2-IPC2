@@ -14,7 +14,7 @@ export class UsuarioService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public crearNuevoUsuario(usuario: Usuario): Observable<void> {
+    public crearNuevoUsuario(usuario: FormData): Observable<void> {
         return this.httpClient.post<void>(`${this.restConstants.getApiURL()}usuarios`, usuario);
     }
 }

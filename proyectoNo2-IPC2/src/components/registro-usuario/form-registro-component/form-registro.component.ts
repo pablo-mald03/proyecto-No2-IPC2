@@ -34,12 +34,12 @@ export class FormRegistroComponent implements OnInit {
       {
         nombre: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         identificacion: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
-        userid: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
+        id: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         password: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
         confirmpassword: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
-        email: [null, [Validators.required, Validators.maxLength(150), Validators.email]],
+        correo: [null, [Validators.required, Validators.maxLength(150), Validators.email]],
         telefono: [null, [Validators.required, Validators.maxLength(150), Validators.pattern('^[0-9]+$')]],
-        TipoUsuario: [TipoUsuarioEnum.USUARIO, Validators.required],
+        codigoRol: [TipoUsuarioEnum.USUARIO, Validators.required],
         pais: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
       }
     )
@@ -49,17 +49,11 @@ export class FormRegistroComponent implements OnInit {
   submit(): void {
     if (this.nuevoRegistroFormulario.valid) {
 
-      this.nuevoRegistro = this.nuevoRegistroFormulario.value as Usuario;
-
-      this.usuarioService.crearNuevoUsuario(this.nuevoRegistro).subscribe({
-        next: () => this.reset(),
-        error: (error: any) => console.log(error)
-      });
 
       console.log(this.nuevoRegistro);
 
-      /*
-       const formData = new FormData();
+
+      const formData = new FormData();
 
       // Agregar todos los campos del formulario
       Object.entries(this.nuevoRegistroFormulario.value).forEach(([key, value]) => {
@@ -79,9 +73,8 @@ export class FormRegistroComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al crear usuario:', err);
-        } 
-      */
-
+        }
+      });
 
     }
   }

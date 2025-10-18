@@ -38,12 +38,12 @@
         
         <div class="col-12">
             <label for="institucion" class="form-label">Identificador de usuario</label>
-            <input type="text" class="form-control" name="userid" id="userid" autocomplete="off" placeholder="nombre-00"
-                formControlName="userid"
-                [class.is-invalid]="nuevoRegistroFormulario.controls['userid'].dirty && nuevoRegistroFormulario.controls['userid'].invalid">
+            <input type="text" class="form-control" name="id" id="id" autocomplete="off" placeholder="nombre-00"
+                formControlName="id"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['id'].dirty && nuevoRegistroFormulario.controls['id'].invalid">
 
-            @if (nuevoRegistroFormulario.controls['userid'].invalid &&
-            nuevoRegistroFormulario.controls['userid'].touched) {
+            @if (nuevoRegistroFormulario.controls['id'].invalid &&
+            nuevoRegistroFormulario.controls['id'].touched) {
             <div class="invalid-feedback">
                 <div>
                     Ingrese un Identificador de usuario valido
@@ -93,12 +93,12 @@
 
         <div class="col-12">
             <label for="email" class="form-label">Correo Electronico</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="tunombre@ejemplo.com"
-                autocomplete="off" formControlName="email"
-                [class.is-invalid]="nuevoRegistroFormulario.controls['email'].dirty && nuevoRegistroFormulario.controls['email'].invalid">
+            <input type="email" class="form-control" name="correo" id="correo" placeholder="tunombre@ejemplo.com"
+                autocomplete="off" formControlName="correo"
+                [class.is-invalid]="nuevoRegistroFormulario.controls['correo'].dirty && nuevoRegistroFormulario.controls['correo'].invalid">
 
-            @if (nuevoRegistroFormulario.controls['email'].invalid &&
-            nuevoRegistroFormulario.controls['email'].touched) {
+            @if (nuevoRegistroFormulario.controls['correo'].invalid &&
+            nuevoRegistroFormulario.controls['correo'].touched) {
             <div class="invalid-feedback">
                 <div>
                     Ingrese un correo electronico valido
@@ -141,7 +141,7 @@
 
         <div class="col-6">
             <label for="TipoUsuario" class="form-label">Tipo:</label>
-            <select id="TipoUsuario" name="TipoUsuario" class="form-control" formControlName="TipoUsuario">
+            <select id="codigoRol" name="codigoRol" class="form-control" formControlName="codigoRol">
                 <option *ngFor="let option of TiposuarioOptions" [value]="option.key">
                     {{ option.value }}
                 </option>
@@ -150,7 +150,7 @@
 
         <div class="col-6">
             <label for="fotoperfil" class="form-label">Seleccione su foto de perfil</label>
-            <input class="form-control" type="file" id="fotoperfil" name="fotoperfil"
+            <input class="form-control" type="file" id="foto" name="foto"
                 accept=".png, .jpg, .jpeg, image/png, image/jpeg"  (change)="onFileSelected($event)">
         </div>
 

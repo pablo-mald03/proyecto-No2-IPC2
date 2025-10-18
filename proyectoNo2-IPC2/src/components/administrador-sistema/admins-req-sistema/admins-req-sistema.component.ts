@@ -11,19 +11,22 @@ import { Router } from '@angular/router';
 })
 export class AdminsReqSistemaComponent {
 
-    administradoresMostrados: Usuario[] = [];
-    todosCargados = false;
+  administradores: Usuario[] = [];
+  administradoresMostrados: Usuario[] = [];
+  indiceActual = 0;
+  cantidadPorCarga = 2;
+  todosCargados = false;
 
-    router = inject(Router);
+  router = inject(Router);
 
-    ngOnInit(): void {
+  ngOnInit(): void {
 
-    this.administradoresMostrados = [
+    this.administradores = [
       {
         id: 'carlos-01',
         correo: 'admin1@cineapp.com',
         nombre: 'Carlos López',
-        foto: '', 
+        foto: '',
         password: '',
         telefono: '+502 5555-1234',
         pais: 'Guatemala',
@@ -40,13 +43,51 @@ export class AdminsReqSistemaComponent {
         pais: 'Guatemala',
         identificacion: '987654321',
         codigoRol: 'ROL-1'
+      },
+      {
+        id: 'mariap-02',
+        correo: 'admin2@cineapp.com',
+        nombre: 'María Pérez',
+        foto: '',
+        password: '',
+        telefono: '+502 5555-5678',
+        pais: 'Guatemala',
+        identificacion: '987654321',
+        codigoRol: 'ROL-1'
+      },
+      {
+        id: 'mariap-02',
+        correo: 'admin2@cineapp.com',
+        nombre: 'María Pérez',
+        foto: '',
+        password: '',
+        telefono: '+502 5555-5678',
+        pais: 'Guatemala',
+        identificacion: '987654321',
+        codigoRol: 'ROL-1'
       }
     ];
+
+    this.cargarMasUsuarios();
   }
 
-  volver(){
+  volver() {
     this.router.navigateByUrl('/menu-admin-sistema/usuarios')
 
+  }
+
+  cargarMasUsuarios(): void {
+    const siguienteBloque = this.administradores.slice(
+      this.indiceActual,
+      this.indiceActual + this.cantidadPorCarga
+    );
+
+    this.administradoresMostrados.push(...siguienteBloque);
+    this.indiceActual += this.cantidadPorCarga;
+
+    if (this.indiceActual >= this.administradores.length) {
+      this.todosCargados = true;
+    }
   }
 
 }
