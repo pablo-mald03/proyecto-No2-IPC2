@@ -1,0 +1,23 @@
+<div class="admin-card bg-color-admin bg-opacity-75 text-light rounded-4 shadow-lg p-3">
+
+  <div class="d-flex align-items-center flex-column text-center">
+    <div class="foto-container me-3">
+      <img [src]="fotoUrl" alt="Foto de {{ admin.nombre }}" class="foto-perfil" />
+    </div>
+
+    <div class="text-center flex-grow-1 mt-2">
+      <h5 class="fw-bold mb-1">{{ admin.nombre }}</h5>
+      <p class="text-light-50 mb-1"><i class="bi bi-person-badge-fill me-2"></i>{{ admin.id }}</p>
+      <p class="text-light-50 mb-1"><i class="bi bi-envelope-fill me-2"></i>{{ admin.correo }}</p>
+      <p class="text-light-50 mb-1"><i class="bi bi-telephone-fill me-2"></i>{{ admin.telefono }}</p>
+      <p class="text-light-50 mb-1"><i class="bi bi-house-door-fill me-2"></i>{{ admin.pais }}</p>
+      <p class="text-warning fw-semibold mb-0">{{ rolNombre }}</p>
+    </div>
+  </div>
+
+  <div class="mt-3 d-flex justify-content-center">
+    <button class="btn btn-outline-danger btn-sm rounded-pill px-3">
+      <i class="bi bi-power"></i> Desactivar
+    </button>
+  </div>
+</div>

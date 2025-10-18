@@ -33,6 +33,23 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.btn-back {
+  font-weight: 500;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(107, 8, 153, 0.1), rgba(107, 8, 153, 0.25));
+  box-shadow: 0 0 10px rgba(107, 8, 153, 0.3);
+}
+
+.btn-back:hover {
+  color: #ffc107;
+  border-color: #ffc107;
+  background: linear-gradient(135deg, rgba(107, 8, 153, 0.3), rgba(107, 8, 153, 0.5));
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+}
+
 .btn-warning:hover {
   background-color: #e0a800;
   transform: translateY(-2px);
