@@ -151,7 +151,7 @@
         <div class="col-6">
             <label for="fotoperfil" class="form-label">Seleccione su foto de perfil</label>
             <input class="form-control" type="file" id="foto" name="foto"
-                accept=".png, .jpg, .jpeg, image/png, image/jpeg"  (change)="onFileSelected($event)">
+                accept=".png, .jpg, .jpeg, image/png, image/jpeg"  (change)="archivoSeleccionado($event)">
         </div>
 
 
@@ -166,7 +166,7 @@
 
     <br>
     <div class="d-flex justify-content-center align-items-center gap-2 mt-3">
-        <button class="btn btn-secondary me-md-2" type="button" (click)="reset()">Limpiar</button>
+        <button class="btn btn-secondary me-md-2" type="button" (click)="reiniciar()">Limpiar</button>
 
         <button class=" btn bg-success bg-gradient text-white px-4"
             [disabled]="nuevoRegistroFormulario.invalid">Registrarse

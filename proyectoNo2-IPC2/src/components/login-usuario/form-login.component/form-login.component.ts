@@ -10,7 +10,7 @@ import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
 
 @Component({
   selector: 'app-form-login',
-  imports: [RouterLinkActive, RouterModule, FormsModule, ReactiveFormsModule, KeyValuePipe],
+  imports: [RouterLinkActive, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './form-login.component.html',
   styleUrl: './form-login.component.scss'
 })

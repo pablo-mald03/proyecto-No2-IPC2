@@ -8,6 +8,7 @@ import { authGuard } from './guards/auth-guard';
 import { AdminSistemaPageComponent } from '../pages/admin-sistema-page/admin-sistema-page.component';
 import { AdministracionUsuariosComponent } from '../components/administrador-sistema/administracion-usuarios/administracion-usuarios.component';
 import { AdminsReqSistemaComponent } from '../components/administrador-sistema/admins-req-sistema/admins-req-sistema.component';
+import { CrearAdminSistemaComponent } from '../components/administrador-sistema/crear-admin-sistema/crear-admin-sistema.component';
 
 
 export const routes: Routes = [
@@ -50,6 +51,10 @@ export const routes: Routes = [
             {
                 path: 'admins-sistema',
                 component: AdminsReqSistemaComponent,
+            },
+            {
+                path: 'crear-admin-sistema',
+                component: CrearAdminSistemaComponent,
             },
 
             {

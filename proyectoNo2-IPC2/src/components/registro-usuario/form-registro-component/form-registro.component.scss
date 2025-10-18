@@ -1,0 +1,54 @@
+.form-container {
+  max-width: 900px;
+  margin-top: 40px;
+  background: linear-gradient(145deg, rgba(60, 0, 90, 0.95), rgba(20, 20, 20, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.form-label {
+  font-weight: 500;
+  color: #cfcfcf;
+}
+
+.form-control,
+.form-select {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #f8f9fa;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #a020f0;
+  box-shadow: 0 0 8px #a020f0;
+  color: #fff;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #a020f0, #6b0fbb);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #b54cff, #8d2ae5);
+  transform: translateY(-2px);
+}
+
+.btn-back {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(-3px);
+}
+
+hr {
+  opacity: 0.2;
+}

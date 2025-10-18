@@ -16,7 +16,7 @@ export class FormRegistroComponent implements OnInit {
 
   nuevoRegistroFormulario!: FormGroup;
   nuevoRegistro!: Usuario;
-  TipoUsuarioEnums = TipoUsuarioEnum;
+  tipoUsuarioEnums = TipoUsuarioEnum;
 
   //Indica el archivo seleccionado
   selectedFile!: File | null;
@@ -69,7 +69,7 @@ export class FormRegistroComponent implements OnInit {
       this.usuarioService.crearNuevoUsuario(formData).subscribe({
         next: () => {
           console.log('Usuario creado correctamente');
-          this.reset();
+          this.reiniciar();
         },
         error: (err) => {
           console.error('Error al crear usuario:', err);
@@ -80,7 +80,7 @@ export class FormRegistroComponent implements OnInit {
   }
 
   //Metodo encargado de recibir el 
-  onFileSelected(event: Event): void {
+  archivoSeleccionado(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
@@ -94,15 +94,11 @@ export class FormRegistroComponent implements OnInit {
       value: TipoUsuarioEnum[key as keyof typeof TipoUsuarioEnum]
     }));
 
-  reset(): void {
+  reiniciar(): void {
     this.nuevoRegistroFormulario.reset({
       TipoUsuario: TipoUsuarioEnum.USUARIO,
     });
     this.selectedFile = null;
   }
-
-
-
-
 
 }

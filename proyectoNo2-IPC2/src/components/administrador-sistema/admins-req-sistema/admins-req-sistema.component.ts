@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Usuario } from '../../../models/usuarios/usuario';
 import { AdminsSistemaCardComponent } from "../admins-sistema-card/admins-sistema-card.component";
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-admins-req-sistema',
-  imports: [AdminsSistemaCardComponent],
+  imports: [AdminsSistemaCardComponent, RouterLink, RouterLinkActive],
   templateUrl: './admins-req-sistema.component.html',
   styleUrl: './admins-req-sistema.component.scss'
 })
