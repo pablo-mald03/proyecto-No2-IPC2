@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Master } from '../../../services/masterLog/master';
 
 @Component({
   selector: 'app-header-admin',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './header-admin.component.html',
   styleUrl: './header-admin.component.scss'
 })

@@ -4,7 +4,7 @@ import { FormLoginComponent } from "../../components/login-usuario/form-login.co
 
 @Component({
   selector: 'app-login-page.component',
-  imports: [RouterModule, RouterLinkActive, FormLoginComponent],
+  imports: [RouterModule, FormLoginComponent],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })

@@ -9,6 +9,8 @@ import { AdminSistemaPageComponent } from '../pages/admin-sistema-page/admin-sis
 import { AdministracionUsuariosComponent } from '../components/administrador-sistema/administracion-usuarios/administracion-usuarios.component';
 import { AdminsReqSistemaComponent } from '../components/administrador-sistema/admins-req-sistema/admins-req-sistema.component';
 import { CrearAdminSistemaComponent } from '../components/administrador-sistema/crear-admin-sistema/crear-admin-sistema.component';
+import { CrearAdminCineComponent } from '../components/administrador-sistema/crear-admin-cine/crear-admin-cine.component';
+import { AdminsReqCineComponent } from '../components/administrador-sistema/admins-req-cine/admins-req-cine.component';
 
 
 export const routes: Routes = [
@@ -55,6 +57,14 @@ export const routes: Routes = [
             {
                 path: 'crear-admin-sistema',
                 component: CrearAdminSistemaComponent,
+            },
+            {
+                path: 'admins-cine',
+                component: AdminsReqCineComponent,
+            },
+            {
+                path: 'crear-admin-cine',
+                component: CrearAdminCineComponent,
             },
 
             {
