@@ -1,0 +1,66 @@
+.admin-sistema-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #1b002b, #000);
+}
+
+.form-container {
+    width: 90%;
+    max-width: 900px;
+    background: linear-gradient(145deg, rgba(0, 17, 90, 0.95), rgba(80, 61, 61, 0.589));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+}
+
+
+.form-label {
+    font-weight: 500;
+    color: #f8f6f6;
+}
+
+.form-control,
+.form-select {
+    background-color: rgba(255, 255, 255, 0.247);
+    color: #f8f9fa;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.26);
+    border-color: #f0bf20;
+    box-shadow: 0 0 8px #f09d20;
+    color: #fff;
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, #f09d20, #bbb80f);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+
+
+.btn-gradient:hover {
+    background: linear-gradient(90deg, #76ff4c70, #2ae543);
+    transform: translateY(-2px);
+}
+
+
+.btn-back {
+    border: 1px solid rgba(207, 224, 160, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: rgba(199, 130, 2, 0.404);
+    transform: translateX(-3px);
+}
+
+hr {
+    opacity: 0.2;
+}
