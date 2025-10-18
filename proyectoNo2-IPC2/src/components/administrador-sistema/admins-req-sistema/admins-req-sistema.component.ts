@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/usuarios/usuario';
 import { AdminsSistemaCardComponent } from "../admins-sistema-card/admins-sistema-card.component";
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './admins-req-sistema.component.html',
   styleUrl: './admins-req-sistema.component.scss'
 })
-export class AdminsReqSistemaComponent {
+export class AdminsReqSistemaComponent implements OnInit{
 
   administradores: Usuario[] = [];
   administradoresMostrados: Usuario[] = [];

@@ -11,6 +11,7 @@ import { AdminsReqSistemaComponent } from '../components/administrador-sistema/a
 import { CrearAdminSistemaComponent } from '../components/administrador-sistema/crear-admin-sistema/crear-admin-sistema.component';
 import { CrearAdminCineComponent } from '../components/administrador-sistema/crear-admin-cine/crear-admin-cine.component';
 import { AdminsReqCineComponent } from '../components/administrador-sistema/admins-req-cine/admins-req-cine.component';
+import { ReporteAnunciosComponent } from '../components/reportes-sistema/reporte-anuncios/reporte-anuncios.component';
 
 
 export const routes: Routes = [
@@ -66,7 +67,10 @@ export const routes: Routes = [
                 path: 'crear-admin-cine',
                 component: CrearAdminCineComponent,
             },
-
+            {
+                path: 'reporte-anuncios',
+                component: ReporteAnunciosComponent,
+            },
             {
                 path: '',
                 redirectTo: 'usuarios',

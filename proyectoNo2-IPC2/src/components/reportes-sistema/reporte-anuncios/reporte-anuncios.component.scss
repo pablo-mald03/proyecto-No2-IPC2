@@ -1,0 +1,115 @@
+.reportes-container {
+    max-width: 1200px;
+    min-height: calc(100vh - 160px);
+}
+
+.filtros-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 25px;
+    padding: 1.2rem 2rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light {
+    transition: all 0.3s ease;
+}
+
+
+.filtros-container .form-control,
+.filtros-container .form-select {
+    background-color: #4e193c;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.filtros-container .form-control:focus,
+.filtros-container .form-select:focus {
+    outline: none;
+    box-shadow: 0 0 8px #f39c12;
+    background-color: #5e1d51;
+}
+
+.btn-outline-light:hover {
+    background-color: #ca9d0a;
+    border-color: #2f0899;
+}
+
+.reporte-card {
+    width: 320px;
+    height: 180px;
+    background: linear-gradient(135deg, #6B0899, #9b59b6, #f39c12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+}
+
+.reporte-card:hover {
+    transform: scale(1.03);
+    transition: 0.3s ease;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-filtros {
+    background: linear-gradient(90deg, #994e08, #f39c12, #b68b59);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 50px;
+    border: none;
+    padding: 0.55rem 1.8rem;
+    transition: all 0.4s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-filtros:hover {
+    background-position: right center;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 201, 10, 0.5);
+    color: #fff;
+}
+
+.btn-filtros:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 12px rgba(255, 201, 10, 0.4);
+}
+
+
+.btn-cargar-mas {
+    position: relative;
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #6b0899, #f39c12, #9b59b6);
+    background-size: 200% 200%;
+    transition: all 0.4s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+
+.btn-cargar-mas:hover {
+    background-position: right center;
+    color: #fff;
+    box-shadow: 0 6px 25px rgba(255, 201, 10, 0.5);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.btn-cargar-mas:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #4e193c;
+    box-shadow: none;
+    color: #ccc;
+}

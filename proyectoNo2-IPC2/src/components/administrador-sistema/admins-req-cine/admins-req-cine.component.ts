@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/usuarios/usuario';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminsCineCardsComponent } from "../admins-cine-cards/admins-cine-cards.component";
@@ -9,7 +9,7 @@ import { AdminsCineCardsComponent } from "../admins-cine-cards/admins-cine-cards
   templateUrl: './admins-req-cine.component.html',
   styleUrl: './admins-req-cine.component.scss'
 })
-export class AdminsReqCineComponent {
+export class AdminsReqCineComponent implements OnInit{
 
   administradores: Usuario[] = [];
   administradoresMostrados: Usuario[] = [];

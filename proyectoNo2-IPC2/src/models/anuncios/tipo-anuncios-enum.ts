@@ -1,0 +1,6 @@
+export enum TipoAnuncioEnum{
+
+    ANUNCIO_TEXTO = "ANUNCIO TEXTO",
+    IMAGEN_TEXTO = "IMAGEN TEXTO",
+    VIDEO_TEXTO = "VIDEO TEXTO",
+}
