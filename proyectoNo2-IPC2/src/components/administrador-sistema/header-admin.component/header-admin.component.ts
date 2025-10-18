@@ -4,7 +4,7 @@ import { Master } from '../../../services/masterLog/master';
 
 @Component({
   selector: 'app-header-admin',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './header-admin.component.html',
   styleUrl: './header-admin.component.scss'
 })
