@@ -1,0 +1,30 @@
+<main class="reportes-container mx-auto p-2">
+    <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
+        <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de 5 Salas mas Gustadas </h2>
+
+
+        <div class="text-center mt-1 mb-4">
+            <button class="btn btn-exportar" (click)="exportarReporte()">
+                Exportar Reporte
+            </button>
+        </div>
+
+
+        <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
+            @for (salas of reportesMostrados; track salas.codigo) {
+            <app-salas-gustadas-cards [salasGustadas]="salas"></app-salas-gustadas-cards>
+            }
+            @empty {
+            <div class="text-center text-light mt-5">
+                <h5>No hay reportes de las 5 salas mas gustadas</h5>
+            </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-cargar-mas" (click)="cargarMasReportes()" [disabled]="todosCargados">
+                {{ todosCargados ? 'No hay más Anuncios' : 'Cargar más' }}
+            </button>
+        </div>
+    </div>
+</main>

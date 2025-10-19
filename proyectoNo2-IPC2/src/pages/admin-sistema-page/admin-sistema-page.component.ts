@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HeaderAdminComponent } from '../../components/administrador-sistema/header-admin.component/header-admin.component';
+import { HeaderAdminComponent } from '../../components/administrador-sistema/header-admin/header-admin.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RouterOutlet } from '@angular/router';
 
