@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SalaMasGustadaDTO } from '../../../models/reportes/sala-mas-comentada-dto';
+import { SalaMasGustadaDTO } from '../../../models/reportes/sala-mas-gustada-dto';
 import { CommonModule, NgFor } from '@angular/common';
 
 @Component({

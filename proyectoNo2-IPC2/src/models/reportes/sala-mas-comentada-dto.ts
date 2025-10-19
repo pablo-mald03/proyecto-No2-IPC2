@@ -1,12 +1,11 @@
-import { UsuarioReporteDTO } from "../usuarios/usuario-report-dto";
+import { SalaComentarioDTO } from "../salas-cine/sala-comentada-dto";
 
-export interface SalaMasGustadaDTO {
+export interface SalaMasComenadaDTO {
 
     codigo: string,
     nombre: string,
     filas: number,
     columnas: number,
     ubicacion: string,
-    totalVentasBoleto: number,
-    usuarios: UsuarioReporteDTO[],
+    comentarios: SalaComentarioDTO[],
 }
