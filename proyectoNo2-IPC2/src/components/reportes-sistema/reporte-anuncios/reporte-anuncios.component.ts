@@ -106,4 +106,9 @@ export class ReporteAnunciosComponent implements OnInit {
     }
   }
 
+  exportarReporte(){
+
+
+  }
+
 }

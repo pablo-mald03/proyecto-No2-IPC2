@@ -1,0 +1,138 @@
+.card-reporte {
+  width: 100%;
+  max-width: 950px;
+  background: radial-gradient(circle at top left, #1f1f1f, #121212 60%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.2rem;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.45);
+  transition: all 0.35s ease;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+
+.card-reporte:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 0 35px rgba(255, 193, 7, 0.35);
+}
+
+.card-header.bg-gradient {
+  background: linear-gradient(90deg, #ffcc33, #ffb300, #ff9900);
+  color: #212121;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header h5 {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+.card-header p {
+  font-size: 0.9rem;
+  color: rgba(20, 20, 20, 0.8);
+  margin-bottom: 0;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, #ffde59, #ffc107);
+  color: #1a1a1a !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.card-body {
+  padding: 1.5rem;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  font-size: 0.92rem;
+  color: #eaeaea;
+}
+
+.table thead {
+  background: linear-gradient(90deg, #ffc107, #ffb300);
+  color: #1b1b1b;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table thead th {
+  border: none;
+  padding: 0.75rem 1rem;
+}
+
+.table tbody tr {
+  background-color: rgba(255, 255, 255, 0.03);
+  transition: background 0.3s ease, transform 0.2s ease;
+  border-radius: 12px;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 193, 7, 0.1);
+  transform: scale(1.01);
+}
+
+.table td {
+  padding: 0.8rem 1rem;
+  border: none;
+  color: #e0e0e0;
+  vertical-align: middle;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #28a745, #66bb6a);
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #dc3545, #e57373);
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.table-responsive {
+  border-radius: 12px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffc107 #1c1c1c;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: #1c1c1c;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #ffc107;
+  border-radius: 10px;
+}
+
+.card-reporte::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 193, 7, 0.15), transparent 70%);
+  transform: rotate(25deg);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  z-index: 0;
+}
+
+.card-reporte:hover::before {
+  opacity: 1;
+}

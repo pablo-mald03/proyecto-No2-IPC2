@@ -1,18 +1,24 @@
 <main class="reportes-container mx-auto p-2">
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
-        <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Centro de Reportes</h2>
+        <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de Anuncios Comprados</h2>
 
-        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-5">
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
             <div class="px-3">
                 <label for="tipoAnuncio" class="form-label fw-semibold">Tipo de Anuncio:</label>
                 <select id="tipoAnuncio" class="form-select rounded-pill px-3 py-2 border-0 shadow-sm">
+                    <option value="todos">Todos</option>
                     <option *ngFor="let tipo of tipoAnuncioOptions" [value]="tipo">{{ tipo.value }}</option>
                 </select>
             </div>
 
             <div class="px-3">
-                <label for="fecha" class="form-label fw-semibold">Fecha:</label>
-                <input type="date" id="fecha" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm" />
+                <label for="fecha" class="form-label fw-semibold">Fecha Inicio:</label>
+                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm" />
+            </div>
+
+            <div class="px-3">
+                <label for="fecha" class="form-label fw-semibold">Fecha Fin:</label>
+                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm" />
             </div>
 
             <div class="text-center mt-3 mt-md-4">
@@ -21,6 +27,13 @@
                 </button>
             </div>
         </div>
+
+        <div class="text-center mt-1 mb-4">
+            <button class="btn btn-exportar" (click)="exportarReporte()" >
+                Exportar Reporte
+            </button>
+        </div>
+
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
             @for (anuncio of anunciosMostrados; track anuncio.codigo) {

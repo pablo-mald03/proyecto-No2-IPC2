@@ -1,0 +1,52 @@
+<div class="card-reporte shadow-lg rounded-4 overflow-hidden text-light">
+    <div class="card-header p-3 bg-gradient d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="mb-3 fw-bold text-info">{{ anunciante.nombre }}</h3>
+
+            <h5 class="mb-2 fw-bold text-white"><i class="bi bi-person-badge"></i> {{ anunciante.id }}</h5>
+            <p class="mb-0 text-secondary text-warning">{{ anunciante.correo }}</p>
+        </div>
+        <span class="badge bg-warning text-dark fw-semibold px-3 py-2">
+            Total Q{{ anunciante.total | number: '1.2-2' }}
+        </span>
+    </div>
+
+
+    <div class="card-body p-3">
+        <div class="table-responsive">
+            <table class="table table-dark table-striped align-middle mb-0 rounded-3 overflow-hidden">
+                <thead class="table-warning text-dark">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Fecha Compra</th>
+                        <th>Fecha Expiración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (anuncio of anunciante.anuncios; track anuncio.codigo) {
+                    <tr>
+                        <td>{{ anuncio.codigo }}</td>
+                        <td>{{ anuncio.nombre }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="anuncio.estado ? 'bg-success' : 'bg-danger'">
+                                {{ anuncio.estado ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                        <td>{{ anuncio.fechaCompra | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ anuncio.fechaExpiracion | date: 'dd/MM/yyyy' }}</td>
+                    </tr>
+                    }
+                    @empty {
+                    <tr>
+                        <td colspan="5" class="text-center text-secondary py-3">
+                            No hay anuncios registrados
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,7 @@ import { CrearAdminSistemaComponent } from '../components/administrador-sistema/
 import { CrearAdminCineComponent } from '../components/administrador-sistema/crear-admin-cine/crear-admin-cine.component';
 import { AdminsReqCineComponent } from '../components/administrador-sistema/admins-req-cine/admins-req-cine.component';
 import { ReporteAnunciosComponent } from '../components/reportes-sistema/reporte-anuncios/reporte-anuncios.component';
+import { ReporteGananciasAnuncianteComponent } from '../components/reportes-sistema/reporte-ganancias-anunciante/reporte-ganancias-anunciante.component';
 
 
 export const routes: Routes = [
@@ -70,6 +71,10 @@ export const routes: Routes = [
             {
                 path: 'reporte-anuncios',
                 component: ReporteAnunciosComponent,
+            },
+            {
+                path: 'reporte-anunciantes',
+                component: ReporteGananciasAnuncianteComponent,
             },
             {
                 path: '',
