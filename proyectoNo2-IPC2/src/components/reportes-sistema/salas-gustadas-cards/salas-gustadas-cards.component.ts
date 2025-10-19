@@ -4,7 +4,7 @@ import { CommonModule, NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-salas-gustadas-cards',
-  imports: [NgFor,CommonModule],
+  imports: [CommonModule],
   templateUrl: './salas-gustadas-cards.component.html',
   styleUrl: './salas-gustadas-cards.component.scss'
 })

@@ -3,13 +3,6 @@
         <h2 class="fw-bold mb-5 text-center fs-3 text-warning">Reporte de 5 Salas mas Gustadas </h2>
 
          <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
-            <div class="px-3">
-                <label for="tipoAnuncio" class="form-label fw-semibold">Tipo de Anuncio:</label>
-                <select id="tipoAnuncio" class="form-select rounded-pill px-3 py-2 border-0 shadow-sm">
-                    <option value="todos">Todos</option>
-                    <option *ngFor="let tipo of tipoAnuncioOptions" [value]="tipo">{{ tipo.value }}</option>
-                </select>
-            </div>
 
             <div class="px-3">
                 <label for="fecha" class="form-label fw-semibold">Fecha Inicio:</label>

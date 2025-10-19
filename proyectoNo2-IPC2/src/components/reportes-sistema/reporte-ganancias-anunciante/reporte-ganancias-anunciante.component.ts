@@ -6,7 +6,7 @@ import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-reporte-ganancias-anunciante.component',
-  imports: [GananciasAnuncianteCardsComponent, NgFor],
+  imports: [GananciasAnuncianteCardsComponent],
   templateUrl: './reporte-ganancias-anunciante.component.html',
   styleUrl: './reporte-ganancias-anunciante.component.scss'
 })

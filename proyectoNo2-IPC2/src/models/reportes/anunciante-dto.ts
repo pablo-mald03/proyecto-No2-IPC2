@@ -1,4 +1,4 @@
-import { AnuncioDTO } from "../anuncios/anuncioDTO";
+import { AnuncioDTO } from "../anuncios/anuncio-dto";
 
 export interface ReporteAnuncianteDTO{
 
