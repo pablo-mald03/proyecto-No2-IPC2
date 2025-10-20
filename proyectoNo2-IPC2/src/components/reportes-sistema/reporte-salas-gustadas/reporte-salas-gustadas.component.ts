@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SalaMasGustadaDTO } from '../../../models/reportes/sala-mas-gustada-dto';
 import { SalasGustadasCardsComponent } from "../salas-gustadas-cards/salas-gustadas-cards.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './reporte-salas-gustadas.component.html',
   styleUrl: './reporte-salas-gustadas.component.scss'
 })
-export class ReporteSalasGustadasComponent {
+export class ReporteSalasGustadasComponent implements OnInit {
 
   reporteSalaGustada: SalaMasGustadaDTO[] = [];
   reportesMostrados: SalaMasGustadaDTO[] = [];

@@ -1,7 +1,7 @@
 <main class="reportes-container mx-auto p-2">
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
-        <h2 class="fw-bold mb-4 text-center fs-3 text-warning"><i class="bi bi-currency-exchange"></i> Reporte de
-            Ganancias del sistema</h2>
+        <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de
+            Comentarios en Salas de Cine</h2>
 
         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
             [formGroup]="filtrosForm">
@@ -25,8 +25,8 @@
             </div>
 
             <div class="text-center mt-md-4 d-flex gap-2">
-                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrar()">
-                    <i class="bi bi-funnel-fill me-2"></i>Generar
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="generarReporte()">
+                    <i class="bi bi-book me-2"></i> Generar
                 </button>
 
                 <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
@@ -36,6 +36,30 @@
             </div>
         </div>
 
+         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 mt-3"
+            [formGroup]="filtroSalaForm">
+
+            <div class="px-3 text-white">
+                <label for="usuario" class="form-label fw-semibold">Codigo sala de Cine:</label>
+                <input type="text" id="idSala" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm "
+                    placeholder="sala-001" formControlName="idSala" />
+
+            </div>
+
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrarSala()">
+                    <i class="bi bi-funnel-fill me-2"></i> Filtrar
+                </button>
+
+
+                <button class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold" (click)="limpiarSala()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
+                </button>
+            </div>
+        </div>
+
+
+
         <div class="text-center mt-1 mb-4">
             <button class="btn btn-exportar" (click)="exportarReporte()">
                 Exportar Reporte
@@ -44,15 +68,15 @@
 
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
-            @for (ganancia of reportesMostrados; track ganancia.totalGanancia) {
-            <app-reporte-ganacias-cards [gananciaProcesada]="ganancia"></app-reporte-ganacias-cards >
+          @for (sala of reportesMostrados; track sala.codigo) {
+            <app-reporte-salas-comentadas-cards [salaComentarios]="sala"></app-reporte-salas-comentadas-cards>
             }
             @empty {
             <div class="text-center text-light mt-5">
                 <h5>No hay reportes de ganancias en el intervalo</h5>
             </div>
             }
-
+     
 
 
         </div>

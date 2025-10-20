@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GananciasSistemaDTO } from '../../../models/reportes/ganancias-sistema-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
@@ -10,7 +10,7 @@ import { ReporteGanaciasCardsComponent } from "../reporte-ganacias-cards/reporte
   templateUrl: './reporte-ganancias.component.html',
   styleUrl: './reporte-ganancias.component.scss'
 })
-export class ReporteGananciasComponent {
+export class ReporteGananciasComponent implements OnInit{
 
   //Apartado de atributos que sirven para exponer los dto
   reporteGanancias: GananciasSistemaDTO[] = [];

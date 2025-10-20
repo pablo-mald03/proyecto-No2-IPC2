@@ -3,7 +3,6 @@ import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { LoginPageComponent } from '../pages/login-page/login-page.component';
 import { RegistroPageComponent } from '../pages/registro-page/registro-page.component';
 import { PrincipalUsuarioPageComponent } from '../pages/principal-usuario-page/principal-usuario-page.component';
-import { NgModule } from '@angular/core';
 import { authGuard } from './guards/auth-guard';
 import { AdminSistemaPageComponent } from '../pages/admin-sistema-page/admin-sistema-page.component';
 import { AdministracionUsuariosComponent } from '../components/administrador-sistema/administracion-usuarios/administracion-usuarios.component';
@@ -17,6 +16,7 @@ import { ReporteSalasGustadasComponent } from '../components/reportes-sistema/re
 import { ReporteSalasComentadasComponent } from '../components/reportes-sistema/reporte-salas-comentadas/reporte-salas-comentadas.component';
 import { ReporteGananciasComponent } from '../components/reportes-sistema/reporte-ganancias/reporte-ganancias.component';
 import { AdminCinePageComponent } from '../pages/admin-cine-page/admin-cine-page.component';
+import { ReporteComentariosSalasComentadasComponent } from '../components/reportes-cine/reporte-comentarios-salas-comentadas/reporte-comentarios-salas-comentadas.component';
 
 
 export const routes: Routes = [
@@ -107,7 +107,10 @@ export const routes: Routes = [
 
         //Directorios de funcionalidades dentro de la pagina de administradores de cine
         children: [
-
+            {
+                path: 'reportes/salas/comentadas',
+                component: ReporteComentariosSalasComentadasComponent,
+            },
 
         ]
     },
