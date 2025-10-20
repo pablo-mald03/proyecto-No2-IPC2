@@ -1,0 +1,49 @@
+.card-anuncio:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+}
+
+
+
+.text-dark-emphasis {
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.badge.bg-warning {
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.bg-gradient-anuncio {
+  background: linear-gradient(120deg, #d49b00, #f321f3);
+  color: #212121;
+}
+
+
+.card-body {
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-body p {
+  font-size: 0.9rem;
+  color: #d1d1d1;
+}
+
+.card-body i {
+  font-size: 1rem;
+}
+
+@media (max-width: 420px) {
+  .card-anuncio {
+    max-width: 100%;
+  }
+}
+
+.card-anuncio {
+  background: linear-gradient(145deg, #121212, #1f1f1f);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}

@@ -49,3 +49,10 @@
 .subcontenedor:hover {
   background-color: rgba(255, 255, 255, 0.08);
 }
+
+app-ganacias-anuncios-ccomprados-cards {
+  display: block;
+  width: 100%;        // ocupa el 100% de su columna
+  max-width: 420px;   // ancho máximo de la card
+  margin: 0 auto;     // centra la card dentro de la columna
+}

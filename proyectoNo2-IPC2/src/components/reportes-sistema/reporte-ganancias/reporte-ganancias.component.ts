@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { GananciasSistemaDTO } from '../../../models/reportes/ganancias-sistema-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { ReporteGanaciasCardsComponent } from "../reporte-ganacias-cards.component/reporte-ganacias-cards.component";
+import { ReporteGanaciasCardsComponent } from "../reporte-ganacias-cards/reporte-ganacias-cards.component";
 
 @Component({
   selector: 'app-reporte-ganancias',
@@ -46,7 +46,7 @@ export class ReporteGananciasComponent {
             nombre: 'Alba Cinema',
             montoOcultacion: 2000,
             fechaCreacion: new Date('2025-02-15'),
-            costos: [
+            costosAsociados: [
               {
                 costo: 300,
                 fechaModificacion: new Date('2025-03-15')
@@ -64,7 +64,7 @@ export class ReporteGananciasComponent {
             nombre: 'Cinepolis',
             montoOcultacion: 1000,
             fechaCreacion: new Date('2025-01-15'),
-            costos: [
+            costosAsociados: [
               {
                 costo: 400,
                 fechaModificacion: new Date('2025-03-12')
@@ -83,17 +83,23 @@ export class ReporteGananciasComponent {
           {
             codigo: 'AN-2025-001',
             nombre: 'Campaña de Verano - CineNova',
-            fechaCompra: new Date('2025-03-12')
+            fechaCompra: new Date('2025-03-12'),
+            monto: 123,
+            usuario: 'patito-01'
           },
           {
             codigo: 'AN-2025-002',
             nombre: 'Promoción Película Épica',
-            fechaCompra: new Date('2025-06-01')
+            fechaCompra: new Date('2025-06-01'),
+            monto: 203,
+            usuario: 'papito-01'
           },
           {
             codigo: 'AN-2025-003',
             nombre: 'Lanzamiento Serie Animada',
-            fechaCompra: new Date('2025-08-25')
+            fechaCompra: new Date('2025-08-25'),
+            monto: 153,
+            usuario: 'pepito-01'
           }
         ],
 

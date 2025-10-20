@@ -27,30 +27,33 @@
                 <i class="bi bi-building me-2"></i>Gastos por Cine
             </h5>
         </div>
-        <!-- <div class="subcontenedor">
-            @for (gasto of dto.gastosCine; track gasto.id) {
-            <app-card-gasto-cine [gasto]="gasto"></app-card-gasto-cine>
+        <div class="subcontenedor">
+            @for (costo of gananciaProcesada.costosCine; track costo.codigo) {
+            <app-ganacias-costos-cine-cards [costoCine]="costo"></app-ganacias-costos-cine-cards>
             }
             @empty {
             <p class="text-secondary text-center">No hay gastos registrados</p>
             }
-        </div> -->
+        </div>
     </section>
 
     <section class="seccion mb-4 mt-1">
         <div class="d-flex align-items-center justify-content-between mb-2 mt-1">
-            <h5 class="fw-bold text-info mb-0">
+            <h5 class="fw-bold text-info mb-4">
                 <i class="bi bi-bag-check me-2"></i>Anuncios Comprados
             </h5>
         </div>
-        <!-- <div class="subcontenedor">
-            @for (anuncio of dto.anunciosComprados; track anuncio.codigo) {
-            <app-card-anuncio-comprado [anuncio]="anuncio"></app-card-anuncio-comprado>
+        <div class="subcontenedor row g-4 align-items-center">
+            @for (anuncio of gananciaProcesada.anunciosComprados; track anuncio.codigo) {
+            <div class="col-12 col-md-6">
+                <app-ganacias-anuncios-ccomprados-cards
+                    [anuncioComprado]="anuncio"></app-ganacias-anuncios-ccomprados-cards>
+            </div>
             }
             @empty {
             <p class="text-secondary text-center">No hay anuncios comprados</p>
             }
-        </div>-->
+        </div>
     </section>
 
     <section class="seccion mt-1">

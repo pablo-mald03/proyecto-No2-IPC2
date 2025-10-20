@@ -1,0 +1,51 @@
+<div class="cine-card shadow-lg rounded-4 overflow-hidden mb-5">
+    <div class="cine-header p-3 bg-gradient-cine d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">{{ costoCine.nombre }}</h3>
+            <p class="mb-0 text-dark-emphasis">
+                Código: {{ costoCine.codigo }}
+
+            </p>
+            <p class="mb-0  text-dark-emphasis">
+                Creado el: {{ costoCine.fechaCreacion | date: 'dd/MM/yyyy' }}
+
+            </p>
+        </div>
+        <div class="text-end mt-3">
+            <p class="badge bg-info text-dark px-3 py-2 fw-bold">
+                Monto Ocultación de Anuncios: Q{{ costoCine.montoOcultacion | number: '1.2-2' }}
+            </p>
+        </div>
+    </div>
+
+    <div class="cine-body bg-dark p-3">
+        <div class="subcard-costos rounded-4 p-3">
+            <h6 class="text-light mb-3">Costos que ha tenido el Cine</h6>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle mb-0">
+                    <thead class="table-warning text-dark">
+                        <tr>
+                            <th>Monto (Q)</th>
+                            <th>Fecha Modificación</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center text-white">
+                        @for (costoModificado of costoCine.costosAsociados; track costoModificado.fechaModificacion) {
+                        <tr>
+                            <td>{{ costoModificado.costo | number: '1.2-2' }}</td>
+                            <td>{{ costoModificado.fechaModificacion | date: 'dd/MM/yyyy' }}</td>
+                        </tr>
+                        }
+                        @empty {
+                        <tr>
+                            <td colspan="3" class="text-center text-secondary py-3">
+                                No hay costos de cine registrados
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

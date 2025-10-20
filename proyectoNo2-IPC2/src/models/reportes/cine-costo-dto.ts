@@ -1,4 +1,4 @@
-import { CostoCineDTO } from "./costo-cine-dto";
+import { CostoModificacionCineDTO } from "./costo-modificacion-cine-dto";
 
 export interface CineCostoDTO {
 
@@ -6,6 +6,6 @@ export interface CineCostoDTO {
     nombre: string,
     montoOcultacion: number,
     fechaCreacion: Date,
-    costos: CostoCineDTO[],
+    costosAsociados: CostoModificacionCineDTO[],
 
 }
