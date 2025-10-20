@@ -2,16 +2,24 @@
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
         <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de Ganancias por Anunciante</h2>
 
-        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
+            [formGroup]="filtrosForm">
 
             <div class="px-3 text-white">
                 <label for="usuario" class="form-label fw-semibold">ID usuario:</label>
-                <input type="text" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm " placeholder="user-001"/>
+                <input type="text" id="idUsuario" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm "
+                    placeholder="user-001" formControlName="idUsuario" />
+
             </div>
 
-            <div class="text-center mt-3 mt-md-4">
-                <button class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" >
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold">
                     <i class="bi bi-funnel-fill me-2"></i>Filtrar
+                </button>
+
+
+                <button class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold" (click)="limpiarUsuario()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
                 </button>
             </div>
         </div>

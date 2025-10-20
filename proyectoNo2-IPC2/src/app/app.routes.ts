@@ -50,7 +50,6 @@ export const routes: Routes = [
         children: [
 
             //Van todas las URL relacionadas a la pagina de admin
-
             {
                 path: 'usuarios',
                 component: AdministracionUsuariosComponent,
@@ -72,23 +71,23 @@ export const routes: Routes = [
                 component: CrearAdminCineComponent,
             },
             {
-                path: 'reporte-anuncios',
+                path: 'reportes/anuncios',
                 component: ReporteAnunciosComponent,
             },
             {
-                path: 'reporte-anunciantes',
+                path: 'reportes/anunciantes',
                 component: ReporteGananciasAnuncianteComponent,
             },
             {
-                path: 'reporte-salas-gustadas',
+                path: 'reportes/salas-gustadas',
                 component: ReporteSalasGustadasComponent,
             },
             {
-                path: 'reporte-salas-comentadas',
+                path: 'reportes/salas-comentadas',
                 component: ReporteSalasComentadasComponent,
             },
             {
-                path: 'reporte-ganancias',
+                path: 'reportes/ganancias',
                 component: ReporteGananciasComponent,
             },
             {

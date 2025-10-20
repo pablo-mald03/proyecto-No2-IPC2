@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
-import { NgFor } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 import { Anuncio } from '../../../models/anuncios/anuncio';
 import { CardsReporteAnunciosComponent } from "../cards-reporte-anuncios/cards-reporte-anuncios.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reporte-anuncios',
-  imports: [NgFor, CardsReporteAnunciosComponent],
+  imports: [NgFor, CardsReporteAnunciosComponent, ReactiveFormsModule, NgClass],
   templateUrl: './reporte-anuncios.component.html',
   styleUrl: './reporte-anuncios.component.scss'
 })
@@ -21,8 +22,25 @@ export class ReporteAnunciosComponent implements OnInit {
   cantidadPorCarga = 2;
   todosCargados = false;
 
+  //Atributos que sirven para gestionar los filtros
+  filtrosForm!: FormGroup;
+
+  constructor(
+    private formBuild: FormBuilder
+
+  ) { }
+
+
 
   ngOnInit(): void {
+
+    //Se teneran los filtros reactivos
+    this.filtrosForm = this.formBuild.group({
+      tipoAnuncio: ['todos'],
+      fechaInicio: [null],
+      fechaFin: [null]
+    });
+
 
     this.anuncios = [
 
@@ -82,6 +100,7 @@ export class ReporteAnunciosComponent implements OnInit {
     this.cargarMasAnuncios();
   }
 
+  //Anuncios 
   tipoAnuncioOptions = Object.keys(TipoAnuncioEnum)
     .filter(val => ['ANUNCIO_TEXTO', 'IMAGEN_TEXTO', 'VIDEO_TEXTO'].includes(val))
     .map(key => ({
@@ -106,8 +125,53 @@ export class ReporteAnunciosComponent implements OnInit {
     }
   }
 
-  exportarReporte(){
+  //Metodo que sirve para exportar el reporte
+  exportarReporte() {
 
+
+  }
+
+
+  //Metodo get que sirve para validar si la fecha inicial antecede a la final
+  get fechaInvalida(): boolean {
+    const inicio = this.filtrosForm.get('fechaInicio')?.value;
+    const fin = this.filtrosForm.get('fechaFin')?.value;
+    if (!inicio || !fin) return false;
+    return new Date(inicio) > new Date(fin);
+  }
+
+  //Metodo que sirve para validar las fechas
+  validarFechas() {
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+    if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
+      this.filtrosForm.setErrors({ fechaInvalida: true });
+    } else {
+      this.filtrosForm.setErrors(null);
+    }
+  }
+
+  //Metodo que sirve para filtrar
+  filtrar(): void {
+
+    if (this.filtrosForm.invalid || this.fechaInvalida) return;
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString() : null;
+    const finISO = fechaFin ? new Date(fechaFin).toISOString() : null;
+
+    //Pendiente hacer la query
+
+
+  }
+
+  //Metodo que se encarga de limpiar los filtros
+  limpiarFiltros(): void {
+    this.filtrosForm.patchValue({
+      tipoAnuncio: 'Todos',
+      fechaInicio: null,
+      fechaFin: null
+    });
 
   }
 

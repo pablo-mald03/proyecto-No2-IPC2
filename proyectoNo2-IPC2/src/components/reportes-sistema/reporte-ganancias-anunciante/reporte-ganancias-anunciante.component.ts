@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { Anuncio } from '../../../models/anuncios/anuncio';
 import { GananciasAnuncianteCardsComponent } from "../ganancias-anunciante-cards/ganancias-anunciante-cards.component";
 import { ReporteAnuncianteDTO } from '../../../models/reportes/anunciante-dto';
-import { NgFor } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reporte-ganancias-anunciante.component',
-  imports: [GananciasAnuncianteCardsComponent],
+  imports: [GananciasAnuncianteCardsComponent, ReactiveFormsModule],
   templateUrl: './reporte-ganancias-anunciante.component.html',
   styleUrl: './reporte-ganancias-anunciante.component.scss'
 })
@@ -19,8 +18,20 @@ export class ReporteGananciasAnuncianteComponent {
   cantidadPorCarga = 2;
   todosCargados = false;
 
+  //Atributo que permite filtrar por anunciante
+  filtrosForm!: FormGroup;
+
+  constructor(
+    private formBuild: FormBuilder
+
+  ) { }
+
 
   ngOnInit(): void {
+
+    this.filtrosForm = this.formBuild.group({
+      idUsuario: [null]
+    });
 
     this.reporteAnunciante = [
       {
@@ -104,9 +115,30 @@ export class ReporteGananciasAnuncianteComponent {
     }
   }
 
+  //Metodo que sirve para exportar reportes
   exportarReporte() {
 
 
+  }
+
+  //Metodo que sirve para filtrar
+  filtrar(): void {
+
+    const { idUsuario } = this.filtrosForm.value;
+
+    if (idUsuario == null || idUsuario == '') {
+      return;
+    }
+
+    //Pendiente hacer la query
+    console.log('trilin');
+
+  }
+
+  limpiarUsuario(): void {
+    this.filtrosForm.patchValue({
+      idUsuario: ''
+    });
   }
 
 

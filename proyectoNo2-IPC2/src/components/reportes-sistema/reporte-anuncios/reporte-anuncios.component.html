@@ -2,34 +2,53 @@
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
         <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de Anuncios Comprados</h2>
 
-        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
+            [formGroup]="filtrosForm">
+
             <div class="px-3">
                 <label for="tipoAnuncio" class="form-label fw-semibold">Tipo de Anuncio:</label>
-                <select id="tipoAnuncio" class="form-select rounded-pill px-3 py-2 border-0 shadow-sm">
+                <select id="tipoAnuncio" class="form-select rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="tipoAnuncio">
                     <option value="todos">Todos</option>
-                    <option *ngFor="let tipo of tipoAnuncioOptions" [value]="tipo">{{ tipo.value }}</option>
+                    <option *ngFor="let tipo of tipoAnuncioOptions" [value]="tipo.key">
+                        {{ tipo.value }}
+                    </option>
                 </select>
             </div>
 
             <div class="px-3">
-                <label for="fecha" class="form-label fw-semibold">Fecha Inicio:</label>
-                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm" />
+                <label for="fechainicio" class="form-label fw-semibold">Fecha Inicio:</label>
+                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaInicio" [ngClass]="{'is-invalid': fechaInvalida}" />
             </div>
 
             <div class="px-3">
-                <label for="fecha" class="form-label fw-semibold">Fecha Fin:</label>
-                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm" />
+                <label for="fechafin" class="form-label fw-semibold">Fecha Fin:</label>
+                <input type="date" id="fechafin" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaFin" [ngClass]="{'is-invalid': fechaInvalida}" />
+
+                @if (fechaInvalida) {
+                <div class="invalid-feedback d-block">
+                    La fecha de inicio no puede ser posterior a la fecha fin.
+                </div>
+                }
             </div>
 
-            <div class="text-center mt-3 mt-md-4">
-                <button class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold">
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrar()">
                     <i class="bi bi-funnel-fill me-2"></i>Filtrar
                 </button>
+
+                <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
+                    (click)="limpiarFiltros()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
+                </button>
             </div>
+
         </div>
 
         <div class="text-center mt-1 mb-4">
-            <button class="btn btn-exportar" (click)="exportarReporte()" >
+            <button class="btn btn-exportar" (click)="exportarReporte()">
                 Exportar Reporte
             </button>
         </div>
