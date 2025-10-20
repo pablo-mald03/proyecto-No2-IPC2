@@ -19,6 +19,7 @@ import { AdminCinePageComponent } from '../pages/admin-cine-page/admin-cine-page
 import { ReporteComentariosSalasComentadasComponent } from '../components/reportes-cine/reporte-comentarios-salas-comentadas/reporte-comentarios-salas-comentadas.component';
 import { ReportePeliculasProyectadasComponent } from '../components/reportes-cine/reporte-peliculas-proyectadas/reporte-peliculas-proyectadas.component';
 import { ReporteSalasGustadasCineComponent } from '../components/reportes-cine/reporte-salas-gustadas-cine/reporte-salas-gustadas-cine.component';
+import { ReporteBoletosVendidosComponent } from '../components/reportes-cine/reporte-boletos-vendidos/reporte-boletos-vendidos.component';
 
 
 export const routes: Routes = [
@@ -120,6 +121,10 @@ export const routes: Routes = [
             {
                 path: 'reportes/salas/gustadas',
                 component: ReporteSalasGustadasCineComponent,
+            },
+            {
+                path: 'reportes/boletos',
+                component: ReporteBoletosVendidosComponent,
             },
 
         ]

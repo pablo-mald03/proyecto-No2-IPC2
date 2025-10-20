@@ -21,17 +21,22 @@
                 <h5 class="text-warning mb-3"><i class="bi bi-film"></i> Películas proyectadas</h5>
 
                 <div class="peliculas-list mb-2">
-                    <div class="pelicula-item border-bottom border-secondary py-2 px-2 rounded-3 mb-2"
-                        *ngFor="let peli of salaPelicula.peliculaProyectada">
+                    @for (peli of salaPelicula.peliculaProyectada; track peli.nombre) {
+                    <div class="pelicula-item border-bottom border-secondary py-2 px-2 rounded-3 mb-2">
                         <h5 class="text-info mb-2 fw-semibold">{{ peli.nombre }}</h5>
                         <p class="text-light small mb-3">{{ peli.sinopsis }}</p>
                         <div class="d-flex justify-content-between text-secondary small">
-                            <p><i class="bi bi-calendar-event"></i> {{ peli.fechaProyeccion | date: 'dd/MM/yyyy'
-                                }}</p>
+                            <p><i class="bi bi-calendar-event"></i> {{ peli.fechaProyeccion | date: 'dd/MM/yyyy' }}</p>
                             <p><i class="bi bi-clock"></i> {{ peli.duracion }} minutos</p>
                             <p><i class="bi bi-badge-ad-fill"></i> {{ peli.clasificacion }}</p>
                         </div>
                     </div>
+                    }
+                    @empty {
+                    <div class="text-center text-secondary py-3">
+                        No hay películas proyectadas en esta sala.
+                    </div>
+                    }
                 </div>
             </div>
 

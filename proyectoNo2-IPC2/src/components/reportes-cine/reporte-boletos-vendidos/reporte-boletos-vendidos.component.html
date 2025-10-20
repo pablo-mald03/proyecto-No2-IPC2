@@ -1,0 +1,93 @@
+<main class="reportes-container mx-auto p-2">
+    <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
+        <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de
+            Comentarios en Salas de Cine</h2>
+
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
+            [formGroup]="filtrosForm">
+
+            <div class="px-3">
+                <label for="fechainicio" class="form-label fw-semibold">Fecha Inicio:</label>
+                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaInicio" [ngClass]="{'is-invalid': fechaInvalida}" />
+            </div>
+
+            <div class="px-3">
+                <label for="fechafin" class="form-label fw-semibold">Fecha Fin:</label>
+                <input type="date" id="fechafin" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaFin" [ngClass]="{'is-invalid': fechaInvalida}" />
+
+                @if (fechaInvalida) {
+                <div class="invalid-feedback d-block">
+                    La fecha de inicio no puede ser posterior a la fecha fin.
+                </div>
+                }
+            </div>
+
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="generarReporte()">
+                    <i class="bi bi-book me-2"></i> Generar
+                </button>
+
+                <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
+                    (click)="limpiarFechas()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
+                </button>
+            </div>
+        </div>
+
+         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 mt-3"
+            [formGroup]="filtroSalaForm">
+
+            <h5 class="text-warning" >Filtros:</h5>
+
+            <div class="px-3 text-white">
+                <label for="usuario" class="form-label fw-semibold">Codigo sala de Cine:</label>
+                <input type="text" id="idSala" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm "
+                    placeholder="sala-001" formControlName="idSala" />
+
+            </div>
+
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrarSala()">
+                    <i class="bi bi-funnel-fill me-2"></i> Filtrar
+                </button>
+
+
+                <button class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold" (click)="limpiarSala()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
+                </button>
+            </div>
+        </div>
+
+
+
+        <div class="text-center mt-1 mb-4">
+            <button class="btn btn-exportar" (click)="exportarReporte()">
+                Exportar Reporte
+            </button>
+        </div>
+
+
+        <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
+          @for (reporte of reportesMostrados; track reporte.codigo) {
+           <app-boletos-vendidos-cards [reporteBoletos]="reporte"></app-boletos-vendidos-cards>
+            }
+            @empty {
+            <div class="text-center text-light mt-5">
+                <h5>No hay reportes de Boletos vendidos en el intervalo</h5>
+            </div>
+            }
+     
+
+
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-cargar-mas" (click)="cargarMasReportes()" [disabled]="todosCargados">
+                {{ todosCargados ? 'No hay más salas con Boletos Vendidos' : 'Cargar más' }}
+            </button>
+        </div>
+    </div>
+</main>
+

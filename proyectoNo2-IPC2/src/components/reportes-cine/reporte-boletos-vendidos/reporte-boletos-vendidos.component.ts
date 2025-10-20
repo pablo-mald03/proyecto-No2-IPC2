@@ -1,20 +1,20 @@
 import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ReporteSalasGustadasDTO } from '../../../models/reportes-cine/reporte-sala-gustada-dto';
-import { SalasGustadasCineCardsComponent } from "../salas-gustadas-cine-cards/salas-gustadas-cine-cards.component";
+import { ReporteBoletosVendidosDTO } from '../../../models/reportes-cine/reporte-boletos-vendidos-dto';
+import { BoletosVendidosCardsComponent } from "../boletos-vendidos-cards/boletos-vendidos-cards.component";
 
 @Component({
-  selector: 'app-reporte-salas-gustadas-cine',
-  imports: [NgClass, ReactiveFormsModule, SalasGustadasCineCardsComponent],
-  templateUrl: './reporte-salas-gustadas-cine.component.html',
-  styleUrl: './reporte-salas-gustadas-cine.component.scss'
+  selector: 'app-reporte-boletos-vendidos',
+  imports: [NgClass, ReactiveFormsModule, BoletosVendidosCardsComponent],
+  templateUrl: './reporte-boletos-vendidos.component.html',
+  styleUrl: './reporte-boletos-vendidos.component.scss'
 })
-export class ReporteSalasGustadasCineComponent implements OnInit{
+export class ReporteBoletosVendidosComponent implements OnInit {
 
   //Apartado de atributos que sirven para exponer los dto
-  reporteSalas: ReporteSalasGustadasDTO[] = [];
-  reportesMostrados: ReporteSalasGustadasDTO[] = [];
+  reporteBoletos: ReporteBoletosVendidosDTO[] = [];
+  reportesMostrados: ReporteBoletosVendidosDTO[] = [];
 
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
@@ -46,19 +46,29 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
       idSala: [null]
     });
 
-    this.reporteSalas = [
+    this.reporteBoletos = [
       {
-        codigo: 'S001',
-        cineAsociado: 'Cinepolis',
-        nombre: 'Sala Premium 3D',
-        filas: 12,
-        columnas: 20,
-        ubicacion: 'Nivel 2, ala norte',
-        comentarios: [
-          { idUsuario: 'U001', calificacion: 2, fechaPosteo: new Date('2025-09-10') },
-          { idUsuario: 'U002', calificacion: 3, fechaPosteo: new Date('2025-10-12') },
-          { idUsuario: 'pablofsd-02', calificacion: 5, fechaPosteo: new Date('2025-10-15') }
-        ]
+        codigo: 'REP-001',
+        cineAsociado: 'Cine Aurora',
+        nombre: 'Sala Estelar',
+        ubicacion: 'Zona 10, Guatemala',
+        total: 1250.50,
+        usuarios: [
+          { idUsuario: 'USR-101', nombre: 'María López', boletosComprados: '4', totalPagado: 200 },
+          { idUsuario: 'USR-102', nombre: 'Carlos Pérez', boletosComprados: '3', totalPagado: 150 },
+          { idUsuario: 'USR-103', nombre: 'Ana García', boletosComprados: '5', totalPagado: 250 },
+        ],
+      },
+      {
+        codigo: 'REP-002',
+        cineAsociado: 'Cine Capitol',
+        nombre: 'Sala Premier',
+        ubicacion: 'Zona 1, Guatemala',
+        total: 890.75,
+        usuarios: [
+          { idUsuario: 'USR-201', nombre: 'Luis Ramírez', boletosComprados: '2', totalPagado: 100 },
+          { idUsuario: 'USR-202', nombre: 'Sofía Méndez', boletosComprados: '6', totalPagado: 300 },
+        ],
       },
     ];
 
@@ -69,7 +79,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
 
   //Metodo que sirve para cargar mas y no mostrar todos de golpe
   cargarMasReportes(): void {
-    const siguienteBloque = this.reporteSalas.slice(
+    const siguienteBloque = this.reporteBoletos.slice(
       this.indiceActual,
       this.indiceActual + this.cantidadPorCarga
     );
@@ -77,7 +87,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
     this.reportesMostrados.push(...siguienteBloque);
     this.indiceActual += this.cantidadPorCarga;
 
-    if (this.indiceActual >= this.reporteSalas.length) {
+    if (this.indiceActual >= this.reporteBoletos.length) {
       this.todosCargados = true;
     }
   }
@@ -135,7 +145,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
     });
   }
 
-   //Metodo que sirve para filtrar por sala
+  //Metodo que sirve para filtrar por sala
   filtrarSala(): void {
 
     const { idSala } = this.filtroSalaForm.value;
@@ -148,4 +158,5 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
     console.log('trilin');
 
   }
+
 }
