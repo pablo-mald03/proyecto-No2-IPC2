@@ -1,7 +1,7 @@
 <main class="reportes-container mx-auto p-2">
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
         <h2 class="fw-bold mb-4 text-center fs-3 text-warning">Reporte de
-            Comentarios en Salas de Cine</h2>
+            Peliculas Proyectadas en Salas de Cine</h2>
 
         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
             [formGroup]="filtrosForm">
@@ -38,7 +38,6 @@
 
          <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 mt-3"
             [formGroup]="filtroSalaForm">
-
             <h5 class="text-warning" >Filtros:</h5>
 
             <div class="px-3 text-white">
@@ -71,11 +70,11 @@
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
           @for (sala of reportesMostrados; track sala.codigo) {
-            <app-reporte-salas-comentadas-cards [salaComentarios]="sala"></app-reporte-salas-comentadas-cards>
+            <app-peliculas-proyectadas-cards [salaPelicula]="sala"></app-peliculas-proyectadas-cards> 
             }
             @empty {
             <div class="text-center text-light mt-5">
-                <h5>No hay reportes de Comentarios en salas de cine en el intervalo</h5>
+                <h5>No hay reportes de Peliculas proyectadas en el intervalo</h5>
             </div>
             }
      
@@ -85,8 +84,9 @@
 
         <div class="text-center mt-4">
             <button class="btn btn-cargar-mas" (click)="cargarMasReportes()" [disabled]="todosCargados">
-                {{ todosCargados ? 'No hay más Salas de cine' : 'Cargar más' }}
+                {{ todosCargados ? 'No hay más Peliculas en salas' : 'Cargar más' }}
             </button>
         </div>
     </div>
 </main>
+

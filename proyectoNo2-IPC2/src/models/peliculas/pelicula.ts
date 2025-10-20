@@ -1,6 +1,7 @@
 export interface Pelicula{
 
     codigo: string,
+    nombre: string,
     poster: string,
     sinopsis: string, 
     cast: string, 

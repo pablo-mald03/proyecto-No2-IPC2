@@ -316,6 +316,8 @@ CREATE TABLE pelicula(
 
 codigo VARCHAR(35) NOT NULL,
 
+nombre VARCHAR(150) NOT NULL,
+
 poster LONGBLOB NOT NULL,
 
 sinopsis VARCHAR(500) NOT NULL,

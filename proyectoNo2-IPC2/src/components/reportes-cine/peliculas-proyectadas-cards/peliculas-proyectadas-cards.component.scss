@@ -1,0 +1,100 @@
+.card-sala {
+  background: radial-gradient(circle at top left, #1a1a2e 0%, #0f0f1a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.pelicula-item h6 {
+  color: #00e0ff;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+}
+
+.pelicula-item p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.pelicula-item .text-secondary {
+  color: #b0b0b0 !important;
+}
+
+.card-sala .card-header {
+  background: linear-gradient(135deg, #232344 0%, #1a1a30 60%, #12121e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.info-line i,
+.pelicula-item i {
+  color: #ffc107;
+}
+
+.card-sala .card-header h4 {
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.card-sala .badge {
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  box-shadow: 0 0 8px rgba(0, 255, 100, 0.3);
+}
+
+.card-sala::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+
+.pelicula-item {
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid transparent;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.pelicula-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #00ffff;
+  transform: translateX(3px);
+}
+
+
+.card-sala .card-body {
+  background: rgba(18, 18, 18, 0.9);
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.peliculas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 4px;
+  overflow: visible; 
+}
+
+
+.card-sala:hover::before {
+  opacity: 1;
+}
+
+.card-sala:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+}
+
+.peliculas-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.peliculas-list::-webkit-scrollbar-thumb {
+  background-color: #ffc107;
+  border-radius: 4px;
+}

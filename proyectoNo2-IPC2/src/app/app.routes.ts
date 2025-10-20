@@ -17,6 +17,7 @@ import { ReporteSalasComentadasComponent } from '../components/reportes-sistema/
 import { ReporteGananciasComponent } from '../components/reportes-sistema/reporte-ganancias/reporte-ganancias.component';
 import { AdminCinePageComponent } from '../pages/admin-cine-page/admin-cine-page.component';
 import { ReporteComentariosSalasComentadasComponent } from '../components/reportes-cine/reporte-comentarios-salas-comentadas/reporte-comentarios-salas-comentadas.component';
+import { ReportePeliculasProyectadasComponent } from '../components/reportes-cine/reporte-peliculas-proyectadas/reporte-peliculas-proyectadas.component';
 
 
 export const routes: Routes = [
@@ -110,6 +111,10 @@ export const routes: Routes = [
             {
                 path: 'reportes/salas/comentadas',
                 component: ReporteComentariosSalasComentadasComponent,
+            },
+            {
+                path: 'reportes/peliculas',
+                component: ReportePeliculasProyectadasComponent,
             },
 
         ]
