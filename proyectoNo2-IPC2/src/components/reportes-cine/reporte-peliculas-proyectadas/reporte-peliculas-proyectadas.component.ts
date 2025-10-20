@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/sala-pelicula-proyectada-dto';
+import { ReporteSalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/reporte-sala-pelicula-proyectada-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { PeliculasProyectadasCardsComponent } from "../peliculas-proyectadas-cards/peliculas-proyectadas-cards.component";
@@ -14,8 +14,8 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
 
   //Apartado de atributos que sirven para exponer los dto
-  reportePelicula: SalaPeliculaProyectadaDTO[] = [];
-  reportesMostrados: SalaPeliculaProyectadaDTO[] = [];
+  reportePelicula: ReporteSalaPeliculaProyectadaDTO[] = [];
+  reportesMostrados: ReporteSalaPeliculaProyectadaDTO[] = [];
 
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;

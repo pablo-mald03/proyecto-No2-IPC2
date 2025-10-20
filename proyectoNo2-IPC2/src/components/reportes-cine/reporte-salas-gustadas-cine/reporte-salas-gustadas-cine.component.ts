@@ -1,21 +1,20 @@
 import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ReporteSalasComentadasDTO } from '../../../models/reportes-cine/reporte-salas-comentarios-dto';
-import { ReporteSalasComentadasCardsComponent } from "../reporte-salas-comentadas-cards/reporte-salas-comentadas-cards.component";
+import { ReporteSalasGustadasDTO } from '../../../models/reportes-cine/reporte-sala-gustada-dto';
+import { SalasGustadasCineCardsComponent } from "../salas-gustadas-cine-cards/salas-gustadas-cine-cards.component";
 
 @Component({
-  selector: 'app-reporte-comentarios-salas-comentadas',
-  imports: [NgClass, ReactiveFormsModule, ReporteSalasComentadasCardsComponent],
-  templateUrl: './reporte-comentarios-salas-comentadas.component.html',
-  styleUrl: './reporte-comentarios-salas-comentadas.component.scss'
+  selector: 'app-reporte-salas-gustadas-cine',
+  imports: [NgClass, ReactiveFormsModule, SalasGustadasCineCardsComponent],
+  templateUrl: './reporte-salas-gustadas-cine.component.html',
+  styleUrl: './reporte-salas-gustadas-cine.component.scss'
 })
-export class ReporteComentariosSalasComentadasComponent implements OnInit {
-
+export class ReporteSalasGustadasCineComponent {
 
   //Apartado de atributos que sirven para exponer los dto
-  reporteSalas: ReporteSalasComentadasDTO[] = [];
-  reportesMostrados: ReporteSalasComentadasDTO[] = [];
+  reporteSalas: ReporteSalasGustadasDTO[] = [];
+  reportesMostrados: ReporteSalasGustadasDTO[] = [];
 
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
@@ -56,9 +55,9 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
         columnas: 20,
         ubicacion: 'Nivel 2, ala norte',
         comentarios: [
-          { idUsuario: 'U001', contenido: 'Excelente experiencia, la imagen es muy nítida.', fechaPosteo: new Date('2025-10-10') },
-          { idUsuario: 'U002', contenido: 'Muy cómodos los asientos.', fechaPosteo: new Date('2025-10-12') },
-          { idUsuario: 'pablofsd-02', contenido: 'Me gusta el pene demasiado asi de que me encanta comer pito todos los dias. Me gusta el pene demasiado asi de que me encanta comer pito todos los dias.', fechaPosteo: new Date('2025-10-12') }
+          { idUsuario: 'U001', calificacion: 2, fechaPosteo: new Date('2025-09-10') },
+          { idUsuario: 'U002', calificacion: 3, fechaPosteo: new Date('2025-10-12') },
+          { idUsuario: 'pablofsd-02', calificacion: 5, fechaPosteo: new Date('2025-10-15') }
         ]
       },
     ];

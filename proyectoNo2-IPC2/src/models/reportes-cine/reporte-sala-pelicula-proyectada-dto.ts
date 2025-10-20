@@ -1,6 +1,6 @@
 import { PeliculaProyectadaDTO } from "./peliculas-proyectadas-dto";
 
-export interface SalaPeliculaProyectadaDTO {
+export interface ReporteSalaPeliculaProyectadaDTO {
 
     codigo: string,
     cineAsociado: string,

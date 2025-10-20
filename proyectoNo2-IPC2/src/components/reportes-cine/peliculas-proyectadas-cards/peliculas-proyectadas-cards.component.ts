@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DatePipe, NgFor } from '@angular/common';
-import { SalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/sala-pelicula-proyectada-dto';
+import { ReporteSalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/reporte-sala-pelicula-proyectada-dto';
 
 @Component({
   selector: 'app-peliculas-proyectadas-cards',
@@ -10,5 +10,5 @@ import { SalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/sala-pe
 })
 export class PeliculasProyectadasCardsComponent {
 
-  @Input() salaPelicula!: SalaPeliculaProyectadaDTO;
+  @Input() salaPelicula!: ReporteSalaPeliculaProyectadaDTO;
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ReporteSalasComentadasDTO } from '../../../models/reportes-cine/reportes-salas-comentarios-dto';
+import { ReporteSalasComentadasDTO } from '../../../models/reportes-cine/reporte-salas-comentarios-dto';
 import { DatePipe } from '@angular/common';
 
 @Component({
