@@ -50,9 +50,55 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-app-ganacias-anuncios-ccomprados-cards {
-  display: block;
-  width: 100%;        // ocupa el 100% de su columna
-  max-width: 420px;   // ancho máximo de la card
-  margin: 0 auto;     // centra la card dentro de la columna
+
+.tabla-bloqueo {
+  width: 100%;             
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+  background: linear-gradient(145deg, #1c1c2e, #2a2a45);
+  border-radius: 12px;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  thead {
+    background: linear-gradient(90deg, #8e24aa, #d500f9);
+    color: #fff;
+    font-weight: 600;
+
+    th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 0.3s ease;
+      cursor: default;
+
+      &:hover {
+        background: rgba(255, 82, 82, 0.1); // hover sutil
+      }
+
+      td {
+        padding: 0.65rem 1rem;
+        color: #e0e0e0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
 }

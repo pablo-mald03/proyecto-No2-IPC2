@@ -64,14 +64,33 @@
         </div>
 
 
-        <!-- <div class="subcontenedor">
-      @for (pago of dto.pagoBloqueoAnuncios; track pago.id) {
-        <app-card-pago-bloqueo [pago]="pago"></app-card-pago-bloqueo>
-      }
-      @empty {
-        <p class="text-secondary text-center">No hay pagos registrados</p>
-      }
-    </div>-->
+        <div class="table-responsive table-pagos-bloqueo shadow-lg rounded-4 overflow-hidden">
+            <table class="tabla-bloqueo table-hover mb-0">
+                <thead class="table-header-pagos text-black">
+                    <tr class="bg-warning">
+                        <th>Usuario</th>
+                        <th>Monto (Q)</th>
+                        <th>Fecha de Pago</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    @for (pago of gananciaProcesada.pagoBloqueoAnuncios; track pago.fechaPago) {
+                    <tr>
+                        <td>{{ pago.idUsuario }}</td>
+                        <td>{{ pago.monto | number:'1.2-2' }}</td>
+                        <td>{{ pago.fechaPago | date:'dd/MM/yyyy' }}</td>
+                    </tr>
+                    }
+                    @empty {
+                    <tr>
+                        <td colspan="3" class="text-center text-secondary py-3">
+                            No hay pagos registrados
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
     </section>
 
