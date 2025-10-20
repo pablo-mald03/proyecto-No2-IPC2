@@ -1,0 +1,77 @@
+<div class="card-ganancias shadow-lg rounded-4 text-light p-4">
+
+    <div class="card-header bg-gradient text-dark p-3 rounded-3 d-flex justify-content-between align-items-center">
+        <h4 class="fw-bold mb-0 text-white">
+            <i class="bi bi-graph-up-arrow me-2"></i>Ganancias del Sistema
+        </h4>
+        <span class="badge bg-success fs-6 fw-semibold px-3 py-2 mx-5">
+            Total Q{{ gananciaProcesada.totalGanancia | number: '1.2-2' }}
+        </span>
+    </div>
+
+    <div class="totales-container mt-3 d-flex flex-wrap justify-content-around text-center mb-4">
+        <div class="total-box bg-dark bg-opacity-75 rounded-4 p-3 shadow-sm">
+            <p class="fw-semibold text-warning mb-1">Total Ingresos</p>
+            <h5 class="fw-bold text-light mb-0">Q{{ gananciaProcesada.totalIngresos | number: '1.2-2' }}</h5>
+        </div>
+        <div class="total-box bg-dark bg-opacity-75 rounded-4 p-3 shadow-sm">
+            <p class="fw-semibold text-danger mb-1">Gastos en Cines</p>
+            <h5 class="fw-bold text-light mb-0">Q{{ gananciaProcesada.totalCostoCine | number: '1.2-2' }}</h5>
+        </div>
+    </div>
+
+
+    <section class="seccion mb-4 mt-1">
+        <div class="d-flex align-items-center justify-content-between mb-2 mt-1">
+            <h5 class="fw-bold text-warning mb-0">
+                <i class="bi bi-building me-2"></i>Gastos por Cine
+            </h5>
+        </div>
+        <!-- <div class="subcontenedor">
+            @for (gasto of dto.gastosCine; track gasto.id) {
+            <app-card-gasto-cine [gasto]="gasto"></app-card-gasto-cine>
+            }
+            @empty {
+            <p class="text-secondary text-center">No hay gastos registrados</p>
+            }
+        </div> -->
+    </section>
+
+    <section class="seccion mb-4 mt-1">
+        <div class="d-flex align-items-center justify-content-between mb-2 mt-1">
+            <h5 class="fw-bold text-info mb-0">
+                <i class="bi bi-bag-check me-2"></i>Anuncios Comprados
+            </h5>
+        </div>
+        <!-- <div class="subcontenedor">
+            @for (anuncio of dto.anunciosComprados; track anuncio.codigo) {
+            <app-card-anuncio-comprado [anuncio]="anuncio"></app-card-anuncio-comprado>
+            }
+            @empty {
+            <p class="text-secondary text-center">No hay anuncios comprados</p>
+            }
+        </div>-->
+    </section>
+
+    <section class="seccion mt-1">
+        <div class="d-flex align-items-center justify-content-between mb-2 mt-1">
+            <h5 class="fw-bold text-danger mb-0">
+                <i class="bi bi-lock-fill me-2"></i>Pagos por Bloqueo de Anuncios
+            </h5>
+        </div>
+
+
+        <!-- <div class="subcontenedor">
+      @for (pago of dto.pagoBloqueoAnuncios; track pago.id) {
+        <app-card-pago-bloqueo [pago]="pago"></app-card-pago-bloqueo>
+      }
+      @empty {
+        <p class="text-secondary text-center">No hay pagos registrados</p>
+      }
+    </div>-->
+
+    </section>
+
+
+
+</div>

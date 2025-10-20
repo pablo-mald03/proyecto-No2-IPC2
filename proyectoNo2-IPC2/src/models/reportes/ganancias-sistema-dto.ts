@@ -4,9 +4,9 @@ import { PagoCineAnuncioDTO } from "./pago-cine-anuncio-dto";
 
 export interface GananciasSistemaDTO {
 
-    gastosCine: CineCostoDTO,
-    anunciosComprados: AnunciosCompradosDTO,
-    pagoBloqueoAnuncios: PagoCineAnuncioDTO,
+    costosCine: CineCostoDTO [],
+    anunciosComprados: AnunciosCompradosDTO [],
+    pagoBloqueoAnuncios: PagoCineAnuncioDTO [],
 
     totalCostoCine: number,
     totalIngresos: number,
