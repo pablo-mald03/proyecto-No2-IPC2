@@ -16,6 +16,7 @@ import { ReporteGananciasAnuncianteComponent } from '../components/reportes-sist
 import { ReporteSalasGustadasComponent } from '../components/reportes-sistema/reporte-salas-gustadas/reporte-salas-gustadas.component';
 import { ReporteSalasComentadasComponent } from '../components/reportes-sistema/reporte-salas-comentadas/reporte-salas-comentadas.component';
 import { ReporteGananciasComponent } from '../components/reportes-sistema/reporte-ganancias/reporte-ganancias.component';
+import { AdminCinePageComponent } from '../pages/admin-cine-page/admin-cine-page.component';
 
 
 export const routes: Routes = [
@@ -95,6 +96,17 @@ export const routes: Routes = [
                 redirectTo: 'usuarios',
                 pathMatch: 'full'
             },
+
+
+        ]
+    },
+    {
+        path: 'menu-admin-cine',
+        component: AdminCinePageComponent,
+        canActivate: [authGuard],
+
+        //Directorios de funcionalidades dentro de la pagina de administradores de cine
+        children: [
 
 
         ]
