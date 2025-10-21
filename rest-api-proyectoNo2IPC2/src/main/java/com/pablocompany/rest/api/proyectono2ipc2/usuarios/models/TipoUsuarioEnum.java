@@ -12,7 +12,7 @@ public enum TipoUsuarioEnum {
     
     ADMINISTRADOR_SISTEMA("ADMINISTRADOR DE SISTEMA"),
     ADMINISTRADOR_CINE("ADMINISTRADOR DE CINE"),
-    USUARIO_COMUN("USUARIO"),
+    USUARIO("USUARIO"),
     USUARIO_ESPECIAL("ANUNCIANTE");
     
     
@@ -22,4 +22,8 @@ public enum TipoUsuarioEnum {
     
     
     private String contexto;
+    
+    public String getContexto(){
+        return this.contexto;
+    }
 }
