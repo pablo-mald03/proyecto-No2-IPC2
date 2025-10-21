@@ -3,7 +3,7 @@ export interface Anuncio {
     codigo: string,
     estado: boolean,
     nombre: string,
-
+    caducacion:boolean,
     fechaExpiracion: Date,
     fechaCompra: Date,
     url: string,

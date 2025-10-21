@@ -26,6 +26,7 @@ export class CardsReporteAnunciosComponent {
     return this.sanitizer.bypassSecurityTrustResourceUrl(safeUrl);
   }
 
+  //Metodo que ayuda a saber el tipo de anuncio que es 
   getTipoAnuncio(codigo: number): string {
     switch (codigo) {
 

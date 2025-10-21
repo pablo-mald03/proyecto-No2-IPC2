@@ -24,6 +24,7 @@ import { AnunciantePageComponent } from '../pages/anunciante-page.component/anun
 import { DashboardBienvenidaAnuncianteComponent } from '../components/pagina-anunciante/dashboard-bienvenida-anunciante/dashboard-bienvenida-anunciante.component';
 import { rolAnuncianteGuard } from './guards/rol-anunciante-guard';
 import { AccesoDenegadoPageComponent } from '../pages/acceso-denegado-page/acceso-denegado-page.component';
+import { AnunciosCompradosComponent } from '../components/pagina-anunciante/anuncios-comprados/anuncios-comprados.component';
 
 
 export const routes: Routes = [
@@ -66,6 +67,10 @@ export const routes: Routes = [
             {
                 path: 'inicio',
                 component: DashboardBienvenidaAnuncianteComponent,
+            },
+            {
+                path: 'anuncios/comprados/:id',
+                component: AnunciosCompradosComponent,
             },
             {
                 path: '',
