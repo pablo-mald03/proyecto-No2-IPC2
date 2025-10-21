@@ -1,4 +1,4 @@
-import { KeyValuePipe } from '@angular/common';
+import { KeyValuePipe, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLinkActive, RouterModule } from '@angular/router';
@@ -7,12 +7,15 @@ import { LoginService } from '../../../services/usuarios-service/login.sercive';
 import { Master } from '../../../services/masterLog/master';
 import { UserLoggedDTO } from '../../../models/usuarios/user-logged-dto';
 import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
+import { Popup } from '../../../shared/popup/popup';
+import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
 
 @Component({
   selector: 'app-form-login',
-  imports: [RouterLinkActive, RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterLinkActive, RouterModule, FormsModule, ReactiveFormsModule, SharedPopupComponent, NgIf],
   templateUrl: './form-login.component.html',
-  styleUrl: './form-login.component.scss'
+  styleUrl: './form-login.component.scss',
+  providers: [Popup]
 })
 export class FormLoginComponent implements OnInit {
 
@@ -23,9 +26,15 @@ export class FormLoginComponent implements OnInit {
   router = inject(Router);
   masterService = inject(Master);
 
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
+    private popUp: Popup,
 
   ) {
 
@@ -41,6 +50,15 @@ export class FormLoginComponent implements OnInit {
         password: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
       }
     )
+
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      // Cada mensaje genera un popup “nuevo”
+      this.mostrarPopup = false;
+      setTimeout(() => this.mostrarPopup = true, 0);
+    });
 
   }
 
@@ -63,9 +81,19 @@ export class FormLoginComponent implements OnInit {
           this.ingresarMenu();
 
         },
-        error: (error: any) => console.log(error)
+        error: (error: any) => {
 
+          let mensaje = 'Ocurrió un error';
 
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+        }
       });
 
     }

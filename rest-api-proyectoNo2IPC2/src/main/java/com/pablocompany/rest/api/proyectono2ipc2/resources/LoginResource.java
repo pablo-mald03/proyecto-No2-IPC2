@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import java.util.Map;
 
 /**
  *
@@ -42,9 +43,9 @@ public class LoginResource {
             return Response.ok(new UserLoggedResponse(usuarioResponse)).build();
 
         } catch (EntidadNoExistenteException ex) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (FormatoInvalidoException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }
