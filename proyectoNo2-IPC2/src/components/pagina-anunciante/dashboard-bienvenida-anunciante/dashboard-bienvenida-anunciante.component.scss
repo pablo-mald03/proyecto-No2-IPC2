@@ -1,0 +1,47 @@
+.bienvenida-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #1b1b1b 0%, #0f0f0f 100%);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.bienvenida-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.2);
+}
+
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #000;
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+}
+
+
+.bienvenida-card {
+  max-width: 550px;
+  background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(15, 15, 15, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.card-icon i {
+  text-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+}
+
+.btn-outline-warning {
+  border-width: 2px;
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

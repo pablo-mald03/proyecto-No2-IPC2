@@ -21,6 +21,7 @@ import { ReportePeliculasProyectadasComponent } from '../components/reportes-cin
 import { ReporteSalasGustadasCineComponent } from '../components/reportes-cine/reporte-salas-gustadas-cine/reporte-salas-gustadas-cine.component';
 import { ReporteBoletosVendidosComponent } from '../components/reportes-cine/reporte-boletos-vendidos/reporte-boletos-vendidos.component';
 import { AnunciantePageComponent } from '../pages/anunciante-page.component/anunciante-page.component';
+import { DashboardBienvenidaAnuncianteComponent } from '../components/pagina-anunciante/dashboard-bienvenida-anunciante/dashboard-bienvenida-anunciante.component';
 
 
 export const routes: Routes = [
@@ -47,14 +48,22 @@ export const routes: Routes = [
         component: PrincipalUsuarioPageComponent,
         canActivate: [authGuard],
     },
-     {
+    {
         path: 'menu-anunciante',
         component: AnunciantePageComponent,
         canActivate: [authGuard],
 
         //Todas las paginas y funcionalidades que tiene el anunciante
-        children:[
-
+        children: [
+            {
+                path: 'inicio',
+                component: DashboardBienvenidaAnuncianteComponent,
+            },
+            {
+                path: '',
+                redirectTo: 'inicio',
+                pathMatch: 'full'
+            },
 
         ]
     },
