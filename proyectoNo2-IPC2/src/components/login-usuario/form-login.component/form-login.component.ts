@@ -49,55 +49,60 @@ export class FormLoginComponent implements OnInit {
 
       this.usuarioCredenciales = this.loginFormulario.value as LoginDTO;
 
-      /*this.loginService.autenticarUsuario(this.usuarioCredenciales).subscribe({
-        next: () => this.reset(),
+      this.loginService.autenticarUsuario(this.usuarioCredenciales).subscribe({
+        next: (response: any) => {
 
+          this.usuarioLogged = {
 
+            id: response.id,
+            rol: TipoUsuarioEnum[response.rol as keyof typeof TipoUsuarioEnum]
+          };
+
+          this.reset();
+
+          this.ingresarMenu();
+
+        },
         error: (error: any) => console.log(error)
 
-        
-      });*/
 
-
-
-      this.usuarioLogged = {
-        id: "tilinsin-01",
-        rol: TipoUsuarioEnum.USUARIO_ESPECIAL,
-        //rol: "USUARIO"
-      }
-
-      //PENDIENTE SETEAR EL RESULTADO
-      localStorage.setItem("angularUserCinema", JSON.stringify(this.usuarioLogged));
-
-      const usuarioStr = localStorage.getItem("angularUserCinema");
-
-      if (usuarioStr) {
-        const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
-
-        this.masterService.onLogin.next(true);
-        // Comparar como texto usando el enum
-        if (usuario.rol === TipoUsuarioEnum.USUARIO) {
-
-          this.router.navigateByUrl("/menu-principal");
-        }
-        else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
-
-          this.router.navigateByUrl("/menu-admin-cine");
-        }
-        else if (usuario.rol === TipoUsuarioEnum.USUARIO_ESPECIAL) {
-
-          this.router.navigateByUrl("/menu-anunciante");
-        }
-        else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_SISTEMA) {
-
-          this.router.navigateByUrl("/menu-admin-sistema");
-        }
-
-      }
-
-
+      });
 
     }
+  }
+
+  //Metodo que sirve para ingresar al menu principal
+  private ingresarMenu() {
+
+    //Se setea el token retornado por la api
+    localStorage.setItem("angularUserCinema", JSON.stringify(this.usuarioLogged));
+
+    const usuarioStr = localStorage.getItem("angularUserCinema");
+
+    if (usuarioStr) {
+      const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
+
+      this.masterService.onLogin.next(true);
+      // Comparar como texto usando el enum
+      if (usuario.rol === TipoUsuarioEnum.USUARIO) {
+
+        this.router.navigateByUrl("/menu-principal");
+      }
+      else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
+
+        this.router.navigateByUrl("/menu-admin-cine");
+      }
+      else if (usuario.rol === TipoUsuarioEnum.USUARIO_ESPECIAL) {
+
+        this.router.navigateByUrl("/menu-anunciante");
+      }
+      else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_SISTEMA) {
+
+        this.router.navigateByUrl("/menu-admin-sistema");
+      }
+
+    }
+
   }
 
   reset(): void {

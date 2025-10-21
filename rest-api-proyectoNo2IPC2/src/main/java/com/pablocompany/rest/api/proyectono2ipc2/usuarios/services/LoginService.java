@@ -24,7 +24,7 @@ public class LoginService {
 
         LoginDTO usuarioLogin = extraerDatos(login);
 
-        if (usuarioLogin.getPassword().equals("pablo-03@gmail.com") && usuarioLogin.getPassword().equals("pitolin")) {
+        if (!usuarioLogin.getCorreo().equals("pablo-03@gmail.com") || !usuarioLogin.getPassword().equals("pitolin")) {
             throw new EntidadNoExistenteException("El usuario ingresado no cuenta con un registro en la web");
         }
 
@@ -33,10 +33,10 @@ public class LoginService {
 
     //Metodo encargado de extraer los datos
     public LoginDTO extraerDatos(LoginRequest loginUser) throws FormatoInvalidoException {
-        
-       /* if(loginUser == null){
-             throw new FormatoInvalidoException("Request vacia");
-        }*/
+
+        if (loginUser == null) {
+            throw new FormatoInvalidoException("Request vacia");
+        }
 
         if (StringUtils.isBlank(loginUser.getCorreo())) {
             throw new FormatoInvalidoException("Correo electronico vacio");
@@ -45,9 +45,9 @@ public class LoginService {
         if (StringUtils.isBlank(loginUser.getPassword())) {
             throw new FormatoInvalidoException("Password vacia");
         }
-        
-        if(!correoValido(loginUser.getCorreo())){
-             throw new FormatoInvalidoException("Correo electronico invalido");
+
+        if (!correoValido(loginUser.getCorreo())) {
+            throw new FormatoInvalidoException("Correo electronico invalido");
         }
 
         return new LoginDTO(
