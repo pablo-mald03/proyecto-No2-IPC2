@@ -1,0 +1,62 @@
+<main class="crear-anuncio-page">
+
+    <section class="crear-anuncio-card">
+
+
+        <h2 class="titulo">Comprar Anuncio</h2>
+
+
+        <form [formGroup]="anuncioForm" (ngSubmit)="submit()" class="formulario-anuncio">
+
+            <div class="form-group">
+                <label>Nombre del Anuncio</label>
+                <input type="text" formControlName="nombre" placeholder="Ingrese nombre..." />
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Anuncio</label>
+                <select formControlName="codigoTipo">
+                    <option *ngFor="let tipo of tiposAnuncio" [value]="tipo.codigo">
+                        {{ tipo.label }}
+                    </option>
+                </select>
+            </div>
+
+            <div *ngIf="tipoSeleccionado === 1 || tipoSeleccionado === 2">
+                <div class="form-group">
+                    <label>Texto del Anuncio</label>
+                    <textarea formControlName="texto" placeholder="Ingrese el texto del anuncio"></textarea>
+                </div>
+            </div>
+
+            <div *ngIf="tipoSeleccionado === 2">
+                <div class="form-group">
+                    <label>Subir Imagen</label>
+                    <input type="file" (change)="onFileSelected($event)" />
+                </div>
+            </div>
+
+            <div *ngIf="tipoSeleccionado === 3">
+                <div class="form-group">
+                    <label>URL del Video</label>
+                    <input type="url" formControlName="url" placeholder="Ingrese URL de YouTube..." />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label>Fecha de Expiración</label>
+                <input type="date" formControlName="fechaExpiracion" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" [disabled]="anuncioForm.invalid">Crear Anuncio</button>
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+</main>

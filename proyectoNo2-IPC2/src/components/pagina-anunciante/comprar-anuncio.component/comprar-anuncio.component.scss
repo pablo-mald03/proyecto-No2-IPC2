@@ -1,0 +1,86 @@
+.crear-anuncio-page {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 4rem;
+    background: linear-gradient(135deg, #1c1c1c, #2a2a72);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    padding-bottom: 4rem;
+}
+
+.form-actions button {
+  background: #f9d423;
+  color: #1f1f2e;
+  font-weight: bold;
+  padding: 0.6rem 1.8rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.titulo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #f9d423;
+    text-align: center;
+}
+
+.form-actions {
+  text-align: right;
+  margin-top: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 200px;
+}
+
+.crear-anuncio-card {
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 2rem 3rem;
+    width: 90%;
+    max-width: 600px;
+    text-align: left;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-actions button:hover {
+  background: #f39c12;
+  color: white;
+}
+
+
+.form-group label {
+
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #fff;
+
+}
+
+.form-group {
+
+    margin-bottom: 1.2rem;
+}
