@@ -1,6 +1,6 @@
 .anuncio-card {
   position: relative;
-  background: linear-gradient(145deg, #1f1f2e, #3a3a5c);
+  background: linear-gradient(145deg, #2e1f26, #5c483a);
   border-radius: 16px;
   padding: 1.5rem;
   overflow: hidden;
@@ -15,6 +15,41 @@
   width: 100%;
   object-fit: cover;
   transition: transform 0.3s;
+}
+
+.texto-anuncio {
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  color: #f0f0f0;
+  font-size: 1rem;
+  text-align: justify;
+  max-height: 150px; 
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+
+.texto-anuncio::-webkit-scrollbar {
+  width: 6px;
+}
+
+.texto-anuncio::-webkit-scrollbar-thumb {
+  background: rgba(249, 212, 35, 0.7);
+  border-radius: 3px;
+}
+
+.texto-anuncio::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.texto-anuncio:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.texto-anuncio p {
+  margin: 0;
 }
 
 .estado {

@@ -36,7 +36,7 @@ export class AnunciosCompradosComponent implements OnInit {
     this.idUsuario = this.router.snapshot.params['id'];
 
 
-    this.anunciosMostrados = [
+    this.anuncios = [
 
       {
         codigo: 'ANU-003',
@@ -46,7 +46,7 @@ export class AnunciosCompradosComponent implements OnInit {
         fechaExpiracion: new Date('2025-12-10'),
         fechaCompra: new Date('2025-10-18'),
         url: 'https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&mute=1&loop=1&playlist=tgbNymZ7vqY',
-        texto: 'Revive los mejores clásicos del cine.',
+        texto: 'Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine. ',
         foto: '',
         codigoTipo: 3,
         idUsuario: 'USR-003',
@@ -61,14 +61,24 @@ export class AnunciosCompradosComponent implements OnInit {
         url: 'imgs-app/bussiness-cinemaimg.png',
         texto: 'Descubre la nueva película de ciencia ficción que todos están esperando.',
         foto: '',
-        codigoTipo: 3,
+        codigoTipo: 2,
+        idUsuario: 'USR-002',
+      },
+      {
+        codigo: 'ANU-002',
+        estado: false,
+        nombre: 'Nuevo Estreno: El Viaje del Tiempo',
+        caducacion: true,
+        fechaExpiracion: new Date('2025-12-01'),
+        fechaCompra: new Date('2025-09-28'),
+        url: 'imgs-app/bussiness-cinemaimg.png',
+        texto: 'Descubre la nueva película de ciencia ficción que todos están esperando.',
+        foto: '',
+        codigoTipo: 2,
         idUsuario: 'USR-002',
       }
     ];
 
-    if (this.anunciosMostrados.length === 0) {
-      this.todosCargados = true;
-    }
 
 
     //PENDIENTE LLAMAR AL SERVICE
@@ -82,6 +92,7 @@ export class AnunciosCompradosComponent implements OnInit {
       }
     });
 */
+    this.cargarMasAnuncios();
 
     console.log(this.idUsuario);
 

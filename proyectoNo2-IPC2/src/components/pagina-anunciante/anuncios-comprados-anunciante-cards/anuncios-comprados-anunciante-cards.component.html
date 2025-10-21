@@ -17,33 +17,35 @@
                 frameborder="0" allowfullscreen>
             </iframe>
         </ng-template>
-        <p class="text-light-50 mb-1 fs-5">{{ anuncioComprado.texto }}</p>
 
-        <div class="info-fechas mb-2">
-            <p class="text-light-50 mb-1 fs-6">
-                <i class="bi bi-calendar-check me-2"></i>Compra: {{ anuncioComprado.fechaCompra | date:'mediumDate' }}
+        <div class="texto-anuncio">
+            <p>{{ anuncioComprado.texto }}</p>
+        </div>
+
+        <div class="info-fechas mb-3">
+            <p class="text-light-50 mb-3 mt-3 fs-5">
+                <i class="bi bi-calendar-check me-2"></i>Fecha de Compra: {{ anuncioComprado.fechaCompra |
+                date:'shortDate' }}
             </p>
-            <p class="text-light-50 mb-1 fs-6">
-                <i class="bi bi-calendar-x me-2"></i>Expiración: {{ anuncioComprado.fechaExpiracion | date:'mediumDate'
+            <p class="text-light-50 mb-3 fs-5">
+                <i class="bi bi-calendar-x me-2"></i>Expiración: {{ anuncioComprado.fechaExpiracion | date:'shortDate'
                 }}
-            </p>
-            <p class="text-light-50 mb-1 fs-6">
-                <i class="bi bi-person-fill me-2"></i>Usuario: {{ anuncioComprado.idUsuario }}
             </p>
         </div>
 
-        <p class="fw-semibold text-warning mb-2 fs-5">
+        <p class="fw-semibold text-warning mb-4 fs-5">
             {{ getTipoAnuncio(anuncioComprado.codigoTipo) }}
         </p>
 
-        <div class="estado mb-3">
-            <span class="badge rounded-pill" [ngClass]="anuncioComprado.estado ? 'bg-success' : 'bg-danger'">
+        <div class="estado mb-4">
+            <p class="badge rounded-pill fs-6" [ngClass]="anuncioComprado.estado ? 'bg-success' : 'bg-danger'">
                 {{ anuncioComprado.estado ? 'Activo' : 'Inactivo' }}
-            </span>
+            </p>
         </div>
 
         <div class="accion text-end">
-            <button class="btn-estado" (click)="cambiarEstado()">
+            <button class="btn-estado" (click)="cambiarEstado()"
+                [ngClass]="anuncioComprado.estado ? 'bg-danger' : 'bg-success'">
                 {{ anuncioComprado.estado ? 'Desactivar' : 'Activar' }}
             </button>
         </div>

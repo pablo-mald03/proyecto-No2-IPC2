@@ -29,10 +29,10 @@ export class AnunciosCompradosAnuncianteCardsComponent {
   getTipoAnuncio(codigo: number): string {
     switch (codigo) {
 
-      case 1: return TipoAnuncioEnum.ANUNCIO_TEXTO;
-      case 2: return TipoAnuncioEnum.IMAGEN_TEXTO;
-      case 3: return TipoAnuncioEnum.VIDEO_TEXTO;
-      default: return 'Desconocido';
+      case 1: return 'ANUNCIO DE TEXTO';
+      case 2: return 'ANUNCIO DE TEXTO E IMAGEN';
+      case 3: return 'ANUNCIO DE VIDEO Y TEXTO';
+      default: return 'DESCONOCIDO';
     }
 
 
@@ -40,7 +40,7 @@ export class AnunciosCompradosAnuncianteCardsComponent {
 
   //Metodo que sirve para activar o desactivar el anuncio en la web
   cambiarEstado(): void{
-
+    this.anuncioComprado.estado = !this.anuncioComprado.estado; 
     
   }
 
