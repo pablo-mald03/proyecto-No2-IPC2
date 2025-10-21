@@ -62,7 +62,7 @@ export class FormLoginComponent implements OnInit {
 
       this.usuarioLogged = {
         id: "tilinsin-01",
-        rol: "ADMINISTRADOR DE CINE"
+        rol: TipoUsuarioEnum.USUARIO_ESPECIAL,
         //rol: "USUARIO"
       }
 
@@ -79,10 +79,16 @@ export class FormLoginComponent implements OnInit {
         if (usuario.rol === TipoUsuarioEnum.USUARIO) {
 
           this.router.navigateByUrl("/menu-principal");
-        } else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
+        }
+        else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_CINE) {
 
           this.router.navigateByUrl("/menu-admin-cine");
-        } else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_SISTEMA) {
+        }
+        else if (usuario.rol === TipoUsuarioEnum.USUARIO_ESPECIAL) {
+
+          this.router.navigateByUrl("/menu-anunciante");
+        }
+        else if (usuario.rol === TipoUsuarioEnum.ADMINISTRADOR_SISTEMA) {
 
           this.router.navigateByUrl("/menu-admin-sistema");
         }

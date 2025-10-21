@@ -1,0 +1,34 @@
+<header class="py-3 px-4 border-bottom bg-light shadow-sm">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+
+    <div class="d-flex align-items-center gap-2">
+      <img src="icons-app/cinemaAppIcon.png" alt="Logo" width="45" height="45">
+      <span class="fw-semibold fs-5 text-dark">CinemaApp</span>
+    </div>
+
+    <nav class="d-none d-md-flex align-items-center gap-4">
+      <a routerLink="/menu-admin-sistema/usuarios" routerLinkActive="active-link" class="nav-link-custom" #rla1="routerLinkActive"> Anuncios comprados </a>
+
+      <a routerLink="/menu-admin-sistema/anuncios" routerLinkActive="active-link" class="nav-link-custom" #rla2="routerLinkActive"> Comprar Anuncio </a>
+
+    </nav>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="dropdown text-black">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <img src="icons-app/defalutUser.png" alt="profile" width="40" height="40" class="rounded-circle me-2">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+          <li><a class="dropdown-item" href="#">Mi cuenta</a></li>
+
+          <li><a class="dropdown-item" href="#">Billetera Digital</a></li>
+          
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><button class="dropdown-item text-danger" (click)="onLogOutUsuario()">Cerrar sesión</button></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</header>

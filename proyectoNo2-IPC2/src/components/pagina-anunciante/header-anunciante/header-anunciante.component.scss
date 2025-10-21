@@ -1,0 +1,39 @@
+.nav-link-custom {
+  position: relative;
+  color: #212529;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #996608;
+  }
+
+
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #997208, #d3bb34);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+
+
+.active-link {
+  color: #996608 !important;
+
+  &::after {
+    width: 100%;
+  }
+}

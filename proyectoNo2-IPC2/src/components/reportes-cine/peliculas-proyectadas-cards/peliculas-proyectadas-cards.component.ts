@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { DatePipe, NgFor } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ReporteSalaPeliculaProyectadaDTO } from '../../../models/reportes-cine/reporte-sala-pelicula-proyectada-dto';
 
 @Component({
   selector: 'app-peliculas-proyectadas-cards',
-  imports: [DatePipe, NgFor],
+  imports: [DatePipe],
   templateUrl: './peliculas-proyectadas-cards.component.html',
   styleUrl: './peliculas-proyectadas-cards.component.scss'
 })
