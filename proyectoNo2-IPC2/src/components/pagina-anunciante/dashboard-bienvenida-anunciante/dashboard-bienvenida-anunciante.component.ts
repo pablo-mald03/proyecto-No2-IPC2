@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-bienvenida-anunciante',
@@ -6,6 +6,20 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard-bienvenida-anunciante.component.html',
   styleUrl: './dashboard-bienvenida-anunciante.component.scss'
 })
-export class DashboardBienvenidaAnuncianteComponent {
+export class DashboardBienvenidaAnuncianteComponent implements OnInit{
+
+  idUsuario!: string;
+
+
+  ngOnInit(): void {
+
+    
+    
+//    this.idUsuario = 
+
+  }
+
+
+
 
 }

@@ -1,0 +1,51 @@
+.full-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(130deg, #28c8dd, #000000);
+}
+
+.card p {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+
+.card button {
+  background: #ff4e50;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.card {
+  background: rgba(77, 22, 58, 0.781);
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.644);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: pop 0.5s ease;
+}
+
+.card h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ff4e50;
+}
+
+.card button:hover {
+  background: #e13b3b;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

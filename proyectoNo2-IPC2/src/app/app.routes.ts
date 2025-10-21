@@ -22,6 +22,8 @@ import { ReporteSalasGustadasCineComponent } from '../components/reportes-cine/r
 import { ReporteBoletosVendidosComponent } from '../components/reportes-cine/reporte-boletos-vendidos/reporte-boletos-vendidos.component';
 import { AnunciantePageComponent } from '../pages/anunciante-page.component/anunciante-page.component';
 import { DashboardBienvenidaAnuncianteComponent } from '../components/pagina-anunciante/dashboard-bienvenida-anunciante/dashboard-bienvenida-anunciante.component';
+import { rolAnuncianteGuard } from './guards/rol-anunciante-guard';
+import { AccesoDenegadoPageComponent } from '../pages/acceso-denegado-page/acceso-denegado-page.component';
 
 
 export const routes: Routes = [
@@ -44,6 +46,12 @@ export const routes: Routes = [
 
     },
     {
+        path: 'acceso-denegado',
+        component: AccesoDenegadoPageComponent,
+        canActivate: [authGuard],
+
+    },
+    {
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
         canActivate: [authGuard],
@@ -51,7 +59,7 @@ export const routes: Routes = [
     {
         path: 'menu-anunciante',
         component: AnunciantePageComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard,rolAnuncianteGuard],
 
         //Todas las paginas y funcionalidades que tiene el anunciante
         children: [
