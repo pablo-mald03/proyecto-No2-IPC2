@@ -26,6 +26,9 @@ import { rolAnuncianteGuard } from './guards/rol-anunciante-guard';
 import { AccesoDenegadoPageComponent } from '../pages/acceso-denegado-page/acceso-denegado-page.component';
 import { AnunciosCompradosComponent } from '../components/pagina-anunciante/anuncios-comprados/anuncios-comprados.component';
 import { ComprarAnuncioComponent } from '../components/pagina-anunciante/comprar-anuncio.component/comprar-anuncio.component';
+import { rolAdminCineGuard } from './guards/rol-admin-cine-guard';
+import { rolAdminSistemaGuard } from './guards/rol-admin-sistema-guard';
+import { rolUsuarioGuard } from './guards/rol-usuario-guard';
 
 
 export const routes: Routes = [
@@ -56,12 +59,13 @@ export const routes: Routes = [
     {
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard,rolUsuarioGuard],
+        canActivateChild: [authGuard,rolUsuarioGuard],
     },
     {
         path: 'menu-anunciante',
         component: AnunciantePageComponent,
-        canActivate: [authGuard,rolAnuncianteGuard],
+        canActivateChild: [authGuard,rolAnuncianteGuard],
 
         //Todas las paginas y funcionalidades que tiene el anunciante
         children: [
@@ -88,7 +92,7 @@ export const routes: Routes = [
     {
         path: 'menu-admin-sistema',
         component: AdminSistemaPageComponent,
-        canActivate: [authGuard],
+        canActivateChild: [authGuard,rolAdminSistemaGuard],
 
         children: [
 
@@ -145,7 +149,8 @@ export const routes: Routes = [
     {
         path: 'menu-admin-cine',
         component: AdminCinePageComponent,
-        canActivate: [authGuard],
+        canActivateChild: [authGuard, rolAdminCineGuard],
+
 
         //Directorios de funcionalidades dentro de la pagina de administradores de cine
         children: [
