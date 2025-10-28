@@ -41,7 +41,12 @@
 
     <br>
 
-    <button class="btn  bg-success bg-gradient text-white  w-100 py-2" [disabled]="loginFormulario.invalid">Iniciar Sesion</button>
+    <p class="text-body-black">¿Olvidaste tu contraseña? <a class="text-success" routerLink="/registro"
+            routerLinkActive="active">Cambiar Contraseña</a>
+    </p>
+
+
+    <button class="btn  bg-success bg-gradient text-white  w-100 py-2 mt-2" [disabled]="loginFormulario.invalid">Iniciar Sesion</button>
 
     <br>
     <br>

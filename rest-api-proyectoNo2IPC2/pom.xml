@@ -64,11 +64,17 @@
         </dependency>
         
         <!-- Database pool -->
-         <dependency>
+        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>11.0.11</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${restapi}</version>
         </dependency>
         
     </dependencies>

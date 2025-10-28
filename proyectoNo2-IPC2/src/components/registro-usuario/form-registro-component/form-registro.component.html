@@ -64,7 +64,7 @@
                 nuevoRegistroFormulario.controls['password'].touched) {
                 <div class="invalid-feedback">
                     <div>
-                        Ingrese una contraseña con 8 caracteres minimo
+                        Ingrese una contraseña con 5 caracteres minimo
                     </div>
                 </div>
                 }
@@ -84,7 +84,7 @@
                 nuevoRegistroFormulario.controls['confirmpassword'].touched) {
                 <div class="invalid-feedback">
                     <div>
-                        Ingrese una contraseña con 8 caracteres minimo
+                        Ingrese una contraseña con 5 caracteres minimo
                     </div>
                 </div>
                 }
@@ -179,3 +179,12 @@
 
 
 </form>
+
+<ng-container *ngIf="mostrarPopup">
+  <app-shared-popup 
+    [mensaje]="mensajePopup" 
+    [tipo]="tipoPopup" 
+    [mostrar]="mostrarPopup" 
+    (cerrarEvent)="mostrarPopup = false">
+  </app-shared-popup>
+</ng-container>

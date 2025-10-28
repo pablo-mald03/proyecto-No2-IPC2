@@ -4,11 +4,19 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.UsuarioCrudService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.Map;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -18,9 +26,40 @@ import jakarta.ws.rs.core.Response;
 public class UsuarioResource {
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response crearUsuario() {
-        return Response.status(Response.Status.CREATED).build();
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response crearUsuario(
+            @FormDataParam("id") String id,
+            @FormDataParam("correo") String correo,
+            @FormDataParam("nombre") String nombre,
+            @FormDataParam("password") String password,
+            @FormDataParam("telefono") String telefono,
+            @FormDataParam("pais") String pais,
+            @FormDataParam("identificacion") String identificacion,
+            @FormDataParam("codigoRol") String codigoRol,
+            @FormDataParam("foto") InputStream foto,
+            @FormDataParam("foto") FormDataContentDisposition fotoDetalle
+    ) {
+
+        Usuario usuarioNuevo = new Usuario(id, correo, nombre, password, telefono, pais, identificacion, codigoRol, foto, fotoDetalle);
+
+        UsuarioCrudService crudService = new UsuarioCrudService();
+
+        try {
+            if (crudService.crearUsuario(usuarioNuevo)) {
+
+                return Response.status(Response.Status.CREATED).build();
+            } else {
+
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", "No se pudo crear el usuario")).build();
+
+            }
+        } catch (EntidadExistenteException ex) {
+
+            return Response.status(Response.Status.CONFLICT).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
     }
 
 }

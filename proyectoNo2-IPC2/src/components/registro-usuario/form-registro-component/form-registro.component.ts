@@ -1,16 +1,19 @@
-import { KeyValuePipe, NgFor } from '@angular/common';
+import { KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Usuario } from '../../../models/usuarios/usuario';
 import { UsuarioService } from '../../../services/usuarios-service/usuario.service';
 import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
+import { Popup } from '../../../shared/popup/popup';
+import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 
 @Component({
   selector: 'app-form-registro',
-  imports: [FormsModule, ReactiveFormsModule, NgFor],
+  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, SharedPopupComponent],
   templateUrl: './form-registro.component.html',
-  styleUrl: './form-registro.component.scss'
+  styleUrl: './form-registro.component.scss',
+   providers: [Popup]
 })
 export class FormRegistroComponent implements OnInit {
 
@@ -21,9 +24,17 @@ export class FormRegistroComponent implements OnInit {
   //Indica el archivo seleccionado
   selectedFile!: File | null;
 
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
+
   constructor(
     private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private popUp: Popup,
+
   ) {
 
   }
@@ -43,6 +54,25 @@ export class FormRegistroComponent implements OnInit {
         pais: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
       }
     )
+
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      this.mostrarPopup = false;
+
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
+      }
+    });
+
 
   }
 
@@ -68,11 +98,22 @@ export class FormRegistroComponent implements OnInit {
       // Enviar al servicio
       this.usuarioService.crearNuevoUsuario(formData).subscribe({
         next: () => {
-          console.log('Usuario creado correctamente');
+
+          let mensaje = 'Te has registrado correctamente';
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'exito' });
           this.reiniciar();
         },
-        error: (err) => {
-          console.error('Error al crear usuario:', err);
+        error: (error) => {
+          let mensaje = 'Ocurrió un error';
+
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
         }
       });
 
@@ -96,7 +137,7 @@ export class FormRegistroComponent implements OnInit {
 
   reiniciar(): void {
     this.nuevoRegistroFormulario.reset({
-      TipoUsuario: TipoUsuarioEnum.USUARIO,
+      codigoRol: TipoUsuarioEnum.USUARIO,
     });
     this.selectedFile = null;
   }
