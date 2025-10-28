@@ -40,6 +40,8 @@ export class FormLoginComponent implements OnInit {
 
   }
 
+  popupKey = 0;
+
   ngOnInit(): void {
 
     localStorage.removeItem("angularUserCinema");
@@ -52,12 +54,22 @@ export class FormLoginComponent implements OnInit {
     )
 
     this.popUp.popup$.subscribe(data => {
+      // Se actualiza el contenido del popup
       this.mensajePopup = data.mensaje;
       this.tipoPopup = data.tipo;
 
-      // Cada mensaje genera un popup “nuevo”
       this.mostrarPopup = false;
-      setTimeout(() => this.mostrarPopup = true, 0);
+
+      setTimeout(() => {
+        this.popupKey++;          
+        this.mostrarPopup = true; 
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
+      }
     });
 
   }

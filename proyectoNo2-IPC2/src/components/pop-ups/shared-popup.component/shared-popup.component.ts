@@ -9,26 +9,23 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 })
 export class SharedPopupComponent {
 
+
   @Input() mensaje: string = '';
   @Input() tipo: 'error' | 'exito' | 'info' = 'info';
   @Input() mostrar: boolean = false;
-  @Input() duracion: number = 4000;
+  @Input() duracion: number = 2500;
 
   @Output() cerrarEvent = new EventEmitter<void>();
 
-  //Metodo que detecta los cambios en el componente pop up 
-  private timeoutId: any;
+  private timeoutId?: any;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['mostrar'] && this.mostrar) {
-      // Limpia timeout previo si existe
+    if (changes['mostrar']?.currentValue) {
       if (this.timeoutId) clearTimeout(this.timeoutId);
-
       this.timeoutId = setTimeout(() => this.cerrar(), this.duracion);
     }
   }
 
-  //Metodo que sirve para cerrar el pop up
   cerrar(): void {
     this.mostrar = false;
     this.cerrarEvent.emit();

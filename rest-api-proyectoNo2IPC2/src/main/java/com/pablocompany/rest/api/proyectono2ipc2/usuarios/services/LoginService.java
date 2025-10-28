@@ -28,7 +28,7 @@ public class LoginService {
             throw new EntidadNoExistenteException("El usuario ingresado no cuenta con un registro en la web");
         }
 
-        return new UserLoggedDTO("pablo-03", TipoUsuarioEnum.ADMINISTRADOR_CINE);
+        return new UserLoggedDTO("pablo-03", TipoUsuarioEnum.ADMINISTRADOR_SISTEMA);
     }
 
     //Metodo encargado de extraer los datos

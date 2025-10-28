@@ -80,7 +80,7 @@ export class FormRegistroComponent implements OnInit {
   }
 
   //Metodo encargado de recibir el 
-  archivoSeleccionado(event: Event): void {
+  onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];

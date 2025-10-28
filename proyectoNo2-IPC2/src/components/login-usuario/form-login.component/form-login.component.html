@@ -54,10 +54,12 @@
     <p class="mt-5 mb-3 text-body-secondary">© CinemaApp 2025–2026</p>
 </form>
 
-<app-shared-popup 
-  *ngIf="mostrarPopup" 
-  [mensaje]="mensajePopup" 
-  [tipo]="tipoPopup" 
-  [mostrar]="mostrarPopup" 
-  (cerrar)="mostrarPopup = false">
-</app-shared-popup>
+
+<ng-container *ngIf="mostrarPopup">
+  <app-shared-popup 
+    [mensaje]="mensajePopup" 
+    [tipo]="tipoPopup" 
+    [mostrar]="mostrarPopup" 
+    (cerrarEvent)="mostrarPopup = false">
+  </app-shared-popup>
+</ng-container>
