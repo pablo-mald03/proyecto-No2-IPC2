@@ -8,6 +8,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.usuarios.database;
  *
  * @author pablo
  */
+//Clase delegada para operar con usuario
 public class UsuarioDB {
     
 }

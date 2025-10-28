@@ -17,7 +17,8 @@ public class FotoPerfilService {
     //Clase delegada para obtener la foto de perfil del usuario
     public String obtenerFotoPerfil(String id) throws  EntidadNoExistenteException, FormatoInvalidoException{
 
-        return null;
+        
+        throw  new EntidadNoExistenteException("foto no encontrada");
     }
 
 }
