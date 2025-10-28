@@ -1,6 +1,6 @@
 import { KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { identifierName } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Usuario } from '../../../models/usuarios/usuario';
 import { UsuarioService } from '../../../services/usuarios-service/usuario.service';
@@ -13,7 +13,7 @@ import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/share
   imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, SharedPopupComponent],
   templateUrl: './form-registro.component.html',
   styleUrl: './form-registro.component.scss',
-   providers: [Popup]
+  providers: [Popup]
 })
 export class FormRegistroComponent implements OnInit {
 
@@ -135,11 +135,19 @@ export class FormRegistroComponent implements OnInit {
       value: TipoUsuarioEnum[key as keyof typeof TipoUsuarioEnum]
     }));
 
+  @ViewChild('fotoInput') fotoInput!: ElementRef<HTMLInputElement>;
+
+  //Metodo utilizado para reiniciar cuando se inserta
   reiniciar(): void {
     this.nuevoRegistroFormulario.reset({
       codigoRol: TipoUsuarioEnum.USUARIO,
     });
     this.selectedFile = null;
+
+
+    if (this.fotoInput) {
+      this.fotoInput.nativeElement.value = '';
+    }
   }
 
 }
