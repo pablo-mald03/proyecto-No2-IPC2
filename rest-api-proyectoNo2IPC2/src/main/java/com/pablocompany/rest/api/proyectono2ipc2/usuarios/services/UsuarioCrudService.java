@@ -16,10 +16,12 @@ import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 public class UsuarioCrudService {
     
     //Metodo delegado para poder crear un nuevo usuario
-    public boolean crearUsuario(Usuario usuarioNuevo) throws EntidadExistenteException, FormatoInvalidoException{
+    public boolean crearUsuario(Usuario usuarioNuevo, String confirmPassword) throws EntidadExistenteException, FormatoInvalidoException{
         
         
-        
+        if(!confirmPassword.isBlank()){
+            throw new FormatoInvalidoException("Si llego la confirmacion");
+        }
         
         return true;
     }

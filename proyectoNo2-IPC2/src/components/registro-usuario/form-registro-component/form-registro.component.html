@@ -35,7 +35,7 @@
 
 
         </div>
-        
+
         <div class="col-12">
             <label for="institucion" class="form-label">Identificador de usuario</label>
             <input type="text" class="form-control" name="id" id="id" autocomplete="off" placeholder="nombre-00"
@@ -76,17 +76,27 @@
             <label for="username" class="form-label">Confirmar Contaseña</label>
             <div class="input-group has-validation">
                 <span class="input-group-text">*</span>
-                <input type="password" class="form-control" name="confirmpassword" id="confirmpassword"
-                    placeholder="Confirmar Contraseña" formControlName="confirmpassword"
-                    [class.is-invalid]="nuevoRegistroFormulario.controls['confirmpassword'].dirty && nuevoRegistroFormulario.controls['confirmpassword'].invalid">
 
-                @if (nuevoRegistroFormulario.controls['confirmpassword'].invalid &&
-                nuevoRegistroFormulario.controls['confirmpassword'].touched) {
-                <div class="invalid-feedback">
-                    <div>
-                        Ingrese una contraseña con 5 caracteres minimo
-                    </div>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar Contraseña"
+                    formControlName="confirmPassword" [class.is-invalid]="nuevoRegistroFormulario.get('confirmPassword')?.invalid &&
+                          nuevoRegistroFormulario.get('confirmPassword')?.touched">
+
+                @if (nuevoRegistroFormulario.get('confirmPassword')?.touched) {
+                @if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('required')) {
+                <div class="invalid-feedback d-block">
+                    <div>Debe ingresar una contraseña</div>
                 </div>
+                }
+                @else if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('minlength')) {
+                <div class="invalid-feedback d-block">
+                    <div>Ingrese una contraseña con 5 caracteres mínimo</div>
+                </div>
+                }
+                @else if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('mismatch')) {
+                <div class="invalid-feedback d-block">
+                    <div>Las contraseñas no coinciden</div>
+                </div>
+                }
                 }
             </div>
         </div>
@@ -151,7 +161,7 @@
         <div class="col-6">
             <label for="fotoperfil" class="form-label">Seleccione su foto de perfil</label>
             <input class="form-control" type="file" id="foto" name="foto"
-                accept=".png, .jpg, .jpeg, image/png, image/jpeg"  (change)="onFileChange($event)" #fotoInput>
+                accept=".png, .jpg, .jpeg, image/png, image/jpeg" (change)="onFileChange($event)" #fotoInput>
         </div>
 
 
@@ -181,10 +191,7 @@
 </form>
 
 <ng-container *ngIf="mostrarPopup">
-  <app-shared-popup 
-    [mensaje]="mensajePopup" 
-    [tipo]="tipoPopup" 
-    [mostrar]="mostrarPopup" 
-    (cerrarEvent)="mostrarPopup = false">
-  </app-shared-popup>
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
 </ng-container>

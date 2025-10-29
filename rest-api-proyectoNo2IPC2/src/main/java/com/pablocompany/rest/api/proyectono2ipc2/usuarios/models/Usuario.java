@@ -4,6 +4,10 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.usuarios.models;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.CifrarPasswordService;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.ConvertirImagenService;
+import java.io.IOException;
 import java.io.InputStream;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
@@ -122,6 +126,59 @@ public class Usuario {
         this.formDetalle = formDetalle;
     }
     
+    //Metodo que permite retornar el arreglo de bytes de la foto de perfil del usuario
+    public byte[] getFotoPerfil() throws IOException, FormatoInvalidoException{
+        ConvertirImagenService convertirImagen = new ConvertirImagenService();
+        return convertirImagen.convertirFormatoImagen(this.foto);
+    }
     
+    //Metodo que sirve para obtener la password cifrada y salteada
+    public String getPasswordCifrada() throws FormatoInvalidoException{
+        CifrarPasswordService cifrarPasswordService = new CifrarPasswordService();
+        
+        return cifrarPasswordService.cifrarPassword(this.password, this.correo);
+    }
+    
+    
+    
+      //Metodo que ayuda a validar un correo que sea valido (IMPLEMENTACION DE EXPRESIONES REGULARES)
+    /*
+        SIGNIFICADOS:
+        
+        ^: Inicio de la cadena
+    
+        [\w.-]+:
+        \w: Contiempla letras y guiones
+        .: contiempla puntos
+        -: Contiempla guiones literales
+        +: Contiempla que tiene que haber al menos uno o mas caracteres
+    
+        @: Compara la arroba literal
+        
+        [\w.-]+: Permite lo mismo y valida los puntos dentro del dominio
+        
+        \.: Evalua el punto que separa al dominio
+        [a-zA-Z]{2,}: 
+    
+        [a-zA-Z]: Indica la validacion de letras
+        
+        {2,}: Evalua que puedan haber dominios con mas de doble punto tales como: .edu.gt
+    
+        $: Indica el fin de la cadena
+        
+    
+     */
+    private boolean correoValido(String correoEntrante) {
+        String expresion = "^[\\w.-]+@[\\w.-]+(\\.[a-zA-Z]{2,})+$";
+
+        return correoEntrante.matches(expresion);
+    }
+    
+     //Expresion regular que permite validar que los correos no contengan terminaciones propias de roles
+    //True si hace match significa que no se puede usar el tipo de dominio
+    private boolean correoRestringido(String correoEntrante) {
+        String regex = "^[\\w.-]+@(admin\\.com|cinema\\.com)$";
+        return correoEntrante.matches(regex);
+    }
     
 }

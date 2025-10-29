@@ -32,6 +32,7 @@ public class UsuarioResource {
             @FormDataParam("correo") String correo,
             @FormDataParam("nombre") String nombre,
             @FormDataParam("password") String password,
+            @FormDataParam("confirmPassword") String confirmPassword,
             @FormDataParam("telefono") String telefono,
             @FormDataParam("pais") String pais,
             @FormDataParam("identificacion") String identificacion,
@@ -45,7 +46,7 @@ public class UsuarioResource {
         UsuarioCrudService crudService = new UsuarioCrudService();
 
         try {
-            if (crudService.crearUsuario(usuarioNuevo)) {
+            if (crudService.crearUsuario(usuarioNuevo, confirmPassword)) {
 
                 return Response.status(Response.Status.CREATED).build();
             } else {

@@ -2,11 +2,11 @@ import { KeyValuePipe, NgFor, NgIf } from '@angular/common';
 import { identifierName } from '@angular/compiler';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Usuario } from '../../../models/usuarios/usuario';
 import { UsuarioService } from '../../../services/usuarios-service/usuario.service';
 import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
+import { Usuario } from '../../../models/usuarios/usuario';
 
 @Component({
   selector: 'app-form-registro',
@@ -47,13 +47,25 @@ export class FormRegistroComponent implements OnInit {
         identificacion: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         id: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
         password: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
-        confirmpassword: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
+        confirmPassword: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
         correo: [null, [Validators.required, Validators.maxLength(150), Validators.email]],
         telefono: [null, [Validators.required, Validators.maxLength(150), Validators.pattern('^[0-9]+$')]],
         codigoRol: [TipoUsuarioEnum.USUARIO, Validators.required],
         pais: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
       }
     )
+
+
+    this.nuevoRegistroFormulario.valueChanges.subscribe(() => {
+      const pass = this.nuevoRegistroFormulario.get('password')?.value;
+      const confirm = this.nuevoRegistroFormulario.get('confirmPassword')?.value;
+
+      if (confirm && pass !== confirm) {
+        this.nuevoRegistroFormulario.get('confirmPassword')?.setErrors({ mismatch: true });
+      } else {
+        this.nuevoRegistroFormulario.get('confirmPassword')?.setErrors(null);
+      }
+    });
 
     this.popUp.popup$.subscribe(data => {
       this.mensajePopup = data.mensaje;
