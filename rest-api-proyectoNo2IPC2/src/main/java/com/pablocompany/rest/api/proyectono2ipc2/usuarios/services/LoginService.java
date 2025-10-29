@@ -4,12 +4,14 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.usuarios.services;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.database.LoginDB;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.LoginRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.LoginDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -20,15 +22,20 @@ import org.apache.commons.lang3.StringUtils;
 public class LoginService {
 
     //Metodo encargado de autenticar al usuario
-    public UserLoggedDTO autenticarUsuario(LoginRequest login) throws EntidadNoExistenteException, FormatoInvalidoException {
+    public UserLoggedDTO autenticarUsuario(LoginRequest login) throws EntidadNoExistenteException, FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         LoginDTO usuarioLogin = extraerDatos(login);
 
-        if (!usuarioLogin.getCorreo().equals("pablo-03@gmail.com") || !usuarioLogin.getPassword().equals("pitolin")) {
-            throw new EntidadNoExistenteException("El usuario ingresado no cuenta con un registro en la web");
+        LoginDB loginDb = new LoginDB();
+        
+        if(loginDb.usuarioRegistrado(usuarioLogin)){
+            
+            return loginDb.obtenerRegistroUsuario(usuarioLogin);
+            
         }
-
-        return new UserLoggedDTO("pablo-03", TipoUsuarioEnum.ADMINISTRADOR_SISTEMA);
+        
+        throw new EntidadNoExistenteException("No existe ningun registro con las credenciales ingresadas");
+        
     }
 
     //Metodo encargado de extraer los datos

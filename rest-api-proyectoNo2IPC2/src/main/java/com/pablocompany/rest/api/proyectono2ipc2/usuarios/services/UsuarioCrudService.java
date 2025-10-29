@@ -38,6 +38,10 @@ public class UsuarioCrudService {
                  
                  UsuarioDB usuarioDb = new UsuarioDB();
                  
+                 if(!rolDb.rolesRegistrados()){
+                     rolDb.crearRoles();
+                 }
+                 
                  if(!usuarioDb.exiteUsuario(usuarioNuevo)){
                      
                     return usuarioDb.insertarUsuario(usuarioNuevo, fotoPerfil, codigoRol);

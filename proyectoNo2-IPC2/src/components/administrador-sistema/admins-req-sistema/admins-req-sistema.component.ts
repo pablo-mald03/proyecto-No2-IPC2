@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Usuario } from '../../../models/usuarios/usuario';
 import { AdminsSistemaCardComponent } from "../admins-sistema-card/admins-sistema-card.component";
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Usuario } from '../../../models/usuarios/usuario';
 
 @Component({
   selector: 'app-admins-req-sistema',

@@ -4,7 +4,9 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.LoginRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedDTO;
@@ -46,6 +48,10 @@ public class LoginResource {
             return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+           return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }

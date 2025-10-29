@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../../models/usuarios/usuario';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminsCineCardsComponent } from "../admins-cine-cards/admins-cine-cards.component";
+import { Usuario } from '../../../models/usuarios/usuario';
 
 @Component({
   selector: 'app-admins-req-cine',
