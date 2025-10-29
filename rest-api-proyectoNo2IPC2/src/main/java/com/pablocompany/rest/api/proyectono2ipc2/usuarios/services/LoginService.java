@@ -10,7 +10,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoExce
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.database.LoginDB;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.LoginRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.LoginDTO;
 import org.apache.commons.lang3.StringUtils;
 

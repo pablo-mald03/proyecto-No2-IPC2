@@ -8,7 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.LoginDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 import java.sql.Connection;

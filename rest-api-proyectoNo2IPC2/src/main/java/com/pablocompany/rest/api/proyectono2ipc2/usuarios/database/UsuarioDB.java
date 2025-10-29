@@ -5,9 +5,14 @@
 package com.pablocompany.rest.api.proyectono2ipc2.usuarios.database;
 
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.DatosUsuario;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.LoginDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,6 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -39,8 +45,9 @@ public class UsuarioDB {
     private final String INSERTAR_USUARIO = "INSERT INTO usuario(id,correo,nombre,foto,password,telefono,pais,identificacion,codigo_rol) VALUES(?,?,?,?,?,?,?,?,?);";
 
     //Constante especial para el login
-    private final String BUSCAR_USUARIO_ID = "SELECT us.id,us.nombre, us.identificacion, us.correo, us.telefono, us.pais, r.nombre AS `rol` FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.id = ?";
-
+    private final String BUSCAR_USUARIO_ID = "SELECT us.id, us.correo, us.nombre, us.foto, us.telefono, us.pais, us.identificacion, r.nombre AS `rol` FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.id = ?";
+   
+    //Constante que permite obtener la foto de perfil del usuario
     private final String FOTO_USUARIO = "SELECT foto FROM usuario WHERE id = ?";
 
     //Metodo que permite comprobar si el usuario ya fue registrado en la base de datos
@@ -184,6 +191,44 @@ public class UsuarioDB {
             } catch (SQLException ex) {
                 System.out.println("Error al reactivar la autoconfirmacion al insertar el usuario. Contactar Soporte tecnico.");
             }
+        }
+
+    }
+    
+    
+      //Metodo que permite retornar las credenciales del usuario en base a los datos ingresados en el login
+    public DatosUsuario obtenerInformacionUsuario(String codigo) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(codigo)) {
+            throw new FormatoInvalidoException("El codigo del usuario esta vacio");
+        }
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(BUSCAR_USUARIO_ID);) {
+
+            query.setString(1, codigo.trim());
+
+            ResultSet resultSet = query.executeQuery();
+
+            if (resultSet.next()) {        
+                return new DatosUsuario(
+                        resultSet.getString("id"), 
+                        resultSet.getString("correo"), 
+                        resultSet.getString("nombre"), 
+                        resultSet.getBytes("foto"), 
+                        resultSet.getString("telefono"), 
+                        resultSet.getString("pais"), 
+                        resultSet.getString("identificacion"), 
+                        resultSet.getString("rol")
+                        );
+            }
+            else{
+                throw  new DatosNoEncontradosException("No se ha encontrado el registro del usuario");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos del usuario login." );
         }
 
     }

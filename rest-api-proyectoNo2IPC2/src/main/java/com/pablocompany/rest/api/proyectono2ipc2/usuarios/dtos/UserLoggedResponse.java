@@ -4,6 +4,7 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos;
 
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 
 /**

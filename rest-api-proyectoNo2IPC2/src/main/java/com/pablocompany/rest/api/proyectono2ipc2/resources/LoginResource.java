@@ -9,7 +9,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.LoginRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UserLoggedResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.LoginService;
 import jakarta.ws.rs.Consumes;
