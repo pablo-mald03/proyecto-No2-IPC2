@@ -36,7 +36,7 @@ public class UsuarioDB {
     private final String ID_USUARIO_EN_USO = "SELECT identificacion FROM usuario WHERE id = ?";
 
     //Constante utilizada para crear el usuario en la pagina web
-    private final String INSERTAR_USUARIO = "INSERT INTO usuario(id,correo,nombre,foto,password,telefono,pais,identificacion,codigo_rol) VALUES(?,?,?,?,?,?,?,?,?,?);";
+    private final String INSERTAR_USUARIO = "INSERT INTO usuario(id,correo,nombre,foto,password,telefono,pais,identificacion,codigo_rol) VALUES(?,?,?,?,?,?,?,?,?);";
 
     //Constante especial para el login
     private final String BUSCAR_USUARIO_ID = "SELECT us.id,us.nombre, us.identificacion, us.correo, us.telefono, us.pais, r.nombre AS `rol` FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.id = ?";
@@ -133,7 +133,7 @@ public class UsuarioDB {
     }
 
     //Metodo que sirve para poder registrar un usuario en el sistema
-    public boolean insertarUsuario(Usuario referenciUsuario) throws ErrorInesperadoException, IOException, FormatoInvalidoException {
+    public boolean insertarUsuario(Usuario referenciUsuario, byte[] fotoPerfil, String codigoRol) throws ErrorInesperadoException, IOException, FormatoInvalidoException {
 
         Connection conexion = DBConnectionSingleton.getInstance().getConnection();
 
@@ -144,15 +144,15 @@ public class UsuarioDB {
             preparedStmt.setString(1, referenciUsuario.getId().trim());
             preparedStmt.setString(2, referenciUsuario.getCorreo().trim());
             preparedStmt.setString(3, referenciUsuario.getNombre().trim());
-            preparedStmt.setBytes(4, referenciUsuario.getFotoPerfil());
+            preparedStmt.setBytes(4, fotoPerfil);
 
-            /*preparedStmt.setString(5, referenciUsuario.getpas().trim());
-            preparedStmt.setString(5, referenciUsuario.getTelefono().trim());
-            preparedStmt.setString(6, referenciUsuario.getOrganizacion().trim());
+            preparedStmt.setString(5, referenciUsuario.getPasswordCifrada().trim());
+            preparedStmt.setString(6, referenciUsuario.getTelefono().trim());
+            preparedStmt.setString(7, referenciUsuario.getPais().trim());
 
-            preparedStmt.setString(8, referenciUsuario.getTipo().toString().trim());
-            preparedStmt.setBigDecimal(9, new BigDecimal(referenciUsuario.getDinero()));
-            preparedStmt.setBoolean(10, referenciUsuario.getEstado());*/
+            preparedStmt.setString(8, referenciUsuario.getIdentificacion().trim());
+
+            preparedStmt.setString(9, codigoRol);
 
             int filasAfectadas = preparedStmt.executeUpdate();
 

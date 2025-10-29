@@ -9,6 +9,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.CifrarPasswor
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.ConvertirImagenService;
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
@@ -135,8 +136,82 @@ public class Usuario {
     //Metodo que sirve para obtener la password cifrada y salteada
     public String getPasswordCifrada() throws FormatoInvalidoException{
         CifrarPasswordService cifrarPasswordService = new CifrarPasswordService();
-        
         return cifrarPasswordService.cifrarPassword(this.password, this.correo);
+    }
+    
+     //Metodo que se encarga de validar que los campos esten llenos
+    //1 significa que se esta creando un administrador o un administrador de cine
+    public boolean esUsuarioValido(String passwordConfirmacion, int parametro) throws FormatoInvalidoException {
+
+        StringBuilder erroresEncontrados = new StringBuilder();
+        boolean error = false;
+        if (StringUtils.isBlank(this.nombre)) {
+            erroresEncontrados.append("\nNombre Vacio, ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(this.identificacion)) {
+            erroresEncontrados.append("\nIdentificacion Vacia, ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(this.password)) {
+            erroresEncontrados.append("\nContraseña Vacia, ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(passwordConfirmacion)) {
+            erroresEncontrados.append("\nConfirmacion de contraseña Vacia, ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(this.correo)) {
+            erroresEncontrados.append("\nCorreo Vacio, ");
+            error = true;
+        }
+
+        if (StringUtils.isNotBlank(this.correo) && !correoValido(this.correo)) {
+            erroresEncontrados.append("\nCorreo no cumple con el formato correcto, ");
+            error = true;
+        }
+
+        if (parametro != 1 && parametro != 2) {
+
+            if (StringUtils.isNotBlank(this.correo) && correoRestringido(this.correo)) {
+                throw new FormatoInvalidoException("No puedes crear usuarios con los dominios\n\"admin\" o \"congress\"");
+            }
+        }
+
+        if (StringUtils.isNotBlank(passwordConfirmacion) && StringUtils.isNotBlank(password) && !password.equals(passwordConfirmacion)) {
+            erroresEncontrados.append("\nLas credenciales de contraseña definidas no coinciden ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(pais)) {
+            erroresEncontrados.append("\nPais Vacio, ");
+            error = true;
+        }
+
+        if (StringUtils.isBlank(telefono)) {
+            erroresEncontrados.append("\nTelefono Vacio, ");
+            error = true;
+        }
+
+        if (!StringUtils.isBlank(telefono) && !StringUtils.isNumeric(telefono)) {
+            erroresEncontrados.append("\nTelefono contiene letras, ");
+            error = true;
+        }
+        
+        if (StringUtils.isBlank(codigoRol) ) {
+             throw new FormatoInvalidoException("No se ha especificado el codigo de Rol que tendra el usuario");
+        }
+
+        if (!error) {
+            return true;
+        } else {
+            throw new FormatoInvalidoException(String.valueOf(erroresEncontrados));
+        }
+
     }
     
     

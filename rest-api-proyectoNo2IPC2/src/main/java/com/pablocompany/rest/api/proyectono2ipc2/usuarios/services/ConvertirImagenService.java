@@ -17,33 +17,45 @@ import javax.imageio.ImageIO;
  */
 //Clase utilizada para convertir imagenes 
 public class ConvertirImagenService {
-    
+
     //Metodo encargado de parsear imagenes a png
-    public byte [] convertirFormatoImagen(InputStream  archivo) throws IOException, FormatoInvalidoException{
-        
-        BufferedImage imagen = ImageIO.read(archivo);
+    public byte[] convertirFormatoImagen(InputStream archivo) throws IOException, FormatoInvalidoException {
+
+        BufferedImage imagen = null;
+
+        if (archivo != null) {
+            imagen = ImageIO.read(archivo);
+        }
+
         if (imagen == null) {
-            throw new FormatoInvalidoException("El archivo no es una imagen válida");
+            try (InputStream defaultImg = getClass().getResourceAsStream("/icons/defaultUser.png")) {
+                if (defaultImg == null) {
+                    throw new IOException("No se encontró la imagen predeterminada");
+                }
+                imagen = ImageIO.read(defaultImg);
+                if (imagen == null) {
+                    throw new FormatoInvalidoException("La imagen predeterminada no es válida o está dañada");
+                }
+            }
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(imagen, "png", baos);
         return baos.toByteArray();
-        
-        
+
     }
-    
+
     //Metodo ecargado de validar imagenes
-    public boolean esImagenValida(InputStream archivo) throws FormatoInvalidoException{
-        
+    public boolean esImagenValida(InputStream archivo) throws FormatoInvalidoException {
+
         try {
             BufferedImage imagen = ImageIO.read(archivo);
             return imagen != null;
         } catch (IOException e) {
-           
+
             throw new FormatoInvalidoException("La imagen enviada esta vacia");
         }
-        
+
     }
-    
+
 }

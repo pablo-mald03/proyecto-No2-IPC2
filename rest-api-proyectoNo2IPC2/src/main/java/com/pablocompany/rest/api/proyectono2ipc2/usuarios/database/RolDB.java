@@ -48,13 +48,15 @@ public class RolDB {
             ResultSet result = query.executeQuery();
 
             if (result.next()) {
+                
                 return result.getString("codigo");
+                
             }else{
                 throw new DatosNoEncontradosException("No se ha encontrado el codigo del Rol" + tipoUsuario.toString());
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se permiten hacer inyecciones SQL en la tabla de Rol");
+            throw new ErrorInesperadoException("No se permiten hacer inyecciones SQL en la tabla de Rol" + e.getMessage());
         }
 
        
