@@ -322,7 +322,7 @@ poster LONGBLOB NOT NULL,
 
 sinopsis VARCHAR(500) NOT NULL,
 
-cast VARCHAR(400) NOT NULL,
+casteo VARCHAR(400) NOT NULL,
 
 fecha_estreno DATE NOT NULL,
 
@@ -388,16 +388,13 @@ fecha_posteo DATE NOT NULL,
 
 codigo_pelicula VARCHAR(35) NOT NULL,
 id_usuario VARCHAR(150) NOT NULL,
-codigo_sala VARCHAR(35) NOT NULL,
 
 
 CONSTRAINT pk_comentario_pelicula PRIMARY KEY (codigo),
 
 CONSTRAINT fk_comentario_pelicula_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
 
-CONSTRAINT fk_comentario_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id),
-
-CONSTRAINT fk_comentario_pelicula_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+CONSTRAINT fk_comentario_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 
 );
 
@@ -414,16 +411,13 @@ fecha_posteo DATE NOT NULL,
 
 codigo_pelicula VARCHAR(35) NOT NULL,
 id_usuario VARCHAR(150) NOT NULL,
-codigo_sala VARCHAR(35) NOT NULL,
 
 
 CONSTRAINT pk_valoracion_pelicula PRIMARY KEY (codigo),
 
 CONSTRAINT fk_valoracion_pelicula_pelicula FOREIGN KEY (codigo_pelicula) REFERENCES pelicula(codigo),
 
-CONSTRAINT fk_valoracion_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id),
-
-CONSTRAINT fk_valoracion_pelicula_sala FOREIGN KEY (codigo_sala) REFERENCES sala(codigo)
+CONSTRAINT fk_valoracion_pelicula_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 
 );
 
