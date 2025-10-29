@@ -48,11 +48,78 @@ border: 1px solid #ced4da;
 transition: all 0.25s ease;
 }
 
+.btn-close::before, .btn-close::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: white;
+  transform-origin: center;
+}
+.btn-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.btn-close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+button.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+button.btn:hover { transform: translateY(-3px); }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes popUp {
+  from { transform: translateY(8px) scale(0.98); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0; 
+  background-color: rgba(33, 37, 41, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; 
+  padding: 1rem;
+  animation: fadeIn 0.25s ease;
+}
+
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transform: translateY(8px) scale(0.98);
+  animation: popUp 0.22s ease forwards;
+  position: relative;
+}
+
 
 button.btn-secondary {
 background-color: #5a6268;
 transform: scale(1.05);
 box-shadow: 0 4px 10px rgba(90, 98, 104, 0.5);
+}
+
+.modal-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
 }
 
 button.btn {
@@ -71,4 +138,22 @@ button.btn.bg-success {
 background-color: #198754 !important;
 transform: scale(1.05);
 box-shadow: 0 4px 10px rgba(25, 135, 84, 0.5);
+}
+
+
+.modal-footer {
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  position: relative;
+  cursor: pointer;
 }

@@ -1,75 +1,75 @@
 <form [formGroup]="reestablecerForm" (submit)="submit()" autocomplete="off">
   <div class="row g-3">
 
-<div class="col-12">
-  <label for="correo" class="form-label">Correo Electrónico</label>
-  <input type="email" class="form-control" id="correo" name="correo" placeholder="tunombre@ejemplo.com"
-    formControlName="correo"
-    [class.is-invalid]="reestablecerForm.controls['correo'].dirty && reestablecerForm.controls['correo'].invalid">
+    <div class="col-12">
+      <label for="correo" class="form-label">Correo Electrónico</label>
+      <input type="email" class="form-control" id="correo" name="correo" placeholder="tunombre@ejemplo.com"
+        formControlName="correo"
+        [class.is-invalid]="reestablecerForm.controls['correo'].dirty && reestablecerForm.controls['correo'].invalid">
 
-  @if (reestablecerForm.controls['correo'].invalid && reestablecerForm.controls['correo'].touched) {
-  <div class="invalid-feedback">
-    <div>Ingrese un correo electrónico válido</div>
-  </div>
-  }
-</div>
-
-<div class="col-12">
-  <label for="idUsuario" class="form-label">Identificador de Usuario</label>
-  <input type="text" class="form-control" id="idUsuario" name="idUsuario" placeholder="usuario-01"
-    formControlName="idUsuario"
-    [class.is-invalid]="reestablecerForm.controls['idUsuario'].dirty && reestablecerForm.controls['idUsuario'].invalid">
-
-  @if (reestablecerForm.controls['idUsuario'].invalid && reestablecerForm.controls['idUsuario'].touched) {
-  <div class="invalid-feedback">
-    <div>Ingrese un identificador válido</div>
-  </div>
-  }
-</div>
-
-<div class="col-12">
-  <label for="nuevaPassword" class="form-label">Nueva Contraseña</label>
-  <div class="input-group has-validation">
-    <span class="input-group-text">*</span>
-    <input type="password" class="form-control" id="nuevaPassword" name="nuevaPassword"
-      placeholder="Ingresar nueva contraseña" formControlName="nuevaPassword"
-      [class.is-invalid]="reestablecerForm.controls['nuevaPassword'].dirty && reestablecerForm.controls['nuevaPassword'].invalid">
-
-    @if (reestablecerForm.controls['nuevaPassword'].invalid && reestablecerForm.controls['nuevaPassword'].touched) {
-    <div class="invalid-feedback">
-      <div>La contraseña debe tener al menos 5 caracteres</div>
+      @if (reestablecerForm.controls['correo'].invalid && reestablecerForm.controls['correo'].touched) {
+      <div class="invalid-feedback">
+        <div>Ingrese un correo electrónico válido</div>
+      </div>
+      }
     </div>
-    }
-  </div>
-</div>
 
-<div class="col-12">
-  <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
-  <div class="input-group has-validation">
-    <span class="input-group-text">*</span>
-    <input type="password" class="form-control" id="confirmarPassword" name="confirmarPassword"
-      placeholder="Confirmar nueva contraseña" formControlName="confirmarPassword"
-      [class.is-invalid]="reestablecerForm.get('confirmarPassword')?.invalid && reestablecerForm.get('confirmarPassword')?.touched">
+    <div class="col-12">
+      <label for="idUsuario" class="form-label">Identificador de Usuario</label>
+      <input type="text" class="form-control" id="idUsuario" name="idUsuario" placeholder="usuario-01"
+        formControlName="idUsuario"
+        [class.is-invalid]="reestablecerForm.controls['idUsuario'].dirty && reestablecerForm.controls['idUsuario'].invalid">
 
-    @if (reestablecerForm.get('confirmarPassword')?.touched) {
-    @if (reestablecerForm.get('confirmarPassword')?.hasError('required')) {
-    <div class="invalid-feedback d-block">
-      <div>Debe ingresar una contraseña</div>
+      @if (reestablecerForm.controls['idUsuario'].invalid && reestablecerForm.controls['idUsuario'].touched) {
+      <div class="invalid-feedback">
+        <div>Ingrese un identificador válido</div>
+      </div>
+      }
     </div>
-    }
-    @else if (reestablecerForm.get('confirmarPassword')?.hasError('minlength')) {
-    <div class="invalid-feedback d-block">
-      <div>Ingrese una contraseña con 5 caracteres mínimo</div>
+
+    <div class="col-12">
+      <label for="nuevaPassword" class="form-label">Nueva Contraseña</label>
+      <div class="input-group has-validation">
+        <span class="input-group-text">*</span>
+        <input type="password" class="form-control" id="password" name="password"
+          placeholder="Ingresar nueva contraseña" formControlName="password"
+          [class.is-invalid]="reestablecerForm.controls['password'].dirty && reestablecerForm.controls['password'].invalid">
+
+        @if (reestablecerForm.controls['password'].invalid && reestablecerForm.controls['password'].touched) {
+        <div class="invalid-feedback">
+          <div>La contraseña debe tener al menos 5 caracteres</div>
+        </div>
+        }
+      </div>
     </div>
-    }
-    @else if (reestablecerForm.get('confirmarPassword')?.hasError('mismatch')) {
-    <div class="invalid-feedback d-block">
-      <div>Las contraseñas no coinciden</div>
+
+    <div class="col-12">
+      <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
+      <div class="input-group has-validation">
+        <span class="input-group-text">*</span>
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"
+          placeholder="Confirmar nueva contraseña" formControlName="passwordConfirm"
+          [class.is-invalid]="reestablecerForm.get('passwordConfirm')?.invalid && reestablecerForm.get('passwordConfirm')?.touched">
+
+        @if (reestablecerForm.get('passwordConfirm')?.touched) {
+        @if (reestablecerForm.get('passwordConfirm')?.hasError('required')) {
+        <div class="invalid-feedback d-block">
+          <div>Debe ingresar una contraseña</div>
+        </div>
+        }
+        @else if (reestablecerForm.get('passwordConfirm')?.hasError('minlength')) {
+        <div class="invalid-feedback d-block">
+          <div>Ingrese una contraseña con 5 caracteres mínimo</div>
+        </div>
+        }
+        @else if (reestablecerForm.get('passwordConfirm')?.hasError('mismatch')) {
+        <div class="invalid-feedback d-block">
+          <div>Las contraseñas no coinciden</div>
+        </div>
+        }
+        }
+      </div>
     </div>
-    }
-    }
-  </div>
-</div>
 
   </div>
 
@@ -78,18 +78,42 @@
   <div class="d-flex justify-content-center align-items-center gap-2 mt-3">
     <button class="btn btn-secondary me-md-2" type="button" (click)="reiniciar()">Limpiar</button>
 
-<button class="btn bg-success bg-gradient text-white px-4" [disabled]="reestablecerForm.invalid">
-  Reestablecer Contraseña
-</button>
+    <button class="btn bg-success bg-gradient text-white px-4" [disabled]="reestablecerForm.invalid">
+      Reestablecer Contraseña
+    </button>
 
   </div>
 
   <br>
-
-  <!--
-<ng-container *ngIf="mostrarPopup">
-<app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
-(cerrarEvent)="mostrarPopup = false"> </app-shared-popup> </ng-container>
--->
 </form>
 
+<ng-container *ngIf="mostrarPopup">
+  <app-shared-popup 
+    [mensaje]="mensajePopup" 
+    [tipo]="tipoPopup" 
+    [mostrar]="mostrarPopup" 
+    (cerrarEvent)="mostrarPopup = false">
+  </app-shared-popup>
+</ng-container>
+
+
+<div class="modal-backdrop" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <!-- evitamos que el click en el contenido cierre el modal -->
+  <div class="modal-content fadeIn" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header bg-success text-white">
+      <h5 id="modalTitle" class="modal-title fw-bold">Contraseña reestablecida</h5>
+      <!-- botón para cerrar (visible) -->
+      <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="cerrarModal()"></button>
+    </div>
+
+    <div class="modal-body text-center">
+      <p class="fs-5">Tu contraseña ha sido actualizada correctamente</p>
+      <p class="text-muted">Ahora puedes iniciar sesión con tus nuevas credenciales.</p>
+    </div>
+
+    <div class="modal-footer justify-content-center">
+      <button class="btn btn-secondary me-2" type="button" (click)="cerrarModal()">Cerrar</button>
+      <button class="btn btn-success px-4" (click)="irLogin()">Ir al Login</button>
+    </div>
+  </div>
+</div>
