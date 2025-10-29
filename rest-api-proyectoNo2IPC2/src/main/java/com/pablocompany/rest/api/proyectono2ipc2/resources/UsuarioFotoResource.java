@@ -5,6 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.resources;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.FotoPerfilUserResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.services.FotoPerfilService;
@@ -43,6 +44,8 @@ public class UsuarioFotoResource {
         } catch (FormatoInvalidoException ex) {
             //Indica que la solicitud no fue procesada
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+           return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
         }
     }
 }
