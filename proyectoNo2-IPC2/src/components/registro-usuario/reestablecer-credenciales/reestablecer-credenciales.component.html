@@ -1,0 +1,95 @@
+<form [formGroup]="reestablecerForm" (submit)="submit()" autocomplete="off">
+  <div class="row g-3">
+
+<div class="col-12">
+  <label for="correo" class="form-label">Correo Electrónico</label>
+  <input type="email" class="form-control" id="correo" name="correo" placeholder="tunombre@ejemplo.com"
+    formControlName="correo"
+    [class.is-invalid]="reestablecerForm.controls['correo'].dirty && reestablecerForm.controls['correo'].invalid">
+
+  @if (reestablecerForm.controls['correo'].invalid && reestablecerForm.controls['correo'].touched) {
+  <div class="invalid-feedback">
+    <div>Ingrese un correo electrónico válido</div>
+  </div>
+  }
+</div>
+
+<div class="col-12">
+  <label for="idUsuario" class="form-label">Identificador de Usuario</label>
+  <input type="text" class="form-control" id="idUsuario" name="idUsuario" placeholder="usuario-01"
+    formControlName="idUsuario"
+    [class.is-invalid]="reestablecerForm.controls['idUsuario'].dirty && reestablecerForm.controls['idUsuario'].invalid">
+
+  @if (reestablecerForm.controls['idUsuario'].invalid && reestablecerForm.controls['idUsuario'].touched) {
+  <div class="invalid-feedback">
+    <div>Ingrese un identificador válido</div>
+  </div>
+  }
+</div>
+
+<div class="col-12">
+  <label for="nuevaPassword" class="form-label">Nueva Contraseña</label>
+  <div class="input-group has-validation">
+    <span class="input-group-text">*</span>
+    <input type="password" class="form-control" id="nuevaPassword" name="nuevaPassword"
+      placeholder="Ingresar nueva contraseña" formControlName="nuevaPassword"
+      [class.is-invalid]="reestablecerForm.controls['nuevaPassword'].dirty && reestablecerForm.controls['nuevaPassword'].invalid">
+
+    @if (reestablecerForm.controls['nuevaPassword'].invalid && reestablecerForm.controls['nuevaPassword'].touched) {
+    <div class="invalid-feedback">
+      <div>La contraseña debe tener al menos 5 caracteres</div>
+    </div>
+    }
+  </div>
+</div>
+
+<div class="col-12">
+  <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
+  <div class="input-group has-validation">
+    <span class="input-group-text">*</span>
+    <input type="password" class="form-control" id="confirmarPassword" name="confirmarPassword"
+      placeholder="Confirmar nueva contraseña" formControlName="confirmarPassword"
+      [class.is-invalid]="reestablecerForm.get('confirmarPassword')?.invalid && reestablecerForm.get('confirmarPassword')?.touched">
+
+    @if (reestablecerForm.get('confirmarPassword')?.touched) {
+    @if (reestablecerForm.get('confirmarPassword')?.hasError('required')) {
+    <div class="invalid-feedback d-block">
+      <div>Debe ingresar una contraseña</div>
+    </div>
+    }
+    @else if (reestablecerForm.get('confirmarPassword')?.hasError('minlength')) {
+    <div class="invalid-feedback d-block">
+      <div>Ingrese una contraseña con 5 caracteres mínimo</div>
+    </div>
+    }
+    @else if (reestablecerForm.get('confirmarPassword')?.hasError('mismatch')) {
+    <div class="invalid-feedback d-block">
+      <div>Las contraseñas no coinciden</div>
+    </div>
+    }
+    }
+  </div>
+</div>
+
+  </div>
+
+  <hr class="my-4">
+
+  <div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <button class="btn btn-secondary me-md-2" type="button" (click)="reiniciar()">Limpiar</button>
+
+<button class="btn bg-success bg-gradient text-white px-4" [disabled]="reestablecerForm.invalid">
+  Reestablecer Contraseña
+</button>
+
+  </div>
+
+  <br>
+
+  <!--
+<ng-container *ngIf="mostrarPopup">
+<app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+(cerrarEvent)="mostrarPopup = false"> </app-shared-popup> </ng-container>
+-->
+</form>
+

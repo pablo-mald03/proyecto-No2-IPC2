@@ -29,6 +29,7 @@ import { ComprarAnuncioComponent } from '../components/pagina-anunciante/comprar
 import { rolAdminCineGuard } from './guards/rol-admin-cine-guard';
 import { rolAdminSistemaGuard } from './guards/rol-admin-sistema-guard';
 import { rolUsuarioGuard } from './guards/rol-usuario-guard';
+import { ReestablecerCredencialesPageComponent } from '../pages/reestablecer-credenciales-page/reestablecer-credenciales-page.component';
 
 
 export const routes: Routes = [
@@ -48,6 +49,12 @@ export const routes: Routes = [
 
         path: 'registro',
         component: RegistroPageComponent,
+
+    },
+    {
+
+        path: 'reestablecer/credenciales',
+        component: ReestablecerCredencialesPageComponent,
 
     },
     {

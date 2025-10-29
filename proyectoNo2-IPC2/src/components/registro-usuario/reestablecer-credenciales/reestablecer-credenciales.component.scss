@@ -1,0 +1,74 @@
+form {
+animation: fadeInUp 0.6s ease-in-out;
+background: #ffffffaa;
+backdrop-filter: blur(6px);
+border-radius: 16px;
+padding: 1rem 1.5rem;
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+transition: transform 0.2s ease;
+}
+
+.form-label {
+font-weight: 600;
+color: #212529;
+}
+
+.invalid-feedback {
+font-size: 0.85rem;
+color: #d63384;
+animation: fadeInUp 0.3s ease;
+}
+
+.input-group-text {
+background-color: #0dcaf0;
+color: white;
+border: none;
+font-weight: bold;
+border-radius: 10px 0 0 10px;
+}
+
+form {
+transform: scale(1.01);
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.form-control {
+border-radius: 10px;
+border: 1px solid #ced4da;
+transition: all 0.25s ease;
+}
+
+
+button.btn-secondary {
+background-color: #5a6268;
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(90, 98, 104, 0.5);
+}
+
+button.btn {
+border-radius: 12px;
+font-weight: 600;
+transition: all 0.3s ease;
+}
+
+.form-control {
+border-color: #0dcaf0;
+box-shadow: 0 0 10px rgba(13, 202, 240, 0.6);
+transform: scale(1.01);
+}
+
+button.btn.bg-success {
+background-color: #198754 !important;
+transform: scale(1.05);
+box-shadow: 0 4px 10px rgba(25, 135, 84, 0.5);
+}
