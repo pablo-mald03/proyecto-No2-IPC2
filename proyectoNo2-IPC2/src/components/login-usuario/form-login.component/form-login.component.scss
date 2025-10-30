@@ -1,0 +1,33 @@
+form {
+    color: #fff;
+}
+
+.logo:hover {
+    transform: rotate(-5deg) scale(1.05);
+}
+
+input.form-control {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+
+.logo {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+    transition: transform 0.4s ease;
+}
+
+input.form-control:focus {
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+    outline: none;
+}
+
+
+.btn-warning {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-warning:hover {
+    background-color: #ffc107d9;
+    transform: scale(1.03);
+}

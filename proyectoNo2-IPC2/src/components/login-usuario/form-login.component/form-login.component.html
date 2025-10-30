@@ -1,70 +1,61 @@
 <form class="text-center" [formGroup]="loginFormulario" (submit)="submit()">
-
     <a routerLink="/" routerLinkActive="active">
-        <img class="mb-4 " src="icons-app/cinemaAppIcon.png" alt="" width="100" height="100">
+        <img class="mb-4 logo" src="icons-app/cinemaAppIcon.png" alt="Logo" width="100" height="100" />
     </a>
 
-    <h1 class="h3 mb-3 fw-bold">Iniciar Sesion</h1>
+    <h1 class="h3 mb-3 fw-bold text-white">Iniciar Sesión</h1>
 
-    <div class="form-floating">
-        <input type="email" class="form-control" id="correo" name="correo" placeholder="tucorreo@ejemplo.com"
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control shadow-sm" id="correo" placeholder="tucorreo@ejemplo.com"
             formControlName="correo"
-            [class.is-invalid]="loginFormulario.controls['correo'].dirty && loginFormulario.controls['correo'].invalid">
+            [class.is-invalid]="loginFormulario.controls['correo'].dirty && loginFormulario.controls['correo'].invalid" />
+        <label for="correo">Correo Electrónico</label>
 
-        @if (loginFormulario.controls['correo'].invalid &&
-        loginFormulario.controls['correo'].touched) {
-        <div class="invalid-feedback">
-            <div>
-                Ingrese un correo valido
-            </div>
+        @if (loginFormulario.controls['correo'].invalid && loginFormulario.controls['correo'].touched) {
+        <div class="invalid-feedback text-start ps-3">
+            Ingrese un correo válido
         </div>
         }
-
-        <label for="floatingInput">Correo Electronico</label>
     </div>
-    <br>
-    <div class="form-floating">
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control shadow-sm" id="password" placeholder="Contraseña"
             formControlName="password"
-            [class.is-invalid]="loginFormulario.controls['password'].dirty && loginFormulario.controls['password'].invalid">
+            [class.is-invalid]="loginFormulario.controls['password'].dirty && loginFormulario.controls['password'].invalid" />
+        <label for="password">Contraseña</label>
 
-        @if (loginFormulario.controls['password'].invalid &&
-        loginFormulario.controls['password'].touched) {
-        <div class="invalid-feedback">
-            <div>
-                Ingrese una contraseña valida
-            </div>
+        @if (loginFormulario.controls['password'].invalid && loginFormulario.controls['password'].touched) {
+        <div class="invalid-feedback text-start ps-3">
+            Ingrese una contraseña válida
         </div>
         }
-        <label for="floatingPassword">Contraseña</label>
     </div>
 
-    <br>
-
-    <p class="text-body-black">¿Olvidaste tu contraseña? <a class="text-success" routerLink="/reestablecer/credenciales"
-            routerLinkActive="active">Cambiar Contraseña</a>
+    <p class="text-white small">
+        ¿Olvidaste tu contraseña?
+        <a class="text-warning fw-semibold" routerLink="/reestablecer/credenciales" routerLinkActive="active">
+            Cambiar Contraseña
+        </a>
     </p>
 
+    <button class="btn btn-warning w-100 py-2 rounded-pill shadow-sm fw-semibold" [disabled]="loginFormulario.invalid">
+        Iniciar Sesión
+    </button>
 
-    <button class="btn  bg-success bg-gradient text-white  w-100 py-2 mt-2" [disabled]="loginFormulario.invalid">Iniciar Sesion</button>
-
-    <br>
-    <br>
-
-    <p class="text-body-black">¿Eres nuevo en CinemaApp? <a class="text-success" routerLink="/registro"
-            routerLinkActive="active">Crear una cuenta</a>
+    <p class="text-white mt-4">
+        ¿Eres nuevo en CinemaApp?
+        <a class="text-warning fw-semibold" routerLink="/registro" routerLinkActive="active">
+            Crear una cuenta
+        </a>
     </p>
 
-    <hr class="my-4">
-    <p class="mt-5 mb-3 text-body-secondary">© CinemaApp 2025–2026</p>
+    <hr class="my-4 border-light opacity-50" />
+    <p class="text-black-50 small mb-0">© CinemaApp 2025–2026</p>
 </form>
 
 
 <ng-container *ngIf="mostrarPopup">
-  <app-shared-popup 
-    [mensaje]="mensajePopup" 
-    [tipo]="tipoPopup" 
-    [mostrar]="mostrarPopup" 
-    (cerrarEvent)="mostrarPopup = false">
-  </app-shared-popup>
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
 </ng-container>
