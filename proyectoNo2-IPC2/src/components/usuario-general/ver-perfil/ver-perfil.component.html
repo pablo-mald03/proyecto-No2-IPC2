@@ -1,0 +1,56 @@
+<div class="perfil-container d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg perfil-card animate-fadeIn">
+        <div class="card-body text-center">
+
+            <div class="position-relative mb-4">
+                <img [src]="usuarioDatos.foto ? getImagenBase64(usuarioDatos.foto) : 'icons-app/defalutUser.png'"
+                    alt="Foto de usuario" class="rounded-circle perfil-foto shadow" />
+            </div>
+
+            <h2 class="fw-bold mb-1 text-warning">{{ usuarioDatos.nombre }}</h2>
+            <p class="text-white mb-3 mt-4 fw-bold fs-5 ">{{ getTipoUsuario( usuarioDatos.rol )}}</p>
+
+            <hr class="text-warning" />
+
+            <div class="row text-start">
+                <div class="col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="correo" placeholder="Correo"
+                            [value]="usuarioDatos.correo" readonly />
+                        <label for="correo">Correo electrónico</label>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono"
+                            [value]="usuarioDatos.telefono" readonly />
+                        <label for="telefono">Teléfono</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="pais" placeholder="País" [value]="usuarioDatos.pais"
+                            readonly />
+                        <label for="pais">País</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="identificacion" placeholder="Identificación"
+                            [value]="usuarioDatos.identificacion" readonly />
+                        <label for="identificacion">Identificación</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mt-4 text-warning"/>
+
+            <button class="btn btn-warning px-4 py-2 rounded-pill shadow-sm">
+                Editar Perfil
+            </button>
+        </div>
+    </div>
+</div>

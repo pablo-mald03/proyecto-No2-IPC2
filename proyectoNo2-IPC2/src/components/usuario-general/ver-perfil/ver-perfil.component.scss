@@ -1,0 +1,54 @@
+
+.perfil-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+}
+
+.perfil-foto {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border: 5px solid #b36806;
+  background-color: #f1f1f1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perfil-container {
+  min-height: 100vh;
+  padding: 40px 15px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.perfil-card {
+  width: 100%;
+  max-width: 500px;
+  border: none;
+  border-radius: 20px;
+  background-color: #04456b;
+  transition: all 0.3s ease;
+}
+
+.perfil-foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(111, 1, 133, 0.664);
+}
+
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
+}
+
+input[readonly].form-control {
+  background-color: #d2e6e6;
+  cursor: default;
+  border: 1px solid #dee2e6;
+}
+
+label {
+  color: #6c757d;
+}

@@ -30,6 +30,7 @@ import { rolAdminCineGuard } from './guards/rol-admin-cine-guard';
 import { rolAdminSistemaGuard } from './guards/rol-admin-sistema-guard';
 import { rolUsuarioGuard } from './guards/rol-usuario-guard';
 import { ReestablecerCredencialesPageComponent } from '../pages/reestablecer-credenciales-page/reestablecer-credenciales-page.component';
+import { VerPerfilComponent } from '../components/usuario-general/ver-perfil/ver-perfil.component';
 
 
 export const routes: Routes = [
@@ -143,6 +144,10 @@ export const routes: Routes = [
             {
                 path: 'reportes/ganancias',
                 component: ReporteGananciasComponent,
+            },
+            {
+                path: 'perfil',
+                component: VerPerfilComponent,
             },
             {
                 path: '',
