@@ -7,15 +7,13 @@ package com.pablocompany.rest.api.proyectono2ipc2.usuarios.database;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.CambioCredencialesDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.DatosUsuario;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.UserLoggedDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.LoginDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +29,10 @@ public class UsuarioDB {
 
     //Constante que verifica si los datos unico del usuario estan en uso
     private final String USUARIO_EXISTENTE = "SELECT identificacion FROM usuario WHERE correo = ? AND identificacion = ? AND id = ?";
-
+    
+    //Constante que permite verificar si el usuario existe en base a su id y su correo
+    private final String CREDENCIALES_EXISTENTES = "SELECT identificacion FROM usuario WHERE correo = ? AND id = ?";
+    
     //Constante que permite verificar si el correo esta en uso
     private final String CORREO_EN_USO = "SELECT identificacion FROM usuario WHERE correo = ?";
 
@@ -49,6 +50,9 @@ public class UsuarioDB {
    
     //Constante que permite obtener la foto de perfil del usuario
     private final String FOTO_USUARIO = "SELECT foto FROM usuario WHERE id = ?";
+    
+    //Constante que permite cambiar las credenciales del usuario
+    private final String REESTABLECER_CREDENCIALES = "UPDATE usuario SET password = ? WHERE correo = ? AND id = ?";
 
     //Metodo que permite comprobar si el usuario ya fue registrado en la base de datos
     public boolean exiteUsuario(Usuario usuarioNuevo) throws ErrorInesperadoException, EntidadExistenteException {
@@ -137,6 +141,84 @@ public class UsuarioDB {
             throw new ErrorInesperadoException("No se permiten inyecciones sql o patrones diferentes a los que se piden.");
         }
 
+    }
+    
+    //Metodo que comprueba si el usuario cuenta con un registro en el sistema para el cambio de credenciales 
+    public boolean credencialesExistentes(String correo, String idUsuario) throws EntidadNoExistenteException, FormatoInvalidoException, ErrorInesperadoException{
+        
+        if (StringUtils.isBlank(correo)) {
+            throw new FormatoInvalidoException("El correo del usuario esta vacio");
+        }
+        
+        if (StringUtils.isBlank(idUsuario)) {
+            throw new FormatoInvalidoException("El id del usuario esta vacio");
+        }
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query1 = connection.prepareStatement(CREDENCIALES_EXISTENTES);) {
+            query1.setString(1, correo.trim());
+            query1.setString(2, idUsuario.trim());
+            ResultSet resultS = query1.executeQuery();
+
+            if (resultS.next()) {
+              return true;
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se permite Hacer inyecciones SQL en la verificacion de credenciales");
+        }
+
+        return false;
+    }
+    
+    //Metodo delegado para poder reestablecer/cambiar la password del usuario
+    public boolean reestablecerCredenciales(CambioCredencialesDTO nuevasCredenciales) throws ErrorInesperadoException, FormatoInvalidoException{
+       
+        if(nuevasCredenciales == null){
+            throw  new FormatoInvalidoException("No se ha enviado ninguna informacion sobre las credenciales");
+        }
+        
+        Connection conexion = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(REESTABLECER_CREDENCIALES);) {
+
+            conexion.setAutoCommit(false);
+            preparedStmt.setString(1, nuevasCredenciales.getPasswordNueva().trim());
+            preparedStmt.setString(2, nuevasCredenciales.getCorreo().trim());
+            preparedStmt.setString(3, nuevasCredenciales.getIdUsuario().trim());
+          
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+
+                conexion.commit();
+                return true;
+
+            } else {
+                conexion.rollback();
+                throw new ErrorInesperadoException("No se ha podido reestablecer las credenciales del usuario. Contactar al administrador de Sistema. ");
+            }
+
+        } catch (SQLException ex) {
+
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new ErrorInesperadoException("Error al hacer Rollback al reestablecer las credenciales del usuario");
+            }
+
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al cambiar credenciales.");
+        } finally {
+
+            try {
+
+                conexion.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                System.out.println("Error al reactivar la autoconfirmacion al editar las credenciales del usuario.");
+            }
+        }
     }
 
     //Metodo que sirve para poder registrar un usuario en el sistema

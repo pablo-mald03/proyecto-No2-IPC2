@@ -159,6 +159,10 @@ public class Usuario {
             erroresEncontrados.append("\nContraseña Vacia, ");
             error = true;
         }
+        
+        if (!StringUtils.isBlank(this.password) && this.password.length() < 5) {
+           throw new FormatoInvalidoException("No se puede ingresar una contraseña con menos de 5 caracteres");
+        }
 
         if (StringUtils.isBlank(passwordConfirmacion)) {
             erroresEncontrados.append("\nConfirmacion de contraseña Vacia, ");

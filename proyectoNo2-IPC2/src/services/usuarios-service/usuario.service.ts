@@ -21,6 +21,6 @@ export class UsuarioService {
 
     //Endpoint que ayuda a cambiar las credenciales del usuario PENDIENTE CAMBIAR ENDPOINT
     public cambiarCredenciales(nuevasCredenciales: CambioCredenciales): Observable<void> {
-        return this.httpClient.post<void>(`${this.restConstants.getApiURL()}reestablecer/credenciales`, nuevasCredenciales);
+        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}reestablecer/credenciales`, nuevasCredenciales);
     }
 }
