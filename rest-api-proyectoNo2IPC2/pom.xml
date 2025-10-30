@@ -77,6 +77,26 @@
             <version>${restapi}</version>
         </dependency>
         
+        <!-- jasper -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-functions</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-pdf -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-pdf</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        
     </dependencies>
     
     <build>
