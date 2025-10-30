@@ -31,6 +31,7 @@ import { rolAdminSistemaGuard } from './guards/rol-admin-sistema-guard';
 import { rolUsuarioGuard } from './guards/rol-usuario-guard';
 import { ReestablecerCredencialesPageComponent } from '../pages/reestablecer-credenciales-page/reestablecer-credenciales-page.component';
 import { VerPerfilComponent } from '../components/usuario-general/ver-perfil/ver-perfil.component';
+import { PrincipalCinesComponent } from '../components/usuario-paginas/principal-cines/principal-cines.component';
 
 
 export const routes: Routes = [
@@ -67,13 +68,33 @@ export const routes: Routes = [
     {
         path: 'menu-principal',
         component: PrincipalUsuarioPageComponent,
-        canActivate: [authGuard,rolUsuarioGuard],
-        canActivateChild: [authGuard,rolUsuarioGuard],
+        canActivate: [authGuard, rolUsuarioGuard],
+        canActivateChild: [authGuard, rolUsuarioGuard],
+
+        children: [
+
+            {
+                path: 'inicio',
+                component: PrincipalCinesComponent,
+
+            },
+            {
+                path: 'perfil',
+                component: VerPerfilComponent,
+            },
+            {
+                path: '',
+                redirectTo: 'inicio',
+                pathMatch: 'full'
+            },
+
+        ]
+
     },
     {
         path: 'menu-anunciante',
         component: AnunciantePageComponent,
-        canActivateChild: [authGuard,rolAnuncianteGuard],
+        canActivateChild: [authGuard, rolAnuncianteGuard],
 
         //Todas las paginas y funcionalidades que tiene el anunciante
         children: [
@@ -90,6 +111,10 @@ export const routes: Routes = [
                 component: ComprarAnuncioComponent,
             },
             {
+                path: 'perfil',
+                component: VerPerfilComponent,
+            },
+            {
                 path: '',
                 redirectTo: 'inicio',
                 pathMatch: 'full'
@@ -100,7 +125,7 @@ export const routes: Routes = [
     {
         path: 'menu-admin-sistema',
         component: AdminSistemaPageComponent,
-        canActivateChild: [authGuard,rolAdminSistemaGuard],
+        canActivateChild: [authGuard, rolAdminSistemaGuard],
 
         children: [
 
@@ -181,6 +206,10 @@ export const routes: Routes = [
             {
                 path: 'reportes/boletos',
                 component: ReporteBoletosVendidosComponent,
+            },
+            {
+                path: 'perfil',
+                component: VerPerfilComponent,
             },
 
         ]
