@@ -1,16 +1,20 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReporteSalasComentadasDTO } from '../../../models/reportes-cine/reporte-salas-comentarios-dto';
 import { ReporteSalasComentadasCardsComponent } from "../reporte-salas-comentadas-cards/reporte-salas-comentadas-cards.component";
 import { ReporteComentariosSalaService } from '../../../services/reportes-cine-service/reporte-comentarios-sala.sercive';
 import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-dto';
+import { ExportarReporteComentariosSalaService } from '../../../services/reportes-cine-service/exportar-reporte-comentarios-sala.sercive';
+import { Popup } from '../../../shared/popup/popup';
+import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 
 @Component({
   selector: 'app-reporte-comentarios-salas-comentadas',
-  imports: [NgClass, ReactiveFormsModule, ReporteSalasComentadasCardsComponent],
+  imports: [NgClass, ReactiveFormsModule, ReporteSalasComentadasCardsComponent, SharedPopupComponent, NgIf],
   templateUrl: './reporte-comentarios-salas-comentadas.component.html',
-  styleUrl: './reporte-comentarios-salas-comentadas.component.scss'
+  styleUrl: './reporte-comentarios-salas-comentadas.component.scss',
+  providers: [Popup]
 })
 export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
@@ -34,10 +38,20 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
   filtroSalaForm!: FormGroup;
 
+
+
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
+
   constructor(
     private formBuild: FormBuilder,
     private formBuildSala: FormBuilder,
     private reporteComentariosService: ReporteComentariosSalaService,
+    private exportarReporteComentariosService: ExportarReporteComentariosSalaService,
+    private popUp: Popup,
 
   ) { }
 
@@ -61,13 +75,111 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
     this.estaFiltrado = false;
 
 
+
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      this.mostrarPopup = false;
+
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
+      }
+    });
+
   }
 
 
-  //Metodo que sirve para mandar a exportar el reporte
-  exportarReporte() {
+  //Metodo que sirve para mandar a exportar el reporte acorde a lo que este configurado
+  exportarReporte(): void {
+
+    if (this.reportesMostrados.length === 0) {
+      const mensaje = 'Genera primero los reportes para poder exportarlos';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+      return;
+    }
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    if (!inicioISO || !finISO) return;
 
 
+    if (!this.estaFiltrado) {
+
+
+      this.exportarReporteComentariosService.exportarReportesSalasComentadasSinFiltro(inicioISO, finISO, this.indiceActual, 0).subscribe({
+        next: (cantidadRetornadaDTO: ReporteSalasComentadasDTO[]) => {
+
+
+          const mensaje = 'Si jala tilin';
+          this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+
+        },
+        error: (error: any) => {
+
+          let mensaje = 'Ocurrió un error';
+
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+        }
+      });
+
+      return;
+    }
+
+
+    if (this.estaFiltrado) {
+
+      const { idSala } = this.filtroSalaForm.value;
+
+      if (idSala == null || idSala == '') {
+        return;
+      }
+
+
+      this.exportarReporteComentariosService.exportarReportesSalasComentadasConFiltro(inicioISO, finISO, this.indiceActual, 0, idSala).subscribe({
+        next: (cantidadRetornadaDTO: ReporteSalasComentadasDTO[]) => {
+
+
+          const mensaje = 'Si jala tilin';
+          this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+        },
+        error: (error: any) => {
+
+          let mensaje = 'Ocurrió un error';
+
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+        }
+      });
+
+
+
+    }
 
   }
 
@@ -101,6 +213,10 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
     if (!inicioISO || !finISO) return;
 
+    if (this.estaFiltrado) {
+      this.limpiarSala();
+    }
+
 
     this.reporteComentariosService.cantidadReportesSinFiltro(inicioISO, finISO).subscribe({
       next: (cantidadDTO: CantidadReportesDTO) => {
@@ -112,7 +228,19 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
         this.cargarMasReportes(inicioISO, finISO);
       },
-      error: (err) => console.error('Error obteniendo cantidad total', err)
+      error: (error: any) => {
+
+        let mensaje = 'Ocurrió un error';
+
+        if (error.error && error.error.mensaje) {
+          mensaje = error.error.mensaje;
+        } else if (error.message) {
+          mensaje = error.message;
+        }
+
+        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+      }
     });
 
 
@@ -169,6 +297,8 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
             mensaje = error.message;
           }
 
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
         }
       });
 
@@ -209,6 +339,8 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
           } else if (error.message) {
             mensaje = error.message;
           }
+
+          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
 
         }
       });
@@ -270,7 +402,19 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
         this.cargarMasReportes(inicioISO, finISO);
       },
-      error: (err) => console.error('Error obteniendo cantidad total', err)
+      error: (error: any) => {
+
+        let mensaje = 'Ocurrió un error';
+
+        if (error.error && error.error.mensaje) {
+          mensaje = error.error.mensaje;
+        } else if (error.message) {
+          mensaje = error.message;
+        }
+
+        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+      }
     });
 
   }

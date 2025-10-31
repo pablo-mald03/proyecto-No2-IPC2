@@ -25,7 +25,8 @@
             </div>
 
             <div class="text-center mt-md-4 d-flex gap-2">
-                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="generarReporte()">
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold"
+                    (click)="generarReporte()">
                     <i class="bi bi-book me-2"></i> Generar
                 </button>
 
@@ -36,10 +37,10 @@
             </div>
         </div>
 
-         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 mt-3"
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 mt-3"
             [formGroup]="filtroSalaForm">
 
-            <h5 class="text-warning" >Filtros:</h5>
+            <h5 class="text-warning">Filtros:</h5>
 
             <div class="px-3 text-white">
                 <label for="usuario" class="form-label fw-semibold">Codigo sala de Cine:</label>
@@ -68,9 +69,15 @@
             </button>
         </div>
 
+        <ng-container *ngIf="mostrarPopup">
+            <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+                (cerrarEvent)="mostrarPopup = false">
+            </app-shared-popup>
+        </ng-container>
+
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
-          @for (sala of reportesMostrados; track sala.codigo) {
+            @for (sala of reportesMostrados; track sala.codigo) {
             <app-reporte-salas-comentadas-cards [salaComentarios]="sala"></app-reporte-salas-comentadas-cards>
             }
             @empty {
@@ -78,7 +85,7 @@
                 <h5>No hay reportes de Comentarios en salas de cine en el intervalo</h5>
             </div>
             }
-     
+
 
 
         </div>

@@ -130,7 +130,7 @@ public class ReporteSalaCineDB {
 
         return listadoReportes;
     }
-    
+
     //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
     public List<ReporteSalasComentadasDTO> obtenerReporteComentariosFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
 
@@ -141,7 +141,6 @@ public class ReporteSalaCineDB {
         List<ReporteSalasComentadasDTO> listadoReportes = new ArrayList<>();
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
-
         try (PreparedStatement query = connection.prepareStatement(REPORTE_COMENTARIOS_FILTRO);) {
 
             query.setString(1, reporteSalas.getIdSala());
