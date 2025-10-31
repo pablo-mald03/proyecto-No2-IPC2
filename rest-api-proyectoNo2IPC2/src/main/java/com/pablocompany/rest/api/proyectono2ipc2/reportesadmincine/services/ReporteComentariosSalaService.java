@@ -4,9 +4,12 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.database.ReporteSalaCineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteSalasCineComentariosRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,12 +25,14 @@ import org.apache.commons.lang3.StringUtils;
 public class ReporteComentariosSalaService {
 
     //Metodo que sirve para poder retornar el request del reporte
-    public List<ReporteSalasComentadasDTO> obtenerReporteSala(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<ReporteSalasComentadasDTO> obtenerReporteSalaSinFiltro(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
 
         ReporteSalasCineComentariosRequest reporteSalasCineComentarios = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
         if (reporteSalasCineComentarios.validarRequest()) {
 
+            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+            return reporteSalaCineDb.obtenerReporteComentarios(reporteSalasCineComentarios);
         }
 
         throw new ErrorInesperadoException("No se ha podido procesar la solicitud del reporte");
@@ -70,6 +75,41 @@ public class ReporteComentariosSalaService {
                     fin,
                     Integer.parseInt(offset),
                     Integer.parseInt(limit));
+
+        } catch (DateTimeParseException e) {
+            throw new FormatoInvalidoException("El formato de fecha solicitado debe ser ISO (yyyy-MM-dd)");
+        } catch (NumberFormatException e) {
+            throw new FormatoInvalidoException("Los limites de peticion no son numericos");
+        }
+
+    }
+
+    //Metodo que obtiene la cantidad de reportes de salas de cine sin filtro
+    public CantidadReportesDTO cantidadReportesSinFiltro(String fechaInicio, String fechaFin) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(fechaInicio)) {
+            throw new FormatoInvalidoException("La fecha de inicio esta vacia");
+        }
+
+        if (StringUtils.isBlank(fechaFin)) {
+            throw new FormatoInvalidoException("La fecha final esta vacia");
+        }
+
+        try {
+            LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
+
+            if (inicio.isAfter(fin)) {
+                throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+            }
+            
+            ReporteSalasCineComentariosRequest reporteSalasCineComentariosRequest= new ReporteSalasCineComentariosRequest(inicio, fin, 0, 0);
+            
+            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+            
+            int cantidad = reporteSalaCineDb.cantidadReportesSinFiltro(reporteSalasCineComentariosRequest);
+            return new CantidadReportesDTO(cantidad);
+            
 
         } catch (DateTimeParseException e) {
             throw new FormatoInvalidoException("El formato de fecha solicitado debe ser ISO (yyyy-MM-dd)");

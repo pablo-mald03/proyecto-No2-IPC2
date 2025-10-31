@@ -10,13 +10,13 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoExce
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteSalasCineComentariosRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.SalaComentarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -35,21 +35,20 @@ public class ReporteSalaCineDB {
     private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN comentario_sala AS `co` ON sa.codigo = co.codigo_sala WHERE sa.codigo = ? AND co.fecha_posteo BETWEEN ? AND ? ";
 
     //Constante que permite obtener el preorte de comentarios en base al filtro de sala
-    private final String COMENTARIOS_SALAS = "SELECT co.id_usuario, co.contenido, co.fecha_posteo FROM sala AS `sa` JOIN comentario_sala AS `co` ON sa.codigo = co.codigo_sala WHERE sa.codigo = ? AND co.fecha_posteo BETWEEN ? AND ? ORDER BY co.fecha_posteo DESC LIMIT ? OFFSET ?";
+    private final String COMENTARIOS_SALAS = "SELECT co.id_usuario, co.contenido, co.fecha_posteo FROM sala AS `sa` JOIN comentario_sala AS `co` ON sa.codigo = co.codigo_sala WHERE sa.codigo = ? AND co.fecha_posteo BETWEEN ? AND ? ORDER BY co.fecha_posteo DESC";
 
     //Constante que permite obtener los comentarios de una sala de cine con filtro de sala de cine
     private final String REPORTE_COMENTARIOS_FILTRO = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN comentario_sala AS `co` ON sa.codigo = co.codigo_sala WHERE sa.codigo = ? AND co.fecha_posteo BETWEEN ? AND ? ORDER BY co.fecha_posteo DESC LIMIT ? OFFSET ?";
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas
-    public int cantidadReportes(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesSinFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_REPORTES);) {
-            
+
             query.setDate(1, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
             query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
-
 
             ResultSet result = query.executeQuery();
             if (result.next()) {
@@ -71,8 +70,9 @@ public class ReporteSalaCineDB {
 
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_REPORTES_FILTRO);) {
 
-            query.setDate(1, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
-            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+            query.setString(1, reporteSalas.getIdSala());
+            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
+            query.setDate(3, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
 
             ResultSet result = query.executeQuery();
             if (result.next()) {
@@ -86,8 +86,7 @@ public class ReporteSalaCineDB {
             throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de salas de cine");
         }
     }
-    
-    
+
     //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
     public List<ReporteSalasComentadasDTO> obtenerReporteComentarios(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
 
@@ -95,45 +94,77 @@ public class ReporteSalaCineDB {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
         }
 
-
         List<ReporteSalasComentadasDTO> listadoReportes = new ArrayList<>();
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(REPORTE_COMENTARIOS);) {
 
-           /* query.setString(1, TipoUsuarioEnum.ADMIN_CONGRESO.toString());
-            query.setString(2, TipoUsuarioEnum.ADMIN_SISTEMA.toString());
-
-            query.setInt(3, limite);
-            query.setInt(4, offset);
+            query.setDate(1, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
+            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+            query.setInt(3, reporteSalas.getLimit());
+            query.setInt(4, reporteSalas.getOffset());
 
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                Usuario usuarioEncontrado = new Usuario(
+                ReporteSalasComentadasDTO usuarioEncontrado = new ReporteSalasComentadasDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("cineAsociado"),
                         resultSet.getString("nombre"),
-                        resultSet.getString("identificacion"),
-                        "N",
-                        resultSet.getString("correo"),
-                        resultSet.getString("telefono"),
-                        resultSet.getString("organizacion"),
-                        null,
-                        TipoUsuarioEnum.valueOf(resultSet.getString("rol")),
-                        0,
-                        resultSet.getBoolean("estado")
+                        resultSet.getInt("filas"),
+                        resultSet.getInt("columnas"),
+                        resultSet.getString("ubicacion")
                 );
 
-                usuarioEncontrado.setFotoPerfilBase64(resultSet.getBytes("foto"));
+                listadoReportes.add(usuarioEncontrado);
+            }
 
-                listadoUsuarios.add(usuarioEncontrado);
-            }*/
+            for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
+                listadoReporte.setComentarios(obtenerComentarios(reporteSalas, listadoReporte.getCodigo()));
+            }
 
         } catch (SQLException e) {
             throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de comentarios en salas de cine");
         }
 
         return listadoReportes;
+    }
+
+    //Metodo que sirve para obtener los comentarios relacionados a una sala
+    private List< SalaComentarioDTO> obtenerComentarios(ReporteSalasCineComentariosRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (reporteSalas == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        List<SalaComentarioDTO> listadoComentarios = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(COMENTARIOS_SALAS);) {
+
+            query.setString(1, idSala);
+            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
+            query.setDate(3, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                SalaComentarioDTO comentarioEncontrado = new SalaComentarioDTO(
+                        resultSet.getString("id_usuario"),
+                        resultSet.getString("contenido"),
+                        resultSet.getDate("fecha_posteo").toLocalDate()
+                );
+
+                listadoComentarios.add(comentarioEncontrado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los comentarios del reporte de salas de cine");
+        }
+
+        return listadoComentarios;
 
     }
 

@@ -4,8 +4,10 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteComentariosSalaService;
 import jakarta.ws.rs.GET;
@@ -37,7 +39,7 @@ public class ReporteComentariosSalaResource {
         ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
 
         try {
-            List<ReporteSalasComentadasDTO> reporteSalasComentadasDTO = reporteComentariosSalaService.obtenerReporteSala(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteSalasComentadasDTO> reporteSalasComentadasDTO = reporteComentariosSalaService.obtenerReporteSalaSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
             return Response.ok(reporteSalasComentadasDTO).build();
 
@@ -57,8 +59,19 @@ public class ReporteComentariosSalaResource {
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        return Response.ok().build();
+        ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
 
+        try {
+            CantidadReportesDTO cantidadReportes = reporteComentariosSalaService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
+            return Response.ok(cantidadReportes).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
     }
 
     //Endpoint que sirve para obtener el listado de reporte de comentarios filtrando por id de sala
