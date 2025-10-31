@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReporteSalasComentadasDTO } from '../../../models/reportes-cine/reporte-salas-comentarios-dto';
 import { ReporteSalasComentadasCardsComponent } from "../reporte-salas-comentadas-cards/reporte-salas-comentadas-cards.component";
+import { ReporteComentariosSalaService } from '../../../services/reportes-cine-service/reporte-comentarios-sala.sercive';
+import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-dto';
 
 @Component({
   selector: 'app-reporte-comentarios-salas-comentadas',
@@ -20,7 +22,9 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
+
 
   //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
@@ -29,7 +33,8 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
   constructor(
     private formBuild: FormBuilder,
-    private formBuildSala: FormBuilder
+    private formBuildSala: FormBuilder,
+    private reporteComentariosService: ReporteComentariosSalaService,
 
   ) { }
 
@@ -47,45 +52,17 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
       idSala: [null]
     });
 
-    this.reporteSalas = [
-      {
-        codigo: 'S001',
-        cineAsociado: 'Cinepolis',
-        nombre: 'Sala Premium 3D',
-        filas: 12,
-        columnas: 20,
-        ubicacion: 'Nivel 2, ala norte',
-        comentarios: [
-          { idUsuario: 'U001', contenido: 'Excelente experiencia, la imagen es muy nítida.', fechaPosteo: new Date('2025-10-10') },
-          { idUsuario: 'U002', contenido: 'Muy cómodos los asientos.', fechaPosteo: new Date('2025-10-12') },
-          { idUsuario: 'pablofsd-02', contenido: 'Me gusta el pene demasiado asi de que me encanta comer pito todos los dias. Me gusta el pene demasiado asi de que me encanta comer pito todos los dias.', fechaPosteo: new Date('2025-10-12') }
-        ]
-      },
-    ];
+    this.indiceActual = 0;
+    this.reportesMostrados = [];
+    this.todosCargados = true;
 
 
-    this.cargarMasReportes();
-  }
-
-
-  //Metodo que sirve para cargar mas y no mostrar todos de golpe
-  cargarMasReportes(): void {
-    const siguienteBloque = this.reporteSalas.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
-
-    this.reportesMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
-
-    if (this.indiceActual >= this.reporteSalas.length) {
-      this.todosCargados = true;
-    }
   }
 
 
   //Metodo que sirve para mandar a exportar el reporte
   exportarReporte() {
+
 
 
   }
@@ -115,13 +92,82 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString() : null;
-    const finISO = fechaFin ? new Date(fechaFin).toISOString() : null;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : null;
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : null;
 
-    //Pendiente hacer la query
-    console.log('trilin');
+    if (!inicioISO || !finISO) return;
+
+
+    // Paso 1: obtener cantidad total
+    this.reporteComentariosService.cantidadReportesSinFiltro(inicioISO, finISO).subscribe({
+      next: (cantidadDTO: CantidadReportesDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.reportesMostrados = [];
+        this.todosCargados = false;
+
+        this.cargarMasReportes(inicioISO, finISO);
+      },
+      error: (err) => console.error('Error obteniendo cantidad total', err)
+    });
+
+
 
   }
+
+
+  //Metodo que sirve para ir cargando dinamicamente los reportes de salas de cine comentadas
+  mostrarMasReportes(): void {
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    this.cargarMasReportes(inicioISO, finISO);
+
+  }
+
+
+  //Metodo que sirve para cargar mas y no mostrar todos de golpe
+  cargarMasReportes(fechaInicioISO: string, fechaFinISO: string): void {
+
+    if (this.todosCargados) return;
+
+    this.reporteComentariosService.reportesSalasComentadasSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
+      next: (response: ReporteSalasComentadasDTO[]) => {
+
+        if (!response || response.length === 0) {
+          this.todosCargados = true;
+          return;
+        }
+
+        this.reportesMostrados.push(...response);
+        this.indiceActual += response.length;
+
+        if (this.indiceActual >= this.totalReportes) {
+          this.todosCargados = true;
+        }
+
+
+      },
+      error: (error: any) => {
+
+        let mensaje = 'Ocurrió un error';
+
+        if (error.error && error.error.mensaje) {
+          mensaje = error.error.mensaje;
+        } else if (error.message) {
+          mensaje = error.message;
+        }
+
+      }
+    });
+  }
+
+
 
   //Metodo que sirve para limpiar las fechas de reporte
   limpiarFechas(): void {
@@ -136,7 +182,7 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
     });
   }
 
-   //Metodo que sirve para filtrar por sala
+  //Metodo que sirve para filtrar por sala
   filtrarSala(): void {
 
     const { idSala } = this.filtroSalaForm.value;
