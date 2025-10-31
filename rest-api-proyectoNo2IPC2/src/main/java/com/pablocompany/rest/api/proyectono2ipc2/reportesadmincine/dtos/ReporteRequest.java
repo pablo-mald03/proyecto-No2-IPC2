@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author pablo
  */
 //Clase delegada para poder manejar los request que vienen de fechas 
-public class ReporteSalasCineComentariosRequest {
+public class ReporteRequest {
 
     private String idSala;
     private LocalDate fechaInicio;
@@ -24,7 +24,7 @@ public class ReporteSalasCineComentariosRequest {
     private int limit;
 
     //String utilizado sin el filtro
-    public ReporteSalasCineComentariosRequest(LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
+    public ReporteRequest(LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.offset = offset;
@@ -32,7 +32,7 @@ public class ReporteSalasCineComentariosRequest {
     }
 
     //Constructor utilizado para el filtro
-    public ReporteSalasCineComentariosRequest(String idSala, LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
+    public ReporteRequest(String idSala, LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
         this.idSala = idSala;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;

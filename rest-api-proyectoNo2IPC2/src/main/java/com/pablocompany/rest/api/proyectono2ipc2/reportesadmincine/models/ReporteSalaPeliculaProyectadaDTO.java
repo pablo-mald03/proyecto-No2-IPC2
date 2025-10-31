@@ -80,5 +80,15 @@ public class ReporteSalaPeliculaProyectadaDTO {
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+    public List<PeliculaProyectadaDTO> getPeliculaProyectada() {
+        return peliculaProyectada;
+    }
+
+    public void setPeliculaProyectada(List<PeliculaProyectadaDTO> peliculaProyectada) {
+        this.peliculaProyectada = peliculaProyectada;
+    }
+
+    
     
 }

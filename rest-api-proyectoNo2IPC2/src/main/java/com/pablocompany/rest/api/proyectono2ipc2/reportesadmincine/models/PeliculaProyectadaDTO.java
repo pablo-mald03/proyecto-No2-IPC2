@@ -17,9 +17,9 @@ public class PeliculaProyectadaDTO {
     private String nombre; 
     private String sinopsis;
     private String clasificacion; 
-    private int duracion; 
+    private double duracion; 
 
-    public PeliculaProyectadaDTO(LocalDate fechaProyeccion, String nombre, String sinopsis, String clasificacion, int duracion) {
+    public PeliculaProyectadaDTO(LocalDate fechaProyeccion, String nombre, String sinopsis, String clasificacion, double duracion) {
         this.fechaProyeccion = fechaProyeccion;
         this.nombre = nombre;
         this.sinopsis = sinopsis;
@@ -59,15 +59,13 @@ public class PeliculaProyectadaDTO {
         this.clasificacion = clasificacion;
     }
 
-    public int getDuracion() {
+    public double getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(int duracion) {
+    public void setDuracion(double duracion) {
         this.duracion = duracion;
     }
-    
-    
-    
+
     
 }

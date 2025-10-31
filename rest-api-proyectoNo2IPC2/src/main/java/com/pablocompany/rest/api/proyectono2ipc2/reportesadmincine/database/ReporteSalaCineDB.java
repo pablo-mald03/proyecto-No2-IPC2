@@ -8,7 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteSalasCineComentariosRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.SalaComentarioDTO;
 import java.sql.Connection;
@@ -41,7 +41,7 @@ public class ReporteSalaCineDB {
     private final String REPORTE_COMENTARIOS_FILTRO = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN comentario_sala AS `co` ON sa.codigo = co.codigo_sala WHERE sa.codigo = ? AND co.fecha_posteo BETWEEN ? AND ? ORDER BY co.fecha_posteo DESC LIMIT ? OFFSET ?";
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas
-    public int cantidadReportesSinFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesSinFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -64,7 +64,7 @@ public class ReporteSalaCineDB {
     }
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas con filtro
-    public int cantidadReportesFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -88,7 +88,7 @@ public class ReporteSalaCineDB {
     }
 
     //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
-    public List<ReporteSalasComentadasDTO> obtenerReporteComentarios(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
+    public List<ReporteSalasComentadasDTO> obtenerReporteComentarios(ReporteRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -132,7 +132,7 @@ public class ReporteSalaCineDB {
     }
 
     //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
-    public List<ReporteSalasComentadasDTO> obtenerReporteComentariosFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
+    public List<ReporteSalasComentadasDTO> obtenerReporteComentariosFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -152,7 +152,7 @@ public class ReporteSalaCineDB {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                ReporteSalasComentadasDTO usuarioEncontrado = new ReporteSalasComentadasDTO(
+                ReporteSalasComentadasDTO reporteEncontrado = new ReporteSalasComentadasDTO(
                         resultSet.getString("codigo"),
                         resultSet.getString("cineAsociado"),
                         resultSet.getString("nombre"),
@@ -161,7 +161,7 @@ public class ReporteSalaCineDB {
                         resultSet.getString("ubicacion")
                 );
 
-                listadoReportes.add(usuarioEncontrado);
+                listadoReportes.add(reporteEncontrado);
             }
 
             for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
@@ -176,7 +176,7 @@ public class ReporteSalaCineDB {
     }
 
     //Metodo que sirve para obtener los comentarios relacionados a una sala
-    private List< SalaComentarioDTO> obtenerComentarios(ReporteSalasCineComentariosRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    private List< SalaComentarioDTO> obtenerComentarios(ReporteRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");

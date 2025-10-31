@@ -8,7 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.database.ReporteSalaCineDB;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteSalasCineComentariosRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ public class ReporteComentariosSalaService {
     //Metodo que sirve para poder retornar el request del reporte
     public List<ReporteSalasComentadasDTO> obtenerReporteSalaSinFiltro(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
 
-        ReporteSalasCineComentariosRequest reporteSalasCineComentarios = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
+        ReporteRequest reporteSalasCineComentarios = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
         if (reporteSalasCineComentarios.validarRequest()) {
 
@@ -39,7 +39,7 @@ public class ReporteComentariosSalaService {
     }
 
     //Metodo delegado para poder validar y extraer la solicitud de request
-    private ReporteSalasCineComentariosRequest extraerDatosReporte(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException {
+    private ReporteRequest extraerDatosReporte(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException {
 
         if (StringUtils.isBlank(fechaInicio)) {
             throw new FormatoInvalidoException("La fecha de inicio esta vacia");
@@ -70,7 +70,7 @@ public class ReporteComentariosSalaService {
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
-            return new ReporteSalasCineComentariosRequest(
+            return new ReporteRequest(
                     inicio,
                     fin,
                     Integer.parseInt(offset),
@@ -103,7 +103,7 @@ public class ReporteComentariosSalaService {
                 throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
             }
 
-            ReporteSalasCineComentariosRequest reporteSalasCineComentariosRequest = new ReporteSalasCineComentariosRequest(inicio, fin, 0, 0);
+            ReporteRequest reporteSalasCineComentariosRequest = new ReporteRequest(inicio, fin, 0, 0);
 
             ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
 
@@ -141,7 +141,7 @@ public class ReporteComentariosSalaService {
                 throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
             }
 
-            ReporteSalasCineComentariosRequest reporteSalasCineComentariosRequest = new ReporteSalasCineComentariosRequest(idSala.trim(), inicio, fin, 0, 0);
+            ReporteRequest reporteSalasCineComentariosRequest = new ReporteRequest(idSala.trim(), inicio, fin, 0, 0);
 
             ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
 
@@ -167,7 +167,7 @@ public class ReporteComentariosSalaService {
             throw new FormatoInvalidoException("El limite inferior de la peticion no es numerico");
         }
 
-        ReporteSalasCineComentariosRequest reporteSalasCineComentarios = extraerDatosReporteFiltro(idSala, fechaInicio, fechaFin, limit, offset);
+        ReporteRequest reporteSalasCineComentarios = extraerDatosReporteFiltro(idSala, fechaInicio, fechaFin, limit, offset);
 
         if (reporteSalasCineComentarios.validarRequest()) {
 
@@ -179,7 +179,7 @@ public class ReporteComentariosSalaService {
     }
 
     //Metodo delegado para poder validar y extraer la solicitud de request
-    private ReporteSalasCineComentariosRequest extraerDatosReporteFiltro(String idSala, String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException {
+    private ReporteRequest extraerDatosReporteFiltro(String idSala, String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException {
 
         if (StringUtils.isBlank(fechaInicio)) {
             throw new FormatoInvalidoException("La fecha de inicio esta vacia");
@@ -209,7 +209,7 @@ public class ReporteComentariosSalaService {
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
-            return new ReporteSalasCineComentariosRequest(
+            return new ReporteRequest(
                     idSala,
                     inicio,
                     fin,
