@@ -4,12 +4,18 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources;
 
-import jakarta.ws.rs.Consumes;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteComentariosSalaService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -17,14 +23,70 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("reportes/salas/comentadas")
 public class ReporteComentariosSalaResource {
-    
+
+    //Endpoint que sirve para obtener el listado de reporte de comentarios
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteComentarios(){
-        
-        return Response.ok().build();
-        
+    public Response reporteComentarios(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("limite") String limite,
+            @PathParam("inicio") String inicio) {
+
+        ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
+
+        try {
+            List<ReporteSalasComentadasDTO> reporteSalasComentadasDTO = reporteComentariosSalaService.obtenerReporteSala(fechaInicio, fechaFin, limite, inicio);
+
+            return Response.ok(reporteSalasComentadasDTO).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
     }
-    
+
+    //Endpoint que sirve para obtener la cantidad de reportes que hay
+    @GET
+    @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cantidadComentarios(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin) {
+
+        return Response.ok().build();
+
+    }
+
+    //Endpoint que sirve para obtener el listado de reporte de comentarios filtrando por id de sala
+    @GET
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}/limit/{limite}/offset/{tope}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reporteComentariosFiltro(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("idSala") String idSala,
+            @PathParam("limite") String limite,
+            @PathParam("tope") String tope) {
+
+        return Response.ok().build();
+
+    }
+
+    //Endpoint que sirve para obtener la cantidad de comentarios que hay en una fecha por sala
+    @GET
+    @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cantidadComentariosFiltro(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("idSala") String idSala) {
+
+        return Response.ok().build();
+
+    }
+
 }

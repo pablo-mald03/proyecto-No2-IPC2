@@ -4,29 +4,32 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author pablo
  */
 //Clase delegada para poder gestionar el modelo de retorno de salas comentadas
 public class ReporteSalasComentadasDTO {
-    
+
     private String codigo;
     private String cineAsociado;
-    private String nombre; 
+    private String nombre;
     private int filas;
     private int columnas;
     private String ubicacion;
-    private SalaComentarioDTO comentarios;
+    private List< SalaComentarioDTO> comentarios;
 
-    public ReporteSalasComentadasDTO(String codigo, String cineAsociado, String nombre, int filas, int columnas, String ubicacion, SalaComentarioDTO comentarios) {
+    public ReporteSalasComentadasDTO(String codigo, String cineAsociado, String nombre, int filas, int columnas, String ubicacion) {
         this.codigo = codigo;
         this.cineAsociado = cineAsociado;
         this.nombre = nombre;
         this.filas = filas;
         this.columnas = columnas;
         this.ubicacion = ubicacion;
-        this.comentarios = comentarios;
+        this.comentarios = new ArrayList<>();
     }
 
     public String getCodigo() {
@@ -77,14 +80,13 @@ public class ReporteSalasComentadasDTO {
         this.ubicacion = ubicacion;
     }
 
-    public SalaComentarioDTO getComentarios() {
+    public List<SalaComentarioDTO> getComentarios() {
         return comentarios;
     }
 
-    public void setComentarios(SalaComentarioDTO comentarios) {
+    public void setComentarios(List<SalaComentarioDTO> comentarios) {
         this.comentarios = comentarios;
     }
     
-    
-    
+
 }
