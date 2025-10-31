@@ -28,6 +28,16 @@ export class ReporteComentariosSalaService {
         return this.httpClient.get<CantidadReportesDTO>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/cantidad/inicio/${fechaInicio}/fin/${fechaFin}`);
     }
 
+    //Endpoint que retorna la cantidad de salas comentadas en un intervalo de tiempo con filtro
+    public reportesSalasComentadasConFiltro(fechaInicio: string, fechaFin: string, limite: number, tope: number, idSala: string): Observable<ReporteSalasComentadasDTO []> {
+        return this.httpClient.get<ReporteSalasComentadasDTO []>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/inicio/${fechaInicio}/fin/${fechaFin}/filtro/${idSala}/limit/${limite}/offset/${tope}`);
+    }
+
+    //Endpoint que ayuda a obtener la cantidad de reportes de la sala de cine con filtro
+    public cantidadReportesConFiltro(fechaInicio: string, fechaFin: string, idSala: string): Observable<CantidadReportesDTO> {
+        return this.httpClient.get<CantidadReportesDTO>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/cantidad/inicio/${fechaInicio}/fin/${fechaFin}/filtro/${idSala}`);
+    }
+
 
 
 }

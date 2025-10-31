@@ -25,6 +25,9 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
   totalReportes = 0;
   todosCargados = false;
 
+  //Flag que sirve para saber si se ha filtrado
+  estaFiltrado = false;
+
 
   //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
@@ -55,6 +58,7 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
     this.indiceActual = 0;
     this.reportesMostrados = [];
     this.todosCargados = true;
+    this.estaFiltrado = false;
 
 
   }
@@ -98,13 +102,13 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
     if (!inicioISO || !finISO) return;
 
 
-    // Paso 1: obtener cantidad total
     this.reporteComentariosService.cantidadReportesSinFiltro(inicioISO, finISO).subscribe({
       next: (cantidadDTO: CantidadReportesDTO) => {
         this.totalReportes = cantidadDTO.cantidad;
         this.indiceActual = 0;
         this.reportesMostrados = [];
         this.todosCargados = false;
+        this.estaFiltrado = false;
 
         this.cargarMasReportes(inicioISO, finISO);
       },
@@ -136,35 +140,81 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
     if (this.todosCargados) return;
 
-    this.reporteComentariosService.reportesSalasComentadasSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
-      next: (response: ReporteSalasComentadasDTO[]) => {
+    if (!this.estaFiltrado) {
 
-        if (!response || response.length === 0) {
-          this.todosCargados = true;
-          return;
+      this.reporteComentariosService.reportesSalasComentadasSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
+        next: (response: ReporteSalasComentadasDTO[]) => {
+
+          if (!response || response.length === 0) {
+            this.todosCargados = true;
+            return;
+          }
+
+          this.reportesMostrados.push(...response);
+          this.indiceActual += response.length;
+
+          if (this.indiceActual >= this.totalReportes) {
+            this.todosCargados = true;
+          }
+
+
+        },
+        error: (error: any) => {
+
+          let mensaje = 'Ocurrió un error';
+
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
         }
-
-        this.reportesMostrados.push(...response);
-        this.indiceActual += response.length;
-
-        if (this.indiceActual >= this.totalReportes) {
-          this.todosCargados = true;
-        }
+      });
 
 
-      },
-      error: (error: any) => {
+    } else {
 
-        let mensaje = 'Ocurrió un error';
+      const { idSala } = this.filtroSalaForm.value;
 
-        if (error.error && error.error.mensaje) {
-          mensaje = error.error.mensaje;
-        } else if (error.message) {
-          mensaje = error.message;
-        }
-
+      if (idSala == null || idSala == '') {
+        this.estaFiltrado = false;
+        return;
       }
-    });
+
+
+      this.reporteComentariosService.reportesSalasComentadasConFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual, idSala).subscribe({
+        next: (response: ReporteSalasComentadasDTO[]) => {
+
+          if (!response || response.length === 0) {
+            this.todosCargados = true;
+            return;
+          }
+
+          this.reportesMostrados.push(...response);
+          this.indiceActual += response.length;
+
+          if (this.indiceActual >= this.totalReportes) {
+            this.todosCargados = true;
+          }
+
+
+        },
+        error: (error: any) => {
+
+          let mensaje = 'Ocurrió un error';
+
+          if (error.error && error.error.mensaje) {
+            mensaje = error.error.mensaje;
+          } else if (error.message) {
+            mensaje = error.message;
+          }
+
+        }
+      });
+
+
+    }
   }
 
 
@@ -172,6 +222,11 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
   //Metodo que sirve para limpiar las fechas de reporte
   limpiarFechas(): void {
     this.filtrosForm.reset();
+
+    this.indiceActual = 0;
+    this.reportesMostrados = [];
+    this.todosCargados = true;
+    this.estaFiltrado = false;
   }
 
 
@@ -180,10 +235,23 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
     this.filtroSalaForm.patchValue({
       idSala: ''
     });
+
+    this.estaFiltrado = false;
+
+    this.generarReporte();
   }
 
   //Metodo que sirve para filtrar por sala
   filtrarSala(): void {
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    if (!inicioISO || !finISO) return;
 
     const { idSala } = this.filtroSalaForm.value;
 
@@ -191,8 +259,19 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
       return;
     }
 
-    //Pendiente hacer la query
-    console.log('trilin');
+
+    this.reporteComentariosService.cantidadReportesConFiltro(inicioISO, finISO, idSala).subscribe({
+      next: (cantidadDTO: CantidadReportesDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.reportesMostrados = [];
+        this.todosCargados = false;
+        this.estaFiltrado = true;
+
+        this.cargarMasReportes(inicioISO, finISO);
+      },
+      error: (err) => console.error('Error obteniendo cantidad total', err)
+    });
 
   }
 }

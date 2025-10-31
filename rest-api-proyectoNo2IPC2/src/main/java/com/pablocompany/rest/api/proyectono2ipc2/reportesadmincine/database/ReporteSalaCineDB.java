@@ -130,6 +130,51 @@ public class ReporteSalaCineDB {
 
         return listadoReportes;
     }
+    
+    //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
+    public List<ReporteSalasComentadasDTO> obtenerReporteComentariosFiltro(ReporteSalasCineComentariosRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        if (reporteSalas == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        List<ReporteSalasComentadasDTO> listadoReportes = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(REPORTE_COMENTARIOS_FILTRO);) {
+
+            query.setString(1, reporteSalas.getIdSala());
+            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
+            query.setDate(3, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+            query.setInt(4, reporteSalas.getLimit());
+            query.setInt(5, reporteSalas.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                ReporteSalasComentadasDTO usuarioEncontrado = new ReporteSalasComentadasDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("cineAsociado"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("filas"),
+                        resultSet.getInt("columnas"),
+                        resultSet.getString("ubicacion")
+                );
+
+                listadoReportes.add(usuarioEncontrado);
+            }
+
+            for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
+                listadoReporte.setComentarios(obtenerComentarios(reporteSalas, listadoReporte.getCodigo()));
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de comentarios en salas de cine");
+        }
+
+        return listadoReportes;
+    }
 
     //Metodo que sirve para obtener los comentarios relacionados a una sala
     private List< SalaComentarioDTO> obtenerComentarios(ReporteSalasCineComentariosRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {

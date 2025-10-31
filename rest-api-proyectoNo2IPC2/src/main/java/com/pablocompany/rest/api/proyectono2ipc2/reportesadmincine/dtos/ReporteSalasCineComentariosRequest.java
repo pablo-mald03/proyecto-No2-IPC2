@@ -8,6 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoExce
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -100,6 +101,38 @@ public class ReporteSalasCineComentariosRequest {
 
             if (fechaInicio.isAfter(fechaFin)) {
                 throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            throw new FormatoInvalidoException("No se ha podido procesar la informacion enviada.");
+        }
+
+    }
+    
+    //Metodo que sirve para validar cuando hay filtro
+    public boolean validarRequestFiltro() throws FormatoInvalidoException {
+
+        try {
+            if (fechaInicio == null || fechaFin == null) {
+                throw new FormatoInvalidoException("El intervalo de fechas se encuentra vacio");
+            }
+
+            DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+            try {
+                LocalDate.parse(fechaInicio.toString(), isoFormatter);
+                LocalDate.parse(fechaFin.toString(), isoFormatter);
+            } catch (DateTimeParseException e) {
+                throw new FormatoInvalidoException("Las fechas no poseen un formato ISO");
+            }
+
+            if (fechaInicio.isAfter(fechaFin)) {
+                throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+            }
+            
+            if(StringUtils.isEmpty(this.idSala)){
+                throw new FormatoInvalidoException("El id de la sala esta vacio");
             }
 
             return true;

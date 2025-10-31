@@ -61,6 +61,7 @@ public class UsuarioResource {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", "No se pudo crear el usuario")).build();
 
             }
+
         } catch (EntidadExistenteException ex) {
 
             return Response.status(Response.Status.CONFLICT).entity(Map.of("mensaje", ex.getMessage())).build();
@@ -92,7 +93,7 @@ public class UsuarioResource {
             //Indica algun error de procesamiento de informacion
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (DatosNoEncontradosException ex) {
-           return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }

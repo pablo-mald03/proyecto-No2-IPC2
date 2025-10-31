@@ -83,9 +83,20 @@ public class ReporteComentariosSalaResource {
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idSala") String idSala,
             @PathParam("limite") String limite,
-            @PathParam("tope") String tope) {
+            @PathParam("tope") String inicio) {
 
-        return Response.ok().build();
+        ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
+
+        try {
+            List<ReporteSalasComentadasDTO> reporteSalasComentadasDTO = reporteComentariosSalaService.obtenerReporteSalaConFiltro(idSala, fechaInicio, fechaFin, limite, inicio);
+            
+            return Response.ok(reporteSalasComentadasDTO).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
 
     }
 
@@ -98,7 +109,19 @@ public class ReporteComentariosSalaResource {
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idSala") String idSala) {
 
-        return Response.ok().build();
+        ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
+
+        try {
+            CantidadReportesDTO cantidadReportes = reporteComentariosSalaService.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
+            return Response.ok(cantidadReportes).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
 
     }
 
