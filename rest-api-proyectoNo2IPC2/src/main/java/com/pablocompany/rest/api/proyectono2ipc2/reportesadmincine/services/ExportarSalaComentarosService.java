@@ -32,7 +32,7 @@ public class ExportarSalaComentarosService {
             throw new ErrorInesperadoException("No se ha podido obtener el logo de la empresa");
         }
 
-        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/ReporteComentariosSalasCIne.jasper");
+        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/comentarios/ReporteComentariosSalasCIne.jasper");
 
         if (reporte == null) {
             throw new ErrorInesperadoException("No se ha podido cargar el reporte Jasper");
@@ -43,8 +43,6 @@ public class ExportarSalaComentarosService {
         Map<String, Object> params = new HashMap<>();
 
         params.put("logoEmpresa", logoEmpresa);
-        params.put("dataComentario", new JRBeanCollectionDataSource(reporteSalasComentadasDTO));
-
         try {
             JasperPrint jasperPrinter = JasperFillManager.fillReport(reporte, params, dataSource);
 
@@ -55,5 +53,5 @@ public class ExportarSalaComentarosService {
         }
 
     }
-
+    
 }

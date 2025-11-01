@@ -8,6 +8,7 @@ import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-
 import { ExportarReporteComentariosSalaService } from '../../../services/reportes-cine-service/exportar-reporte-comentarios-sala.sercive';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-reporte-comentarios-salas-comentadas',
@@ -96,6 +97,44 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
   }
 
+  //Metodo que sirve para redireccionar cuando se exporta un reporte
+  descargarReporte(respuesta: HttpResponse<Blob>) {
+    const contentDisposition = respuesta.headers.get('Content-Disposition');
+
+    let fileName = 'ReporteSalasComentadas.pdf';
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match && match[1]) {
+        fileName = match[1];
+      }
+    }
+
+    const url = window.URL.createObjectURL(respuesta.body!);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    this.popUp.mostrarPopup({ mensaje: 'Reporte generado correctamente', tipo: 'exito' });
+
+  }
+
+  //Metodo implementado para mostrar los mensajes de errores
+  mostrarError(errorEncontrado: any) {
+    let mensaje = 'Ocurrió un error';
+
+    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
+      mensaje = errorEncontrado.error.mensaje;
+    } else if (errorEncontrado.message) {
+      mensaje = errorEncontrado.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+  }
+
 
   //Metodo que sirve para mandar a exportar el reporte acorde a lo que este configurado
   exportarReporte(): void {
@@ -120,31 +159,14 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
 
       this.exportarReporteComentariosService.exportarReportesSalasComentadasSinFiltro(inicioISO, finISO, this.indiceActual, 0).subscribe({
-        next: (blob: Blob) => {
+        next: (response: HttpResponse<Blob>) => {
 
-          const url = window.URL.createObjectURL(blob);
-
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'ReporteSalasComentadas.pdf';
-          a.click();
-
-          window.URL.revokeObjectURL(url);
-
-          this.popUp.mostrarPopup({ mensaje: 'Reporte descargado correctamente', tipo: 'exito' });
+          this.descargarReporte(response);
 
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+          this.mostrarError(error);
 
         }
       });
@@ -163,23 +185,13 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
 
       this.exportarReporteComentariosService.exportarReportesSalasComentadasConFiltro(inicioISO, finISO, this.indiceActual, 0, idSala).subscribe({
-        next: (cantidadRetornadaDTO: ReporteSalasComentadasDTO[]) => {
+        next: (response: HttpResponse<Blob>) => {
 
-
-          const mensaje = 'Si jala tilin';
-          this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+          this.descargarReporte(response);
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+          this.mostrarError(error);
 
         }
       });
@@ -237,15 +249,7 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
       },
       error: (error: any) => {
 
-        let mensaje = 'Ocurrió un error';
-
-        if (error.error && error.error.mensaje) {
-          mensaje = error.error.mensaje;
-        } else if (error.message) {
-          mensaje = error.message;
-        }
-
-        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+        this.mostrarError(error);
 
       }
     });
@@ -296,15 +300,7 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+         this.mostrarError(error);
 
         }
       });
@@ -339,15 +335,7 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+          this.mostrarError(error);
 
         }
       });

@@ -58,6 +58,7 @@ public class ExportarReporteComentariosSalaResource {
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
+                    .header("Access-Control-Expose-Headers", "Content-Disposition")
                     .build();
 
         } catch (FormatoInvalidoException ex) {
@@ -84,7 +85,25 @@ public class ExportarReporteComentariosSalaResource {
         try {
             List<ReporteSalasComentadasDTO> reporteSalasComentadasDTO = reporteComentariosSalaService.obtenerReporteSalaConFiltro(idSala, fechaInicio, fechaFin, limite, inicio);
 
-            return Response.ok(reporteSalasComentadasDTO).build();
+            ExportarSalaComentarosService exportarReporteService = new ExportarSalaComentarosService();
+
+            byte[] pdfData = exportarReporteService.generarReporteSinFiltro(reporteSalasComentadasDTO);
+            
+
+            StreamingOutput stream = output -> {
+
+                output.write(pdfData);
+                output.flush();
+            };
+
+            NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
+
+            String nombreReporte = nombreReporteRandomService.getNombre("ReporteSalaComentada");
+
+            return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
+                    .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
+                    .header("Access-Control-Expose-Headers", "Content-Disposition")
+                    .build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
