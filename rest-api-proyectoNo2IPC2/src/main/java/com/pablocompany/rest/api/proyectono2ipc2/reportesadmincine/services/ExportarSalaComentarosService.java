@@ -6,7 +6,6 @@ package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
-import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ExportarSalaComentarosService {
             throw new ErrorInesperadoException("No se ha podido obtener el logo de la empresa");
         }
 
-        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/ReporteComentariosSalasCIne.jasper.jasper");
+        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/ReporteComentariosSalasCIne.jasper");
 
         if (reporte == null) {
             throw new ErrorInesperadoException("No se ha podido cargar el reporte Jasper");
@@ -44,6 +43,7 @@ public class ExportarSalaComentarosService {
         Map<String, Object> params = new HashMap<>();
 
         params.put("logoEmpresa", logoEmpresa);
+        params.put("dataComentario", new JRBeanCollectionDataSource(reporteSalasComentadasDTO));
 
         try {
             JasperPrint jasperPrinter = JasperFillManager.fillReport(reporte, params, dataSource);

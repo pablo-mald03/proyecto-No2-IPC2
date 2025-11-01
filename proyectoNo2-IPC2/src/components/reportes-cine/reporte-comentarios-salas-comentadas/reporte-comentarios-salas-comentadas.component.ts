@@ -120,11 +120,18 @@ export class ReporteComentariosSalasComentadasComponent implements OnInit {
 
 
       this.exportarReporteComentariosService.exportarReportesSalasComentadasSinFiltro(inicioISO, finISO, this.indiceActual, 0).subscribe({
-        next: (cantidadRetornadaDTO: ReporteSalasComentadasDTO[]) => {
+        next: (blob: Blob) => {
 
+          const url = window.URL.createObjectURL(blob);
 
-          const mensaje = 'Si jala tilin';
-          this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'ReporteSalasComentadas.pdf';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+
+          this.popUp.mostrarPopup({ mensaje: 'Reporte descargado correctamente', tipo: 'exito' });
 
         },
         error: (error: any) => {

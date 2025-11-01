@@ -17,13 +17,15 @@ export class ExportarReporteComentariosSalaService {
     constructor(private httpClient: HttpClient) { }
 
     //Endpoint que retorna el pdf de la cantidad de salas comentadas en un intervalo de tiempo
-    public exportarReportesSalasComentadasSinFiltro(fechaInicio: string, fechaFin: string, limite: number, inicio: number): Observable<ReporteSalasComentadasDTO []> {
-        return this.httpClient.get<ReporteSalasComentadasDTO []>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`);
+    public exportarReportesSalasComentadasSinFiltro(fechaInicio: string, fechaFin: string, limite: number, inicio: number): Observable<Blob> {
+        return this.httpClient.get(`${this.restConstants.getApiURL()}reportes/salas/comentadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`, {
+            responseType: 'blob' 
+        });
     }
 
     //Endpoint que retorna el pdf de la cantidad de salas comentadas en un intervalo de tiempo con filtro
-    public exportarReportesSalasComentadasConFiltro(fechaInicio: string, fechaFin: string, limite: number, tope: number, idSala: string): Observable<ReporteSalasComentadasDTO []> {
-        return this.httpClient.get<ReporteSalasComentadasDTO []>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/filtro/${idSala}/limit/${limite}/offset/${tope}`);
+    public exportarReportesSalasComentadasConFiltro(fechaInicio: string, fechaFin: string, limite: number, tope: number, idSala: string): Observable<ReporteSalasComentadasDTO[]> {
+        return this.httpClient.get<ReporteSalasComentadasDTO[]>(`${this.restConstants.getApiURL()}reportes/salas/comentadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/filtro/${idSala}/limit/${limite}/offset/${tope}`);
     }
 
 }
