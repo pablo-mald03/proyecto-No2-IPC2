@@ -74,5 +74,58 @@ public class ReportePeliculasProyectadasResource {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
     }
+    
+    
+     //Endpoint que permite obtener las salas proyectadas con filtro
+    @GET
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}/limit/{limite}/offset/{inicio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reportePeliculasConFiltro(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("limite") String limite,
+            @PathParam("inicio") String inicio,
+            @PathParam("idSala") String idSala) {
+
+        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+
+        try {
+            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaConFiltro(fechaInicio, fechaFin, limite, inicio,idSala);
+
+            return Response.ok(reportePeliculaProyectadaDTO).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+    
+    //Enpoint que permite obtener la cantidad de peliculas proyectadas sin filtro
+    @GET
+    @Path("/cantidad/filtro/{idSala}/inicio/{fechaInicio}/fin/{fechaFin}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cantidadPeliculasConFiltro(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("idSala") String idSala) {
+
+        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
+
+        try {
+
+            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesSinFIltro(fechaInicio, fechaFin);
+            return Response.ok(cantidadReportes).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+    }
+    
 
 }

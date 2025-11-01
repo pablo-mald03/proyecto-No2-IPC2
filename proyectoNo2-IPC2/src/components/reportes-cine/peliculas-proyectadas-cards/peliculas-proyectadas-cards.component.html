@@ -5,9 +5,13 @@
 
             <div class="card-header rounded-4  bg-gradient p-3 d-flex justify-content-between align-items-center mt-3">
                 <div>
-                    <h3 class="fw-bold text-warning mb-1">{{ salaPelicula.nombre }}</h3>
-                    <h5 class="text-white  mb-2">{{ salaPelicula.cineAsociado }}</h5>
-                    <p class="text-info mb-0"><i class="bi bi-geo-alt-fill"></i> {{ salaPelicula.ubicacion }}</p>
+                    <h2 class="fw-bold text-warning mb-2">{{ salaPelicula.nombre }}</h2>
+                    <h4 class="text-white  mb-3">{{ salaPelicula.cineAsociado }}</h4>
+
+                    <h5 class="text-white  mb-4">ID: {{ salaPelicula.codigo }}</h5>
+                    <p class="text-white mb-2"><i class="bi bi-arrow-bar-right me-2"></i>{{ salaPelicula.filas }}</p>
+                    <p class="text-white mb-3"><i class="bi bi-layout-sidebar-inset-reverse me-2"></i> {{ salaPelicula.columnas }}</p>
+                    <p class="text-info mb-2"><i class="bi bi-geo-alt-fill"></i> {{ salaPelicula.ubicacion }}</p>
 
                 </div>
                 <div class="text-end">

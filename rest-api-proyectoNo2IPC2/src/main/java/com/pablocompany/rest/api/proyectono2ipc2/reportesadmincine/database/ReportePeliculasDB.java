@@ -11,8 +11,6 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoExce
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.PeliculaProyectadaDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalaPeliculaProyectadaDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.SalaComentarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
