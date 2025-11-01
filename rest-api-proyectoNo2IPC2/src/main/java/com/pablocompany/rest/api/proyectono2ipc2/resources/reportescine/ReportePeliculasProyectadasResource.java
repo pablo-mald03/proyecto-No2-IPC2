@@ -8,13 +8,15 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteComentariosSalaService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalaPeliculaProyectadaDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReportePeliculaService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,23 +30,40 @@ public class ReportePeliculasProyectadasResource {
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reportePeliculasSinFiltro() {
+    public Response reportePeliculasSinFiltro(
+            @PathParam("fechaInicio") String fechaInicio,
+            @PathParam("fechaFin") String fechaFin,
+            @PathParam("limite") String limite,
+            @PathParam("inicio") String inicio) {
 
-        return Response.ok().build();
+        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+
+        try {
+            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+
+            return Response.ok(reportePeliculaProyectadaDTO).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
     }
 
     //Enpoint que permite obtener la cantidad de peliculas proyectadas sin filtro
     @GET
     @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadComentarios(
+    public Response cantidadPeliculasSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        ReporteComentariosSalaService reporteComentariosSalaService = new ReporteComentariosSalaService();
+        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
 
         try {
-            CantidadReportesDTO cantidadReportes = reporteComentariosSalaService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
+
+            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesSinFIltro(fechaInicio, fechaFin);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {

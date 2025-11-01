@@ -14,7 +14,7 @@ public class JakartaRestConfiguration extends ResourceConfig {
 
     public JakartaRestConfiguration() {
         
-        packages("com.pablocompany.rest.api.proyectono2ipc2");
+        packages("com.pablocompany.rest.api.proyectono2ipc2.resources");
        register(MultiPartFeature.class);
         
     }

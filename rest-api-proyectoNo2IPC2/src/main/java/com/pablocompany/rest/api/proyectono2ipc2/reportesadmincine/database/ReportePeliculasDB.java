@@ -25,7 +25,7 @@ import java.util.List;
  * @author pablo
  */
 //Clase delegada para poder operar con las peliculas proyectadas en las salas de cine 
-public class PeliculasProyectadasDB {
+public class ReportePeliculasDB {
 
     //Constante que permite obtener el reporte de peliculas proyectadas sin filtro de sala
     private final String REPORTE_PELICULAS = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE ps.fecha_proyeccion BETWEEN ? AND ? ORDER BY ps.fecha_proyeccion DESC LIMIT ? OFFSET ?";
