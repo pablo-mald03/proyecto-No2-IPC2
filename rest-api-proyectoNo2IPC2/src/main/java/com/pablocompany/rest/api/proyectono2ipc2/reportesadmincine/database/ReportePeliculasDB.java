@@ -26,16 +26,16 @@ import java.util.List;
 public class ReportePeliculasDB {
 
     //Constante que permite obtener el reporte de peliculas proyectadas sin filtro de sala
-    private final String REPORTE_PELICULAS = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE ps.fecha_proyeccion BETWEEN ? AND ? ORDER BY ps.fecha_proyeccion DESC LIMIT ? OFFSET ?";
+    private final String REPORTE_PELICULAS = "SELECT DISTINCT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE ps.fecha_proyeccion BETWEEN ? AND ? LIMIT ? OFFSET ?";
 
     //Constante que permite obtener la cantidad de salas del reporte de peliculas proyectadas sin filtro de sala
-    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE ps.fecha_proyeccion BETWEEN ? AND ?";
+    private final String CANTIDAD_REPORTES = "SELECT DISTINCT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE ps.fecha_proyeccion BETWEEN ? AND ?";
 
     //Constante que permite obtener la cantidad de salas del reporte de peliculas proyectadas con filtro de sala
-    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE sa.codigo = ? AND ps.fecha_proyeccion BETWEEN ? AND ? ";
+    private final String CANTIDAD_REPORTES_FILTRO = "SELECT DISTINCT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE sa.codigo = ? AND ps.fecha_proyeccion BETWEEN ? AND ? ";
 
     //Constante que permite obtener el reporte de peliculas proyectadas con filtro de sala
-    private final String REPORTE_PELICULAS_FILTRO = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE sa.codigo = ? AND ps.fecha_proyeccion BETWEEN ? AND ? ORDER BY ps.fecha_proyeccion DESC LIMIT ? OFFSET ?";
+    private final String REPORTE_PELICULAS_FILTRO = "SELECT DISTINCT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE sa.codigo = ? AND ps.fecha_proyeccion BETWEEN ? AND ?  LIMIT ? OFFSET ?";
 
     //Constante que permite saber las peliculas que son pertenecientes a la sala
     private final String PELICULAS_SALAS = "SELECT pe.fecha_estreno, pe.nombre, pe.sinopsis, pe.clasificacion, pe.duracion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN peliculas_sala AS `ps` ON sa.codigo = ps.codigo_sala JOIN  pelicula AS `pe` ON pe.codigo = ps.codigo_pelicula WHERE sa.codigo = ? AND ps.fecha_proyeccion BETWEEN ? AND ? ORDER BY pe.fecha_estreno DESC";
@@ -125,7 +125,7 @@ public class ReportePeliculasDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de peliculas en salas de cine");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de peliculas en salas de cine" + e.getMessage());
         }
 
         return listadoReportes;
@@ -169,7 +169,7 @@ public class ReportePeliculasDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de peliculas en salas de cine");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de peliculas en salas de cine" + e.getMessage());
         }
 
         return listadoReportes;
