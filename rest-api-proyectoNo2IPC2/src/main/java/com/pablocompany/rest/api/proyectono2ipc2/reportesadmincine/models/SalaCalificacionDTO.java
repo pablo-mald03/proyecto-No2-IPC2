@@ -14,10 +14,10 @@ import java.time.LocalDate;
 public class SalaCalificacionDTO {
 
     private String idUsuario;
-    private String calificacion;
+    private int calificacion;
     private LocalDate fechaPosteo;
 
-    public SalaCalificacionDTO(String idUsuario, String calificacion, LocalDate fechaPosteo) {
+    public SalaCalificacionDTO(String idUsuario, int calificacion, LocalDate fechaPosteo) {
         this.idUsuario = idUsuario;
         this.calificacion = calificacion;
         this.fechaPosteo = fechaPosteo;
@@ -31,11 +31,11 @@ public class SalaCalificacionDTO {
         this.idUsuario = idUsuario;
     }
 
-    public String getCalificacion() {
+    public int getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(String calificacion) {
+    public void setCalificacion(int calificacion) {
         this.calificacion = calificacion;
     }
 

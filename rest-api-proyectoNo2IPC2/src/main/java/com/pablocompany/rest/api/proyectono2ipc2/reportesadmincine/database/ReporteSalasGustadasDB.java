@@ -245,7 +245,7 @@ public class ReporteSalasGustadasDB {
             while (resultSet.next()) {
                 SalaCalificacionDTO valoracionEncontrada = new SalaCalificacionDTO(
                         resultSet.getString("id_usuario"),
-                        resultSet.getString("calificacion"),
+                        resultSet.getInt("calificacion"),
                         resultSet.getDate("fecha_posteo").toLocalDate()
                 );
 
