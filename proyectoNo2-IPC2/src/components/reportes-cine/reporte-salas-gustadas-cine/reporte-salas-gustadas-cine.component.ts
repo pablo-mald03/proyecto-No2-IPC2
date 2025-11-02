@@ -296,7 +296,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit {
   descargarReporte(respuesta: HttpResponse<Blob>) {
     const contentDisposition = respuesta.headers.get('Content-Disposition');
 
-    let fileName = 'ReporteSalaGustada.pdf';
+    let fileName = 'ReporteSalasGustadas.pdf';
     if (contentDisposition) {
       const match = contentDisposition.match(/filename="(.+)"/);
       if (match && match[1]) {

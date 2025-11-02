@@ -30,6 +30,11 @@ public class ReporteSalasGustadasService {
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
         if (reporteRequest.validarRequest()) {
+            
+            if(reporteRequest.getOffset() >= 5){
+                reporteRequest.setLimit(5);
+                reporteRequest.setOffset(0);
+            }
 
             ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
             return reporteSalasGustadasDb.obtenerReporteSalasGustadas(reporteRequest);
