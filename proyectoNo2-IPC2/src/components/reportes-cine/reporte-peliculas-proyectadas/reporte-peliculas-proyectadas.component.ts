@@ -98,10 +98,10 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
 
 
-  //Metodo que sirve para mandar a exportar el reporte
-  exportarReporte() {
+  //Metodo que sirve para mandar a exportar el reporte de peliculas en salas de cine
+  exportarReporte(): void {
 
-     if (this.reportesMostrados.length === 0) {
+    if (this.reportesMostrados.length === 0) {
       const mensaje = 'Genera primero los reportes para poder exportarlos';
       this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
       return;
@@ -382,7 +382,7 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
       this.reportePeliculasSalaService.reportesSalasPeliculaConFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual, idSala).subscribe({
         next: (response: ReporteSalaPeliculaProyectadaDTO[]) => {
 
-        this.ampliarResultados(response);
+          this.ampliarResultados(response);
         },
         error: (error: any) => {
 
