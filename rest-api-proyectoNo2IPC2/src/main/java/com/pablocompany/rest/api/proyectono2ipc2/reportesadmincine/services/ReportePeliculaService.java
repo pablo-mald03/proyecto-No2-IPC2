@@ -145,7 +145,7 @@ public class ReportePeliculaService {
     }
 
     //Metodo que sirve para retornar la cantidad de reportes CON FILTRO
-    public CantidadReportesDTO cantidadReportesConFIltro(String fechaInicio, String fechaFin, String idSala) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public CantidadReportesDTO cantidadReportesConFiltro(String fechaInicio, String fechaFin, String idSala) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         if (StringUtils.isBlank(fechaInicio)) {
             throw new FormatoInvalidoException("La fecha de inicio esta vacia");

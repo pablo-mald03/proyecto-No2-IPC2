@@ -115,7 +115,7 @@ public class ReportePeliculasProyectadasResource {
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesSinFIltro(fechaInicio, fechaFin);
+            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesConFiltro(fechaInicio, fechaFin,idSala);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
