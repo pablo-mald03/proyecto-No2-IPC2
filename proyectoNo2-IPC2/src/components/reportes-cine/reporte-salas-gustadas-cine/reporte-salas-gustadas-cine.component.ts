@@ -1,16 +1,24 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReporteSalasGustadasDTO } from '../../../models/reportes-cine/reporte-sala-gustada-dto';
 import { SalasGustadasCineCardsComponent } from "../salas-gustadas-cine-cards/salas-gustadas-cine-cards.component";
+import { Popup } from '../../../shared/popup/popup';
+import { ReporteSalaGustadaService } from '../../../services/reportes-cine-service/reporte-sala-gustada.service';
+import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-dto';
+import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
+import { HttpResponse } from '@angular/common/http';
+import { ExportarReporteSalasGustadasService } from '../../../services/reportes-cine-service/exportar-reporte-salas-gustadas.service';
 
 @Component({
   selector: 'app-reporte-salas-gustadas-cine',
-  imports: [NgClass, ReactiveFormsModule, SalasGustadasCineCardsComponent],
+  imports: [NgClass, ReactiveFormsModule, SalasGustadasCineCardsComponent, SharedPopupComponent, NgIf],
   templateUrl: './reporte-salas-gustadas-cine.component.html',
-  styleUrl: './reporte-salas-gustadas-cine.component.scss'
+  styleUrl: './reporte-salas-gustadas-cine.component.scss',
+  providers: [Popup]
+
 })
-export class ReporteSalasGustadasCineComponent implements OnInit{
+export class ReporteSalasGustadasCineComponent implements OnInit {
 
   //Apartado de atributos que sirven para exponer los dto
   reporteSalas: ReporteSalasGustadasDTO[] = [];
@@ -19,7 +27,18 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
+
+  //Flag que sirve para saber si se ha filtrado
+  estaFiltrado = false;
+
+
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
 
   //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
@@ -28,7 +47,10 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
 
   constructor(
     private formBuild: FormBuilder,
-    private formBuildSala: FormBuilder
+    private formBuildSala: FormBuilder,
+    private reporteSalasGustadasService: ReporteSalaGustadaService,
+    private exportarReporteSalaGustadaService: ExportarReporteSalasGustadasService,
+    private popUp: Popup,
 
   ) { }
 
@@ -46,46 +68,110 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
       idSala: [null]
     });
 
-    this.reporteSalas = [
-      {
-        codigo: 'S001',
-        cineAsociado: 'Cinepolis',
-        nombre: 'Sala Premium 3D',
-        filas: 12,
-        columnas: 20,
-        ubicacion: 'Nivel 2, ala norte',
-        comentarios: [
-          { idUsuario: 'U001', calificacion: 2, fechaPosteo: new Date('2025-09-10') },
-          { idUsuario: 'U002', calificacion: 3, fechaPosteo: new Date('2025-10-12') },
-          { idUsuario: 'pablofsd-02', calificacion: 5, fechaPosteo: new Date('2025-10-15') }
-        ]
-      },
-    ];
+    this.indiceActual = 0;
+    this.reportesMostrados = [];
+    this.todosCargados = true;
+    this.estaFiltrado = false;
 
 
-    this.cargarMasReportes();
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      this.mostrarPopup = false;
+
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
+      }
+    });
   }
 
 
-  //Metodo que sirve para cargar mas y no mostrar todos de golpe
-  cargarMasReportes(): void {
-    const siguienteBloque = this.reporteSalas.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
+  //Metodo que sirve para ir cargando dinamicamente los reportes de salas mas gustadas
+  mostrarMasReportes(): void {
 
-    this.reportesMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    if (this.indiceActual >= this.reporteSalas.length) {
-      this.todosCargados = true;
-    }
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    this.cargarMasReportes(inicioISO, finISO);
+
   }
 
 
   //Metodo que sirve para mandar a exportar el reporte
   exportarReporte() {
 
+
+    if (this.reportesMostrados.length === 0) {
+      const mensaje = 'Genera primero los reportes para poder exportarlos';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+      return;
+    }
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    if (!inicioISO || !finISO) return;
+
+
+    if (!this.estaFiltrado) {
+
+
+      this.exportarReporteSalaGustadaService.exportarReporteSalasGustadasSinFiltro(inicioISO, finISO, this.indiceActual, 0).subscribe({
+        next: (response: HttpResponse<Blob>) => {
+
+          this.descargarReporte(response);
+
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+
+        }
+      });
+
+      return;
+    }
+
+
+    if (this.estaFiltrado) {
+
+      const { idSala } = this.filtroSalaForm.value;
+
+      if (idSala == null || idSala == '') {
+        return;
+      }
+
+      this.exportarReporteSalaGustadaService.exportarReporteSalasGustadasConFiltro(inicioISO, finISO, this.indiceActual, 0, idSala).subscribe({
+        next: (response: HttpResponse<Blob>) => {
+
+          this.descargarReporte(response);
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+
+        }
+      });
+
+
+
+    }
 
   }
 
@@ -114,29 +200,68 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString() : null;
-    const finISO = fechaFin ? new Date(fechaFin).toISOString() : null;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : null;
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : null;
 
-    //Pendiente hacer la query
-    console.log('trilin');
+    if (!inicioISO || !finISO) return;
+
+    if (this.estaFiltrado) {
+      this.limpiarSala();
+    }
+
+
+    this.reporteSalasGustadasService.cantidadReportesSinFiltro(inicioISO, finISO).subscribe({
+      next: (cantidadDTO: CantidadReportesDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.reportesMostrados = [];
+        this.todosCargados = false;
+        this.estaFiltrado = false;
+
+        this.cargarMasReportes(inicioISO, finISO);
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
 
   }
 
-  //Metodo que sirve para limpiar las fechas de reporte
+  //Metodo que sirve para limpiar las fechas de reporte de 5 salas mas gustadas
   limpiarFechas(): void {
     this.filtrosForm.reset();
+
+    this.indiceActual = 0;
+    this.reportesMostrados = [];
+    this.todosCargados = true;
+    this.estaFiltrado = false;
   }
 
 
-  //Metodo que sirve para limpiar la sala de filtro
+  //Metodo que sirve para limpiar la sala que se filtro para visualizar la salas mas gustada
   limpiarSala(): void {
     this.filtroSalaForm.patchValue({
       idSala: ''
     });
+
+    this.estaFiltrado = false;
+
+    this.generarReporte();
   }
 
-   //Metodo que sirve para filtrar por sala
+  //Metodo que sirve para filtrar por sala
   filtrarSala(): void {
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    if (!inicioISO || !finISO) return;
 
     const { idSala } = this.filtroSalaForm.value;
 
@@ -144,8 +269,126 @@ export class ReporteSalasGustadasCineComponent implements OnInit{
       return;
     }
 
-    //Pendiente hacer la query
-    console.log('trilin');
+
+    this.reporteSalasGustadasService.cantidadReportesConFiltro(inicioISO, finISO, idSala).subscribe({
+      next: (cantidadDTO: CantidadReportesDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.reportesMostrados = [];
+        this.todosCargados = false;
+        this.estaFiltrado = true;
+
+        this.cargarMasReportes(inicioISO, finISO);
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
 
   }
+
+  //Metodo que sirve para redireccionar cuando se exporta un reporte de las 5 salas mas gustadas 
+  descargarReporte(respuesta: HttpResponse<Blob>) {
+    const contentDisposition = respuesta.headers.get('Content-Disposition');
+
+    let fileName = 'ReporteSalaGustada.pdf';
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match && match[1]) {
+        fileName = match[1];
+      }
+    }
+
+    const url = window.URL.createObjectURL(respuesta.body!);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    this.popUp.mostrarPopup({ mensaje: 'Reporte generado correctamente', tipo: 'exito' });
+
+  }
+
+  //Metodo implementado para mostrar los mensajes de errores
+  mostrarError(errorEncontrado: any): void {
+    let mensaje = 'Ocurrió un error';
+
+    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
+      mensaje = errorEncontrado.error.mensaje;
+    } else if (errorEncontrado.message) {
+      mensaje = errorEncontrado.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+  }
+
+  //Metodo que permite ir amplieando el arreglo de datos acorde a los request
+  ampliarResultados(response: ReporteSalasGustadasDTO[]): void {
+
+    if (!response || response.length === 0) {
+      this.todosCargados = true;
+      return;
+    }
+
+    this.reportesMostrados.push(...response);
+    this.indiceActual += response.length;
+
+    if (this.indiceActual >= this.totalReportes) {
+      this.todosCargados = true;
+    }
+
+  }
+
+  //Metodo que sirve para cargar mas dinamicamente y no mostrar todos de golpe
+  cargarMasReportes(fechaInicioISO: string, fechaFinISO: string): void {
+
+    if (this.todosCargados) return;
+
+    if (!this.estaFiltrado) {
+
+      this.reporteSalasGustadasService.reporteSalasGustadasSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
+        next: (response: ReporteSalasGustadasDTO[]) => {
+          this.ampliarResultados(response);
+
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+
+        }
+      });
+
+
+    } else {
+
+      const { idSala } = this.filtroSalaForm.value;
+
+      if (idSala == null || idSala == '') {
+        this.estaFiltrado = false;
+        return;
+      }
+
+
+      this.reporteSalasGustadasService.reporteSalasGustadasConFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual, idSala).subscribe({
+        next: (response: ReporteSalasGustadasDTO[]) => {
+
+          this.ampliarResultados(response);
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+        }
+      });
+
+
+    }
+  }
+
+
+
 }
