@@ -4,6 +4,7 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,14 +22,14 @@ public class ReporteSalasGustadasDTO {
     private String ubicacion;
     private List<SalaCalificacionDTO> comentarios;
 
-    public ReporteSalasGustadasDTO(String codigo, String cineAsociado, String nombre, int filas, int columnas, String ubicacion, List<SalaCalificacionDTO> comentarios) {
+    public ReporteSalasGustadasDTO(String codigo, String cineAsociado, String nombre, int filas, int columnas, String ubicacion) {
         this.codigo = codigo;
         this.cineAsociado = cineAsociado;
         this.nombre = nombre;
         this.filas = filas;
         this.columnas = columnas;
         this.ubicacion = ubicacion;
-        this.comentarios = comentarios;
+        this.comentarios = new ArrayList<>();
     }
     
 

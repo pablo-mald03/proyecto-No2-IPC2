@@ -108,7 +108,7 @@ public class ReporteSalaCineDB {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                ReporteSalasComentadasDTO usuarioEncontrado = new ReporteSalasComentadasDTO(
+                ReporteSalasComentadasDTO comentarioEncontrado = new ReporteSalasComentadasDTO(
                         resultSet.getString("codigo"),
                         resultSet.getString("cineAsociado"),
                         resultSet.getString("nombre"),
@@ -117,7 +117,7 @@ public class ReporteSalaCineDB {
                         resultSet.getString("ubicacion")
                 );
 
-                listadoReportes.add(usuarioEncontrado);
+                listadoReportes.add(comentarioEncontrado);
             }
 
             for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
