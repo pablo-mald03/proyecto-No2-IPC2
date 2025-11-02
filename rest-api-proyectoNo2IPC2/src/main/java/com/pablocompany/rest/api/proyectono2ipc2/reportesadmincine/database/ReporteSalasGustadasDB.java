@@ -26,19 +26,67 @@ import java.util.List;
 public class ReporteSalasGustadasDB {
 
     //Constante que permite obtener el reporte de 5 salas mas gustadas sin filtro de sala
-    private final String REPORTE_SALAS_GUSTADAS = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, AVG(va.calificacion) AS promedio_calificacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala WHERE va.fecha_posteo BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY promedio_calificacion DESC LIMIT ? OFFSET ?";
+    private final String REPORTE_SALAS_GUSTADAS
+            = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, "
+            + "AVG(CAST(va.calificacion AS DECIMAL(10,2))) AS promedio_calificacion, "
+            + "COUNT(va.calificacion) AS cantidad_votos, "
+            + "AVG(CAST(va.calificacion AS DECIMAL(10,2))) * COUNT(va.calificacion) AS puntuacion_total "
+            + "FROM sala AS sa "
+            + "JOIN cine AS ci ON sa.codigo_cine = ci.codigo "
+            + "JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala "
+            + "WHERE va.fecha_posteo BETWEEN ? AND ? "
+            + "GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion "
+            + "ORDER BY puntuacion_total DESC "
+            + "LIMIT ? OFFSET ?;";
 
-    //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha
-    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS `cantidad` FROM ( SELECT sa.codigo FROM sala AS sa JOIN cine AS ci ON sa.codigo_cine = ci.codigo JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala WHERE va.fecha_posteo BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY AVG(va.calificacion) DESC LIMIT 5 ) AS `conteo`";
+    // Constante que permite el onteo total de reportes (sin filtro)
+    private final String CANTIDAD_REPORTES
+            = "SELECT COUNT(*) AS cantidad FROM ( "
+            + "SELECT sa.codigo "
+            + "FROM sala AS sa "
+            + "JOIN cine AS ci ON sa.codigo_cine = ci.codigo "
+            + "JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala "
+            + "WHERE va.fecha_posteo BETWEEN ? AND ? "
+            + "GROUP BY sa.codigo "
+            + "ORDER BY AVG(CAST(va.calificacion AS DECIMAL(10,2))) * COUNT(va.calificacion) DESC "
+            + "LIMIT 5 "
+            + ") AS conteo;";
 
-    //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha con filtro por sala de cine
-    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM ( SELECT sa.codigo FROM sala AS sa JOIN cine AS ci ON sa.codigo_cine = ci.codigo JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY AVG(va.calificacion) DESC LIMIT 5 ) AS `conteo`";
+    // Constante que permite el conteo total de reportes (con filtro por sala)
+    private final String CANTIDAD_REPORTES_FILTRO
+            = "SELECT COUNT(*) AS cantidad FROM ( "
+            + "SELECT sa.codigo "
+            + "FROM sala AS sa "
+            + "JOIN cine AS ci ON sa.codigo_cine = ci.codigo "
+            + "JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala "
+            + "WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? "
+            + "GROUP BY sa.codigo "
+            + "ORDER BY AVG(CAST(va.calificacion AS DECIMAL(10,2))) * COUNT(va.calificacion) DESC "
+            + "LIMIT 5 "
+            + ") AS conteo;";
 
-    //Constante que permite obtener el reporte de calificaciones en base al filtro de sala
-    private final String VALORACION_SALAS = "SELECT va.id_usuario, va.calificacion, va.fecha_posteo FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? ORDER BY va.fecha_posteo DESC";
+    //Constante que permite obtener las calificaciones hechas en las distintas salas (por sala)
+    private final String VALORACION_SALAS
+            = "SELECT va.id_usuario, va.calificacion, va.fecha_posteo "
+            + "FROM sala AS sa "
+            + "JOIN cine AS ci ON sa.codigo_cine = ci.codigo "
+            + "JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala "
+            + "WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? "
+            + "ORDER BY va.fecha_posteo DESC;";
 
-    //Constante que permite obtener el reporte de 5 salas mas gustadas con filtro de sala de cine
-    private final String REPORTE_SALAS_GUSTADAS_FILTRO = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, AVG(va.calificacion) AS promedio_calificacion FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY promedio_calificacion DESC LIMIT ? OFFSET ?";
+    // Constante que permite obtener el reporte de 5 salas más gustadas CON FILTRO
+    private final String REPORTE_SALAS_GUSTADAS_FILTRO
+            = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, "
+            + "AVG(CAST(va.calificacion AS DECIMAL(10,2))) AS promedio_calificacion, "
+            + "COUNT(va.calificacion) AS cantidad_votos, "
+            + "AVG(CAST(va.calificacion AS DECIMAL(10,2))) * COUNT(va.calificacion) AS puntuacion_total "
+            + "FROM sala AS sa "
+            + "JOIN cine AS ci ON sa.codigo_cine = ci.codigo "
+            + "JOIN valoracion_sala AS va ON sa.codigo = va.codigo_sala "
+            + "WHERE sa.codigo = ? AND va.fecha_posteo BETWEEN ? AND ? "
+            + "GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion "
+            + "ORDER BY puntuacion_total DESC "
+            + "LIMIT ? OFFSET ?;";
 
     //Metodo delegado para obtener la cantidad de reportes de 5 salas mas gustadas que se tienen en el intervalo de fechas
     public int cantidadReportesSinFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {

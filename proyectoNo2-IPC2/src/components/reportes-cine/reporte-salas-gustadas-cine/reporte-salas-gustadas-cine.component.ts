@@ -214,6 +214,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit {
       next: (cantidadDTO: CantidadReportesDTO) => {
         this.totalReportes = cantidadDTO.cantidad;
         this.indiceActual = 0;
+        this.cantidadPorCarga = 2;
         this.reportesMostrados = [];
         this.todosCargados = false;
         this.estaFiltrado = false;
@@ -234,6 +235,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit {
     this.filtrosForm.reset();
 
     this.indiceActual = 0;
+    this.cantidadPorCarga = 2;
     this.reportesMostrados = [];
     this.todosCargados = true;
     this.estaFiltrado = false;
@@ -274,6 +276,7 @@ export class ReporteSalasGustadasCineComponent implements OnInit {
       next: (cantidadDTO: CantidadReportesDTO) => {
         this.totalReportes = cantidadDTO.cantidad;
         this.indiceActual = 0;
+        this.cantidadPorCarga = 2;
         this.reportesMostrados = [];
         this.todosCargados = false;
         this.estaFiltrado = true;
@@ -350,6 +353,11 @@ export class ReporteSalasGustadasCineComponent implements OnInit {
     if (this.todosCargados) return;
 
     if (!this.estaFiltrado) {
+
+      if ((this.indiceActual + this.cantidadPorCarga) > 5) {
+        this.indiceActual = 4;
+        this.cantidadPorCarga = 1;
+      }
 
       this.reporteSalasGustadasService.reporteSalasGustadasSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
         next: (response: ReporteSalasGustadasDTO[]) => {
