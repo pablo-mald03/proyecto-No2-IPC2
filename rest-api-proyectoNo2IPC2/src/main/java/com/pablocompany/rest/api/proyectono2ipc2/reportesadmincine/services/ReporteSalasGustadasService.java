@@ -104,10 +104,6 @@ public class ReporteSalasGustadasService {
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
-            if (inicio.isAfter(fin)) {
-                throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
-            }
-
             ReporteRequest reporteRequest = new ReporteRequest(inicio, fin, 0, 0);
 
             ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
@@ -130,7 +126,7 @@ public class ReporteSalasGustadasService {
     }
 
     //Metodo utilizado para poder retornar la cantidad de salas de cine con peliculas en un intervalo de tiempo CON FILTRO
-    public List<ReporteSalasGustadasDTO> obtenerreporteSalaGustadaFiltro(String fechaInicio, String fechaFin, String limit, String offset, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<ReporteSalasGustadasDTO> obtenerReporteSalaGustadaFiltro(String fechaInicio, String fechaFin, String limit, String offset, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
@@ -140,7 +136,7 @@ public class ReporteSalasGustadasService {
 
         reporteRequest.setIdSala(idSala.trim());
 
-        if (reporteRequest.validarRequest()) {
+        if (reporteRequest.validarRequestFiltro()) {
 
             ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
             return reporteSalasGustadasDb.obtenerReporteSalasGustadasFiltro(reporteRequest);
@@ -164,9 +160,6 @@ public class ReporteSalasGustadasService {
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
-            if (inicio.isAfter(fin)) {
-                throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
-            }
 
             ReporteRequest reporteRequest = new ReporteRequest(idSala, inicio, fin, 0, 0);
 

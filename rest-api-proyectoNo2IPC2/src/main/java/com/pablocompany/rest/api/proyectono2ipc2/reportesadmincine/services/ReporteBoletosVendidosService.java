@@ -7,10 +7,10 @@ package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.database.ReportePeliculasDB;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.database.ReporteBoletosVendidosDB;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalaPeliculaProyectadaDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteBoletosVendidosDTO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -21,21 +21,26 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author pablo
  */
-//Clase delegada para poder procesar las solicitudes para obtener el listado de peliculas proyectadas en salas de cine
-public class ReportePeliculaService {
+//Clase delegada para poder generar los reportes de boletos vendidos
+public class ReporteBoletosVendidosService {
 
     //Metodo utilizado para poder retornar la cantidad de salas de cine con peliculas en un intervalo de tiempo SIN FILTRO
-    public List<ReporteSalaPeliculaProyectadaDTO> obtenerReportePeliculaSinFiltro(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<ReporteBoletosVendidosDTO> obtenerReporteBoletosVendidosSinFiltro(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
         if (reporteRequest.validarRequest()) {
 
-            ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
-            return reporteSalaCineDb.obtenerReportePeliculas(reporteRequest);
+            if (reporteRequest.getOffset() >= 5) {
+                reporteRequest.setLimit(5);
+                reporteRequest.setOffset(0);
+            }
+
+            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+            return reporteBoletosVendidosDb.obtenerReporteBoletodVendidos(reporteRequest);
         }
 
-        throw new ErrorInesperadoException("No se ha podido procesar la solicitud del reporte");
+        throw new ErrorInesperadoException("No se ha podido procesar la solicitud del reporte de 5 salas mas gustadas");
     }
 
     //Metodo delegado para poder validar y extraer la solicitud de request
@@ -101,11 +106,11 @@ public class ReportePeliculaService {
 
             ReporteRequest reporteRequest = new ReporteRequest(inicio, fin, 0, 0);
 
-            ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
+            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
 
             if (reporteRequest.validarRequest()) {
 
-                int cantidad = reportePeliculasDb.cantidadReportesSinFiltro(reporteRequest);
+                int cantidad = reporteBoletosVendidosDb.cantidadReportesSinFiltro(reporteRequest);
 
                 return new CantidadReportesDTO(cantidad);
 
@@ -117,11 +122,11 @@ public class ReportePeliculaService {
             throw new FormatoInvalidoException("Los limites de peticion no son numericos");
         }
 
-        throw new ErrorInesperadoException("No se pudo obtener la cantidad de salas sin filtro.");
+        throw new ErrorInesperadoException("No se pudo obtener la cantidad de salas gustadas sin filtro.");
     }
 
-    //Metodo utilizado para poder retornar la cantidad de salas de cine con peliculas en un intervalo de tiempo CON FILTRO
-    public List<ReporteSalaPeliculaProyectadaDTO> obtenerReportePeliculaConFiltro(String fechaInicio, String fechaFin, String limit, String offset, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    //Metodo utilizado para poder retornar la cantidad de reporte de boletos vendidos en un intervalo de tiempo CON FILTRO
+    public List<ReporteBoletosVendidosDTO> obtenerReporteBoletosVendidosConFiltro(String fechaInicio, String fechaFin, String limit, String offset, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
@@ -133,14 +138,14 @@ public class ReportePeliculaService {
 
         if (reporteRequest.validarRequest()) {
 
-            ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
-            return reporteSalaCineDb.obtenerReportePeliculasFiltro(reporteRequest);
+            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+            return reporteBoletosVendidosDb.obtenerReporteBoletosVendidosFiltro(reporteRequest);
         }
 
         throw new ErrorInesperadoException("No se ha podido procesar la solicitud del reporte");
     }
 
-    //Metodo que sirve para retornar la cantidad de reportes CON FILTRO
+    //Metodo que sirve para retornar la cantidad de reportes de boletos CON FILTRO
     public CantidadReportesDTO cantidadReportesConFiltro(String fechaInicio, String fechaFin, String idSala) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         if (StringUtils.isBlank(fechaInicio)) {
@@ -159,9 +164,9 @@ public class ReportePeliculaService {
 
             if (reporteRequest.validarRequestFiltro()) {
 
-                ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
+                ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
 
-                int cantidad = reportePeliculasDb.cantidadReportesFiltro(reporteRequest);
+                int cantidad = reporteBoletosVendidosDb.cantidadReportesFiltro(reporteRequest);
 
                 return new CantidadReportesDTO(cantidad);
 
@@ -173,7 +178,7 @@ public class ReportePeliculaService {
             throw new FormatoInvalidoException("Los limites de peticion no son numericos");
         }
 
-        throw new ErrorInesperadoException("No se pudo obtener la cantidad de salas con filtro.");
+        throw new ErrorInesperadoException("No se pudo obtener la cantidad de reporte de boletos vendidos con filtro.");
     }
 
 }

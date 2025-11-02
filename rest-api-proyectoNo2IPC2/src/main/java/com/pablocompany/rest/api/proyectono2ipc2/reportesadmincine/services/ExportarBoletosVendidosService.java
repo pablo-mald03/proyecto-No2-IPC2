@@ -32,7 +32,7 @@ public class ExportarBoletosVendidosService {
             throw new ErrorInesperadoException("No se ha podido obtener el logo de la empresa");
         }
 
-        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/boletosvendidoscine/ReporteSalasGustadas.jasper");
+        InputStream reporte = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/boletosvendidoscine/ReporteBoletosVendidos.jasper");
 
         if (reporte == null) {
             throw new ErrorInesperadoException("No se ha podido cargar el reporte Jasper");

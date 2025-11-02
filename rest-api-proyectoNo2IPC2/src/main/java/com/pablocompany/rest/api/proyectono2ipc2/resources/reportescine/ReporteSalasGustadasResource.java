@@ -89,7 +89,7 @@ public class ReporteSalasGustadasResource {
         ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerreporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
+            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
 
             return Response.ok(reporteSalasGustadasDto).build();
 

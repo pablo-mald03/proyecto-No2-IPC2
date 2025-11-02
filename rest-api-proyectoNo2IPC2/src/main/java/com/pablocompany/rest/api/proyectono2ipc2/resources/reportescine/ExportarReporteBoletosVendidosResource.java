@@ -6,9 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportescine;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteBoletosVendidosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarBoletosVendidosService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarSalasGustadasService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
@@ -28,7 +26,7 @@ import java.util.Map;
  */
 @Path("reportes/boletos/vendidos/exportar")
 public class ExportarReporteBoletosVendidosResource {
-    
+
     //Endpoint que permite exportar el reporte de boletos vendidos sin filtro
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
@@ -39,14 +37,14 @@ public class ExportarReporteBoletosVendidosResource {
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ExportarBoletosVendidosService boletosVendidosService = new ExportarBoletosVendidosService();
+        //PENDIENTE
+        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
-            //PENDIENTE
-          /*  List<ReporteBoletosVendidosDTO> reporteSalasGustadasDto = boletosVendidosService.(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-             ExportarBoletosVendidosService boletosVendidosService = new ExportarBoletosVendidosService();
-*/
+            ExportarSalasGustadasService exportarSalasGustadasService = new ExportarSalasGustadasService();
+
             byte[] pdfGenerado = exportarSalasGustadasService.getReporteSalaGustada(reporteSalasGustadasDto);
 
             StreamingOutput stream = output -> {
@@ -86,7 +84,7 @@ public class ExportarReporteBoletosVendidosResource {
         ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerreporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
+            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
 
             ExportarSalasGustadasService exportarSalasGustadasService = new ExportarSalasGustadasService();
 
@@ -114,5 +112,5 @@ public class ExportarReporteBoletosVendidosResource {
         }
 
     }
-    
+
 }

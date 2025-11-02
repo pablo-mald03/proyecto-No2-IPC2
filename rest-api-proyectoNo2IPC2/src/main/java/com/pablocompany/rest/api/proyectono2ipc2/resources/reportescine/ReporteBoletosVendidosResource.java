@@ -8,8 +8,8 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteBoletosVendidosDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteBoletosVendidosService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -36,10 +36,10 @@ public class ReporteBoletosVendidosResource {
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteBoletosVendidosDTO> reporteSalasGustadasDto = reporteBoletosVendidosService.obtenerReporteBoletosVendidosSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
             return Response.ok(reporteSalasGustadasDto).build();
 
@@ -59,11 +59,11 @@ public class ReporteBoletosVendidosResource {
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
+            CantidadReportesDTO cantidadReportes = reporteBoletosVendidosService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
@@ -86,10 +86,10 @@ public class ReporteBoletosVendidosResource {
             @PathParam("inicio") String inicio,
             @PathParam("idSala") String idSala) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerreporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
+            List<ReporteBoletosVendidosDTO> reporteSalasGustadasDto = reporteBoletosVendidosService.obtenerReporteBoletosVendidosConFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
 
             return Response.ok(reporteSalasGustadasDto).build();
 
@@ -110,11 +110,11 @@ public class ReporteBoletosVendidosResource {
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idSala") String idSala) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
+            CantidadReportesDTO cantidadReportes = reporteBoletosVendidosService.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
