@@ -31,13 +31,13 @@ public class ReporteBoletosVendidosDB {
     private final String REPORTE_BOLETOS = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.ubicacion, COUNT(pb.numero) AS `totalBoletosVendidos`, SUM(pb.monto) AS `totalRecaudado` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY totalRecaudado DESC LIMIT ? OFFSET ?";
 
     //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha
-    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY totalRecaudado DESC LIMIT ? OFFSET ?";
+    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion";
 
     //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha con filtro por sala de cine
-    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE sa.codigo = ? AND pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY totalRecaudado DESC LIMIT ? OFFSET ?";
+    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE sa.codigo = ? AND pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion";
 
     //Constante que permite obtener el reporte de los boletos que ha comprado el usuario
-    private final String USUARIOS_SALA = "SELECT u.id AS `idUsuario`, u.nombre, COUNT(pb.numero) AS `boletosComprados`, SUM(pb.monto) AS `totalPagado`  FROM sala AS `sa` JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala JOIN usuario AS `u` ON pb.id_usuario = u.id WHERE sa.codigo =  ? AND  pb.fecha_pago BETWEEN ? AND ? GROUP  BY  u.id, u.nombre ORDER BY totalPagado DESC LIMIT ? OFFSET ?";
+    private final String USUARIOS_SALA = "SELECT u.id AS `idUsuario`, u.nombre, COUNT(pb.numero) AS `boletosComprados`, SUM(pb.monto) AS `totalPagado`  FROM sala AS `sa` JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala JOIN usuario AS `u` ON pb.id_usuario = u.id WHERE sa.codigo =  ? AND  pb.fecha_pago BETWEEN ? AND ? GROUP  BY  u.id, u.nombre ORDER BY totalPagado DESC";
 
     //Constante que permite obtener el registro de pagos de boleto en un intervalo de tiempo CON FILTRO
     private final String REPORTE_BOLETOS_FILTRO = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.ubicacion, COUNT(pb.numero) AS `totalBoletosVendidos`, SUM(pb.monto) AS `totalRecaudado` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE sa.codigo = ? AND pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY totalRecaudado DESC LIMIT ? OFFSET ?";
@@ -61,7 +61,7 @@ public class ReporteBoletosVendidosDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de boletos vendidos Sin filtro");
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de boletos vendidos Sin filtro" + e.getMessage());
         }
     }
 
@@ -122,7 +122,7 @@ public class ReporteBoletosVendidosDB {
             }
 
             for (ReporteBoletosVendidosDTO reporte : listadoReportes) {
-                reporte.setUsuarios(obtenerCalificaciones(reporteSalas, reporte.getCodigo()));
+                reporte.setUsuarios(obtenerBoletos(reporteSalas, reporte.getCodigo()));
             }
             
         } catch (SQLException e) {
@@ -165,7 +165,7 @@ public class ReporteBoletosVendidosDB {
             }
 
             for (ReporteBoletosVendidosDTO reporte : listadoReportes) {
-                reporte.setUsuarios(obtenerCalificaciones(reporteSalas, reporte.getCodigo()));
+                reporte.setUsuarios(obtenerBoletos(reporteSalas, reporte.getCodigo()));
             }
 
         } catch (SQLException e) {
@@ -176,7 +176,7 @@ public class ReporteBoletosVendidosDB {
     }
 
     //Metodo que sirve para obtener las valificaciones que hacen los usuarios en las salas
-    private List< UsuarioBoletosCompradosDTO> obtenerCalificaciones(ReporteRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    private List< UsuarioBoletosCompradosDTO> obtenerBoletos(ReporteRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -206,7 +206,7 @@ public class ReporteBoletosVendidosDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de los usuarios que compraron boletos en salas de cine");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los usuarios que compraron boletos en salas de cine" + e.getMessage());
         }
 
         return listadoUsuarios;

@@ -5,7 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteBoletosVendidosDTO;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ExportarBoletosVendidosService {
     
     //Metodo utilizado para retornar el reporte de boletos vendidos via stream
-    public byte[] getReporteBoletos(List<ReporteSalasGustadasDTO> salasGustadas) throws ErrorInesperadoException {
+    public byte[] getReporteBoletos(List<ReporteBoletosVendidosDTO> salasGustadas) throws ErrorInesperadoException {
 
         InputStream logoEmpresa = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/img/cinemaAppIcon.png");
 

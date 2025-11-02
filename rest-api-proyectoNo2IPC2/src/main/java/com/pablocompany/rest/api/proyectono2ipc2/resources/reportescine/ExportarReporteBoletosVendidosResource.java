@@ -6,10 +6,10 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportescine;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarSalasGustadasService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteBoletosVendidosDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarBoletosVendidosService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteBoletosVendidosService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -37,15 +37,14 @@ public class ExportarReporteBoletosVendidosResource {
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        //PENDIENTE
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteBoletosVendidosDTO> reporteSalasGustadasDto = reporteBoletosVendidosService.obtenerReporteBoletosVendidosSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-            ExportarSalasGustadasService exportarSalasGustadasService = new ExportarSalasGustadasService();
+            ExportarBoletosVendidosService exportarBoletosVendidosService = new ExportarBoletosVendidosService();
 
-            byte[] pdfGenerado = exportarSalasGustadasService.getReporteSalaGustada(reporteSalasGustadasDto);
+            byte[] pdfGenerado = exportarBoletosVendidosService.getReporteBoletos(reporteSalasGustadasDto);
 
             StreamingOutput stream = output -> {
 
@@ -55,7 +54,7 @@ public class ExportarReporteBoletosVendidosResource {
 
             NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
 
-            String nombreRandom = nombreReporteRandomService.getNombre("ReporteSalasGustadas");
+            String nombreRandom = nombreReporteRandomService.getNombre("ReporteBoletosVendidos");
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreRandom + "\"")
@@ -81,14 +80,14 @@ public class ExportarReporteBoletosVendidosResource {
             @PathParam("inicio") String inicio,
             @PathParam("idSala") String idSala) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteBoletosVendidosService reporteBoletosVendidosService = new ReporteBoletosVendidosService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
+            List<ReporteBoletosVendidosDTO> reporteBoletosVendidosDTo = reporteBoletosVendidosService.obtenerReporteBoletosVendidosConFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
 
-            ExportarSalasGustadasService exportarSalasGustadasService = new ExportarSalasGustadasService();
+            ExportarBoletosVendidosService exportarBoletosVendidosService = new ExportarBoletosVendidosService();
 
-            byte[] pdfGenerado = exportarSalasGustadasService.getReporteSalaGustada(reporteSalasGustadasDto);
+            byte[] pdfGenerado = exportarBoletosVendidosService.getReporteBoletos(reporteBoletosVendidosDTo);
 
             StreamingOutput stream = output -> {
 
@@ -98,7 +97,7 @@ public class ExportarReporteBoletosVendidosResource {
 
             NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
 
-            String nombreRandom = nombreReporteRandomService.getNombre("ReporteSalasGustadas");
+            String nombreRandom = nombreReporteRandomService.getNombre("ReporteBoletosVendidos");
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreRandom + "\"")
