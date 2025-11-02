@@ -1,0 +1,34 @@
+import { Injectable } from "@angular/core";
+import { RestConstants } from "../../shared/rest-constants";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+@Injectable({
+
+    providedIn: 'root'
+
+})
+
+export class ExportarReportePeliculaSalaService {
+
+    restConstants = new RestConstants();
+
+    constructor(private httpClient: HttpClient) { }
+
+    //Endpoint que retorna el pdf de la cantidad de salas comentadas en un intervalo de tiempo
+    public exportarReportePeliculasSalaSinFiltro(fechaInicio: string, fechaFin: string, limite: number, inicio: number): Observable<HttpResponse<Blob>> {
+        return this.httpClient.get(`${this.restConstants.getApiURL()}reportes/peliculas/proyectadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`, {
+            responseType: 'blob',
+            observe: 'response'
+        });
+    }
+
+    //Endpoint que retorna el pdf de la cantidad de salas comentadas en un intervalo de tiempo con filtro
+    public exportarReportePeliculasSalaConFiltro(fechaInicio: string, fechaFin: string, limite: number, tope: number, idSala: string): Observable<HttpResponse<Blob>> {
+        return this.httpClient.get(`${this.restConstants.getApiURL()}reportes/peliculas/proyectadas/exportar/inicio/${fechaInicio}/fin/${fechaFin}/filtro/${idSala}/limit/${limite}/offset/${tope}`, {
+            responseType: 'blob',
+            observe: 'response'
+        });
+    }
+
+}

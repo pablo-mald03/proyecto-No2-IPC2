@@ -7,6 +7,8 @@ import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 import { ReportePeliculasSalaService } from '../../../services/reportes-cine-service/reporte-peliculas-sala.service';
 import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-dto';
+import { HttpResponse } from '@angular/common/http';
+import { ExportarReportePeliculaSalaService } from '../../../services/reportes-cine-service/exportar-reporte-peliculas-sala.sercive';
 
 @Component({
   selector: 'app-reporte-peliculas-proyectadas',
@@ -47,6 +49,7 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
     private formBuild: FormBuilder,
     private formBuildSala: FormBuilder,
     private reportePeliculasSalaService: ReportePeliculasSalaService,
+    private exporaterReportePeliculasService: ExportarReportePeliculaSalaService,
     private popUp: Popup,
 
   ) { }
@@ -98,12 +101,68 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
   //Metodo que sirve para mandar a exportar el reporte
   exportarReporte() {
 
+     if (this.reportesMostrados.length === 0) {
+      const mensaje = 'Genera primero los reportes para poder exportarlos';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+      return;
+    }
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (!fechaInicio || !fechaFin) return;
+
+    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
+    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+
+    if (!inicioISO || !finISO) return;
+
+
+    if (!this.estaFiltrado) {
+
+
+      this.exporaterReportePeliculasService.exportarReportePeliculasSalaSinFiltro(inicioISO, finISO, this.indiceActual, 0).subscribe({
+        next: (response: HttpResponse<Blob>) => {
+
+          this.descargarReporte(response);
+
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+
+        }
+      });
+
+      return;
+    }
+
+
+    if (this.estaFiltrado) {
+
+      const { idSala } = this.filtroSalaForm.value;
+
+      if (idSala == null || idSala == '') {
+        return;
+      }
+
+      this.exporaterReportePeliculasService.exportarReportePeliculasSalaConFiltro(inicioISO, finISO, this.indiceActual, 0, idSala).subscribe({
+        next: (response: HttpResponse<Blob>) => {
+
+          this.descargarReporte(response);
+        },
+        error: (error: any) => {
+
+          this.mostrarError(error);
+
+        }
+      });
+
+
+
+    }
+
 
   }
-
-
-
-
 
 
   //Metodo get que sirve para validar si la fecha inicial antecede a la final
@@ -153,15 +212,7 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
       },
       error: (error: any) => {
 
-        let mensaje = 'Ocurrió un error';
-
-        if (error.error && error.error.mensaje) {
-          mensaje = error.error.mensaje;
-        } else if (error.message) {
-          mensaje = error.message;
-        }
-
-        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+        this.mostrarError(error);
 
       }
     });
@@ -207,7 +258,7 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
   //Metodo que sirve para filtrar por sala
   filtrarSala(): void {
 
-   const { fechaInicio, fechaFin } = this.filtrosForm.value;
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
     if (!fechaInicio || !fechaFin) return;
 
@@ -235,18 +286,65 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
       },
       error: (error: any) => {
 
-        let mensaje = 'Ocurrió un error';
-
-        if (error.error && error.error.mensaje) {
-          mensaje = error.error.mensaje;
-        } else if (error.message) {
-          mensaje = error.message;
-        }
-
-        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+        this.mostrarError(error);
 
       }
     });
+
+  }
+
+  //Metodo que sirve para redireccionar cuando se exporta un reporte de peliculas en salas de cine
+  descargarReporte(respuesta: HttpResponse<Blob>) {
+    const contentDisposition = respuesta.headers.get('Content-Disposition');
+
+    let fileName = 'ReporteSalasComentadas.pdf';
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match && match[1]) {
+        fileName = match[1];
+      }
+    }
+
+    const url = window.URL.createObjectURL(respuesta.body!);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    this.popUp.mostrarPopup({ mensaje: 'Reporte generado correctamente', tipo: 'exito' });
+
+  }
+
+  //Metodo implementado para mostrar los mensajes de errores
+  mostrarError(errorEncontrado: any): void {
+    let mensaje = 'Ocurrió un error';
+
+    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
+      mensaje = errorEncontrado.error.mensaje;
+    } else if (errorEncontrado.message) {
+      mensaje = errorEncontrado.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+  }
+
+  //Metodo que permite ir amplieando el arreglo de datos acorde a los request
+  ampliarResultados(response: ReporteSalaPeliculaProyectadaDTO[]): void {
+
+    if (!response || response.length === 0) {
+      this.todosCargados = true;
+      return;
+    }
+
+    this.reportesMostrados.push(...response);
+    this.indiceActual += response.length;
+
+    if (this.indiceActual >= this.totalReportes) {
+      this.todosCargados = true;
+    }
 
   }
 
@@ -260,32 +358,12 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
       this.reportePeliculasSalaService.reportesSalasPeliculaSinFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual).subscribe({
         next: (response: ReporteSalaPeliculaProyectadaDTO[]) => {
-
-          if (!response || response.length === 0) {
-            this.todosCargados = true;
-            return;
-          }
-
-          this.reportesMostrados.push(...response);
-          this.indiceActual += response.length;
-
-          if (this.indiceActual >= this.totalReportes) {
-            this.todosCargados = true;
-          }
-
+          this.ampliarResultados(response);
 
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+          this.mostrarError(error);
 
         }
       });
@@ -304,32 +382,11 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
       this.reportePeliculasSalaService.reportesSalasPeliculaConFiltro(fechaInicioISO, fechaFinISO, this.cantidadPorCarga, this.indiceActual, idSala).subscribe({
         next: (response: ReporteSalaPeliculaProyectadaDTO[]) => {
 
-          if (!response || response.length === 0) {
-            this.todosCargados = true;
-            return;
-          }
-
-          this.reportesMostrados.push(...response);
-          this.indiceActual += response.length;
-
-          if (this.indiceActual >= this.totalReportes) {
-            this.todosCargados = true;
-          }
-
-
+        this.ampliarResultados(response);
         },
         error: (error: any) => {
 
-          let mensaje = 'Ocurrió un error';
-
-          if (error.error && error.error.mensaje) {
-            mensaje = error.error.mensaje;
-          } else if (error.message) {
-            mensaje = error.message;
-          }
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
-
+          this.mostrarError(error);
         }
       });
 
