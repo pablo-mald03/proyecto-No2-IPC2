@@ -4,9 +4,10 @@
 
         <div class="card-header-reporte p-3 d-flex justify-content-between align-items-center">
             <div>
-                <h3 class="fw-bold text-warning mb-1">{{ reporteBoletos.nombre }}</h3>
-                <h5 class="text-white mb-2">{{ reporteBoletos.cineAsociado }}</h5>
-                <p class="text-info mb-0"><i class="bi bi-geo-alt-fill"></i> {{ reporteBoletos.ubicacion }}</p>
+                <h2 class="fw-bold text-warning mb-3">{{ reporteBoletos.nombre }}</h2>
+                <h3 class="text-info mb-3">ID: {{ reporteBoletos.codigo }}</h3>
+                <h3 class="text-white mb-3">{{ reporteBoletos.cineAsociado }}</h3>
+                <h5 class="text-info mb-4"><i class="bi bi-geo-alt-fill"></i> {{ reporteBoletos.ubicacion }}</h5>
             </div>
             <div class="text-end">
                 <span class="badge bg-success px-3 py-2 fs-6">

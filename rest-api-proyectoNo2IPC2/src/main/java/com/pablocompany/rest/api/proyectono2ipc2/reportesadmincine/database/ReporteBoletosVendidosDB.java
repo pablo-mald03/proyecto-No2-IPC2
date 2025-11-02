@@ -31,10 +31,10 @@ public class ReporteBoletosVendidosDB {
     private final String REPORTE_BOLETOS = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.ubicacion, COUNT(pb.numero) AS `totalBoletosVendidos`, SUM(pb.monto) AS `totalRecaudado` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ORDER BY totalRecaudado DESC LIMIT ? OFFSET ?";
 
     //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha
-    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion";
+    private final String CANTIDAD_REPORTES = "SELECT COUNT(*) AS cantidad FROM ( SELECT sa.codigo FROM sala AS sa JOIN cine AS ci ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS pb ON sa.codigo = pb.codigo_sala WHERE pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ) AS conteo";
 
     //Constante que permite obtener el conteo de cantidad de reportes que hay en base a una fecha con filtro por sala de cine
-    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS `cantidad` FROM sala AS `sa` JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala WHERE sa.codigo = ? AND pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion";
+    private final String CANTIDAD_REPORTES_FILTRO = "SELECT COUNT(*) AS cantidad FROM ( SELECT sa.codigo FROM sala AS sa JOIN cine AS ci ON sa.codigo_cine = ci.codigo JOIN pago_boleto AS pb ON sa.codigo = pb.codigo_sala WHERE sa.codigo = ? AND pb.fecha_pago BETWEEN ? AND ? GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion ) AS conteo";
 
     //Constante que permite obtener el reporte de los boletos que ha comprado el usuario
     private final String USUARIOS_SALA = "SELECT u.id AS `idUsuario`, u.nombre, COUNT(pb.numero) AS `boletosComprados`, SUM(pb.monto) AS `totalPagado`  FROM sala AS `sa` JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala JOIN usuario AS `u` ON pb.id_usuario = u.id WHERE sa.codigo =  ? AND  pb.fecha_pago BETWEEN ? AND ? GROUP  BY  u.id, u.nombre ORDER BY totalPagado DESC";
@@ -57,7 +57,7 @@ public class ReporteBoletosVendidosDB {
                 return result.getInt("cantidad");
             } else {
 
-                throw new DatosNoEncontradosException("No hay registros de reportes de 5 salas mas gustadas");
+                throw new DatosNoEncontradosException("No hay registros de reportes de boletos comprados en salas de cine sin filtros");
             }
 
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class ReporteBoletosVendidosDB {
                 return result.getInt("cantidad");
             } else {
 
-                throw new DatosNoEncontradosException("No hay registros de reportes de 5 salas mas gustadas");
+                throw new DatosNoEncontradosException("No hay registros de reportes de boletos comprados en salas de cine con filtros");
             }
 
         } catch (SQLException e) {
