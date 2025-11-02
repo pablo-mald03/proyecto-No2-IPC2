@@ -2,7 +2,7 @@ export interface UsuarioBoletosCompradosDTO{
 
     idUsuario: string,
     nombre: string,
-    boletosComprados: string,
+    boletosComprados: number,
     totalPagado: number,
 
 }

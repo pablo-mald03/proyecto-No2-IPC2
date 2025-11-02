@@ -54,9 +54,9 @@ export class ReporteBoletosVendidosComponent implements OnInit {
         ubicacion: 'Zona 10, Guatemala',
         total: 1250.50,
         usuarios: [
-          { idUsuario: 'USR-101', nombre: 'María López', boletosComprados: '4', totalPagado: 200 },
-          { idUsuario: 'USR-102', nombre: 'Carlos Pérez', boletosComprados: '3', totalPagado: 150 },
-          { idUsuario: 'USR-103', nombre: 'Ana García', boletosComprados: '5', totalPagado: 250 },
+          { idUsuario: 'USR-101', nombre: 'María López', boletosComprados: 4, totalPagado: 200 },
+          { idUsuario: 'USR-102', nombre: 'Carlos Pérez', boletosComprados: 3, totalPagado: 150 },
+          { idUsuario: 'USR-103', nombre: 'Ana García', boletosComprados: 5, totalPagado: 250 },
         ],
       },
       {
@@ -66,8 +66,8 @@ export class ReporteBoletosVendidosComponent implements OnInit {
         ubicacion: 'Zona 1, Guatemala',
         total: 890.75,
         usuarios: [
-          { idUsuario: 'USR-201', nombre: 'Luis Ramírez', boletosComprados: '2', totalPagado: 100 },
-          { idUsuario: 'USR-202', nombre: 'Sofía Méndez', boletosComprados: '6', totalPagado: 300 },
+          { idUsuario: 'USR-201', nombre: 'Luis Ramírez', boletosComprados: 2, totalPagado: 100 },
+          { idUsuario: 'USR-202', nombre: 'Sofía Méndez', boletosComprados: 6, totalPagado: 300 },
         ],
       },
     ];
