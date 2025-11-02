@@ -85,7 +85,7 @@ public class ReportePeliculaService {
     }
 
     //Metodo que sirve para retornar la cantidad de reportes sin filtro
-    public CantidadReportesDTO cantidadReportesSinFIltro(String fechaInicio, String fechaFin) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public CantidadReportesDTO cantidadReportesSinFiltro(String fechaInicio, String fechaFin) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         if (StringUtils.isBlank(fechaInicio)) {
             throw new FormatoInvalidoException("La fecha de inicio esta vacia");

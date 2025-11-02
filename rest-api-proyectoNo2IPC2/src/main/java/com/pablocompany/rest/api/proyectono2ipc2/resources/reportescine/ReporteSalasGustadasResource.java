@@ -8,8 +8,8 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalaPeliculaProyectadaDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReportePeliculaService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -23,25 +23,25 @@ import java.util.Map;
  *
  * @author pablo
  */
-@Path("reportes/peliculas/proyectadas")
-public class ReportePeliculasProyectadasResource {
+@Path("reportes/salas/gustadas")
+public class ReporteSalasGustadasResource {
 
-    //Endpoint que permite obtener las peliculas proyectadas sin filtro
+    //Endpoint que permite obtener las 5 salas mas gustadas sin filtro
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reportePeliculasSinFiltro(
+    public Response reporteSalasGustadasSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
-            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-            return Response.ok(reportePeliculaProyectadaDTO).build();
+            return Response.ok(reporteSalasGustadasDto).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
@@ -51,19 +51,19 @@ public class ReportePeliculasProyectadasResource {
 
     }
 
-    //Enpoint que permite obtener la cantidad de peliculas proyectadas sin filtro
+    //Enpoint que permite obtener la cantidad de salas mas gustadas sin filtro
     @GET
     @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadPeliculasSinFiltro(
+    public Response cantidadSalasSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
+        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesSinFiltro(fechaInicio, fechaFin);
+            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
@@ -75,23 +75,23 @@ public class ReportePeliculasProyectadasResource {
         }
     }
 
-    //Endpoint que permite obtener las peliculas proyectadas con filtro
+    //Endpoint que permite obtener la cantidad de salas mas gustadas con filtro 
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reportePeliculasConFiltro(
+    public Response reporteSalasGustadasFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio,
             @PathParam("idSala") String idSala) {
 
-        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
-            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaConFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
+            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerreporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
 
-            return Response.ok(reportePeliculaProyectadaDTO).build();
+            return Response.ok(reporteSalasGustadasDto).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
@@ -101,20 +101,20 @@ public class ReportePeliculasProyectadasResource {
 
     }
 
-    //Enpoint que permite obtener la cantidad de peliculas proyectadas con filtro
+    //Enpoint que permite obtener la cantidad de salas mas gustadas con filtro
     @GET
     @Path("/cantidad/filtro/{idSala}/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadPeliculasConFiltro(
+    public Response cantidadsalasConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idSala") String idSala) {
 
-        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
+        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
+            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
