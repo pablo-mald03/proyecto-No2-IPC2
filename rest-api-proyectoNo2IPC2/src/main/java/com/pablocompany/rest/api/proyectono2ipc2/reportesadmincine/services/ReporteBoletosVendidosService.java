@@ -29,14 +29,15 @@ public class ReporteBoletosVendidosService {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
+        ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+
+        //Retorna todo el listado 
+        if (reporteRequest.estaVacia()) {
+            return reporteBoletosVendidosDb.obtenerReporteTodoBoletodVendidos(reporteRequest);
+        }
+
         if (reporteRequest.validarRequest()) {
 
-            if (reporteRequest.getOffset() >= 5) {
-                reporteRequest.setLimit(5);
-                reporteRequest.setOffset(0);
-            }
-
-            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
             return reporteBoletosVendidosDb.obtenerReporteBoletodVendidos(reporteRequest);
         }
 
@@ -70,6 +71,12 @@ public class ReporteBoletosVendidosService {
             throw new FormatoInvalidoException("El limite inferior de la peticion no es numerico");
         }
 
+        if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+            return new ReporteRequest(
+                    Integer.parseInt(offset),
+                    Integer.parseInt(limit));
+        }
+
         try {
             // Parsear a formato ISO (yyyy-MM-dd)
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
@@ -101,12 +108,23 @@ public class ReporteBoletosVendidosService {
         }
 
         try {
+
+            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+
+                int cantidad = reporteBoletosVendidosDb.cantidadReportesTodoSinFiltro(reporteTodoRequest);
+
+                return new CantidadReportesDTO(cantidad);
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteRequest = new ReporteRequest(inicio, fin, 0, 0);
-
-            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
 
             if (reporteRequest.validarRequest()) {
 
@@ -136,9 +154,15 @@ public class ReporteBoletosVendidosService {
 
         reporteRequest.setIdSala(idSala.trim());
 
+        ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+
+        //Retorna todo el listado 
+        if (reporteRequest.estaVacia() && reporteRequest.validarVacio()) {
+            return reporteBoletosVendidosDb.obtenerReporteTodoBoletosVendidosFiltro(reporteRequest);
+        }
+
         if (reporteRequest.validarRequest()) {
 
-            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
             return reporteBoletosVendidosDb.obtenerReporteBoletosVendidosFiltro(reporteRequest);
         }
 
@@ -157,14 +181,28 @@ public class ReporteBoletosVendidosService {
         }
 
         try {
+
+            ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+                reporteTodoRequest.setIdSala(idSala);
+
+                if (reporteTodoRequest.validarVacio()) {
+                    int cantidad = reporteBoletosVendidosDb.cantidadReportesTodoFiltro(reporteTodoRequest);
+
+                    return new CantidadReportesDTO(cantidad);
+                }
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteRequest = new ReporteRequest(idSala, inicio, fin, 0, 0);
 
             if (reporteRequest.validarRequestFiltro()) {
-
-                ReporteBoletosVendidosDB reporteBoletosVendidosDb = new ReporteBoletosVendidosDB();
 
                 int cantidad = reporteBoletosVendidosDb.cantidadReportesFiltro(reporteRequest);
 
