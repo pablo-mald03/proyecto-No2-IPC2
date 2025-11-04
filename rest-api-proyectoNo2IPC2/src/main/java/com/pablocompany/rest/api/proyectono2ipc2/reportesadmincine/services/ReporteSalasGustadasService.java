@@ -23,20 +23,26 @@ import org.apache.commons.lang3.StringUtils;
  */
 //Clase delegada para poder generar los reportes de las 5 salas mas gustadas (EN BASE A LA CALIFICACION)
 public class ReporteSalasGustadasService {
-    
+
     //Metodo utilizado para poder retornar la cantidad de salas de cine con peliculas en un intervalo de tiempo SIN FILTRO
     public List<ReporteSalasGustadasDTO> obtenerReporteSalaGustadaSinFiltro(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
-        if (reporteRequest.validarRequest()) {
-            
-            if(reporteRequest.getOffset() >= 5){
-                reporteRequest.setLimit(5);
-                reporteRequest.setOffset(0);
-            }
+        ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
 
-            ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
+        if (reporteRequest.getOffset() >= 5) {
+            reporteRequest.setLimit(5);
+            reporteRequest.setOffset(0);
+        }
+
+        //Retorna todo el listado 
+        if (reporteRequest.estaVacia()) {
+            return reporteSalasGustadasDb.obtenerReporteTodasSalasGustadas(reporteRequest);
+        }
+
+        if (reporteRequest.validarRequest()) {
+
             return reporteSalasGustadasDb.obtenerReporteSalasGustadas(reporteRequest);
         }
 
@@ -47,11 +53,11 @@ public class ReporteSalasGustadasService {
     private ReporteRequest extraerDatosReporte(String fechaInicio, String fechaFin, String limit, String offset) throws FormatoInvalidoException {
 
         if (StringUtils.isBlank(fechaInicio)) {
-            throw new FormatoInvalidoException("La fecha de inicio esta vacia");
+            throw new FormatoInvalidoException("La fecha de inicio no ha especificado ningun parametro");
         }
 
         if (StringUtils.isBlank(fechaFin)) {
-            throw new FormatoInvalidoException("La fecha final esta vacia");
+            throw new FormatoInvalidoException("La fecha final no ha especificado ningun parametro");
         }
 
         if (StringUtils.isBlank(limit)) {
@@ -68,6 +74,12 @@ public class ReporteSalasGustadasService {
 
         if (!StringUtils.isNumeric(offset)) {
             throw new FormatoInvalidoException("El limite inferior de la peticion no es numerico");
+        }
+
+        if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+            return new ReporteRequest(
+                    Integer.parseInt(offset),
+                    Integer.parseInt(limit));
         }
 
         try {
@@ -101,12 +113,23 @@ public class ReporteSalasGustadasService {
         }
 
         try {
+
+            ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+
+                int cantidad = reporteSalasGustadasDb.cantidadTodosReportesSinFiltro(reporteTodoRequest);
+
+                return new CantidadReportesDTO(cantidad);
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteRequest = new ReporteRequest(inicio, fin, 0, 0);
-
-            ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
 
             if (reporteRequest.validarRequest()) {
 
@@ -136,9 +159,15 @@ public class ReporteSalasGustadasService {
 
         reporteRequest.setIdSala(idSala.trim());
 
+        ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
+        
+        //Retorna todo el listado 
+        if (reporteRequest.estaVacia() && reporteRequest.validarVacio()) {
+            return reporteSalasGustadasDb.obtenerReporteTodasSalasGustadasFiltro(reporteRequest);
+        }
+
         if (reporteRequest.validarRequestFiltro()) {
 
-            ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
             return reporteSalasGustadasDb.obtenerReporteSalasGustadasFiltro(reporteRequest);
         }
 
@@ -157,15 +186,28 @@ public class ReporteSalasGustadasService {
         }
 
         try {
+
+            ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+                reporteTodoRequest.setIdSala(idSala);
+
+                if (reporteTodoRequest.validarVacio()) {
+                    int cantidad = reporteSalasGustadasDb.cantidadTodosReportesFiltro(reporteTodoRequest);
+
+                    return new CantidadReportesDTO(cantidad);
+                }
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
-
 
             ReporteRequest reporteRequest = new ReporteRequest(idSala, inicio, fin, 0, 0);
 
             if (reporteRequest.validarRequestFiltro()) {
-
-                ReporteSalasGustadasDB reporteSalasGustadasDb = new ReporteSalasGustadasDB();
 
                 int cantidad = reporteSalasGustadasDb.cantidadReportesFiltro(reporteRequest);
 
@@ -181,7 +223,5 @@ public class ReporteSalasGustadasService {
 
         throw new ErrorInesperadoException("No se pudo obtener la cantidad de 5 salas mas gustadas con filtro.");
     }
-    
-    
-    
+
 }

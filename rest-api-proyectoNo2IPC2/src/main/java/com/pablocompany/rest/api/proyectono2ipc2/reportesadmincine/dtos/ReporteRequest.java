@@ -23,12 +23,16 @@ public class ReporteRequest {
     private int offset;
     private int limit;
 
+    //Flag que permite saber si la sentencia esta vacia 
+    private boolean estaVacia;
+
     //String utilizado sin el filtro
     public ReporteRequest(LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.offset = offset;
         this.limit = limit;
+        this.estaVacia = false;
     }
 
     //Constructor utilizado para el filtro
@@ -38,10 +42,24 @@ public class ReporteRequest {
         this.fechaFin = fechaFin;
         this.offset = offset;
         this.limit = limit;
+        this.estaVacia = false;
     }
-    
-    
-   
+
+    //Constructor utilizado simplemente para poder instanciar el request vacio 
+    public ReporteRequest(int offset, int limit) {
+        this.offset = offset;
+        this.limit = limit;
+        this.estaVacia = true;
+    }
+
+    public boolean estaVacia() {
+        return estaVacia;
+    }
+
+    public void setEstaVacia(boolean estaVacia) {
+        this.estaVacia = estaVacia;
+    }
+
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -81,7 +99,6 @@ public class ReporteRequest {
     public void setIdSala(String idSala) {
         this.idSala = idSala;
     }
-    
 
     //Metodo delegado para poder validar el request
     public boolean validarRequest() throws FormatoInvalidoException {
@@ -110,7 +127,7 @@ public class ReporteRequest {
         }
 
     }
-    
+
     //Metodo que sirve para validar cuando hay filtro
     public boolean validarRequestFiltro() throws FormatoInvalidoException {
 
@@ -130,8 +147,8 @@ public class ReporteRequest {
             if (fechaInicio.isAfter(fechaFin)) {
                 throw new FormatoInvalidoException("La fecha de inicio no puede ser posterior a la fecha de fin.");
             }
-            
-            if(StringUtils.isEmpty(this.idSala)){
+
+            if (StringUtils.isEmpty(this.idSala)) {
                 throw new FormatoInvalidoException("El id de la sala esta vacio");
             }
 
@@ -140,6 +157,17 @@ public class ReporteRequest {
         } catch (Exception e) {
             throw new FormatoInvalidoException("No se ha podido procesar la informacion enviada.");
         }
+
+    }
+
+    //Metodo que permite validar cuando se construye un request vacio pero con id
+    public boolean validarVacio() throws FormatoInvalidoException {
+
+        if (StringUtils.isEmpty(this.idSala)) {
+            throw new FormatoInvalidoException("El id de la sala esta vacio");
+        }
+
+        return true;
 
     }
 
