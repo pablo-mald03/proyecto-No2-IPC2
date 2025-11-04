@@ -11,18 +11,18 @@ package com.pablocompany.rest.api.proyectono2ipc2.billetera.dtos;
 //Clase delegada para poderse procesar en el request
 public class BilleteraDigitalRequest {
 
-    private double saldo;
+    private String saldo;
     private String idUsuario;
 
     public BilleteraDigitalRequest() {
 
     }
 
-    public double getSaldo() {
+    public String getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public void setSaldo(String saldo) {
         this.saldo = saldo;
     }
 

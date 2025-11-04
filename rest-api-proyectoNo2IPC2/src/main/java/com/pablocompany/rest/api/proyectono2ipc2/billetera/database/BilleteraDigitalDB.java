@@ -10,9 +10,6 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.CambioCredencialesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.DatosUsuario;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
