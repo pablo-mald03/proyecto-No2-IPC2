@@ -29,9 +29,14 @@ public class ReportePeliculaService {
 
         ReporteRequest reporteRequest = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
+        ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
+
+        if (reporteRequest.estaVacia()) {
+            return reporteSalaCineDb.obtenerTodoReportePeliculas(reporteRequest);
+        }
+
         if (reporteRequest.validarRequest()) {
 
-            ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
             return reporteSalaCineDb.obtenerReportePeliculas(reporteRequest);
         }
 
@@ -65,6 +70,12 @@ public class ReportePeliculaService {
             throw new FormatoInvalidoException("El limite inferior de la peticion no es numerico");
         }
 
+        if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+            return new ReporteRequest(
+                    Integer.parseInt(offset),
+                    Integer.parseInt(limit));
+        }
+
         try {
             // Parsear a formato ISO (yyyy-MM-dd)
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
@@ -96,12 +107,23 @@ public class ReportePeliculaService {
         }
 
         try {
+
+            ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+
+                int cantidad = reportePeliculasDb.cantidadTodoReportesSinFiltro(reporteTodoRequest);
+
+                return new CantidadReportesDTO(cantidad);
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteRequest = new ReporteRequest(inicio, fin, 0, 0);
-
-            ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
 
             if (reporteRequest.validarRequest()) {
 
@@ -131,9 +153,15 @@ public class ReportePeliculaService {
 
         reporteRequest.setIdSala(idSala.trim());
 
+        ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
+
+        //Retorna todo el listado 
+        if (reporteRequest.estaVacia() && reporteRequest.validarVacio()) {
+            return reporteSalaCineDb.obtenerReporteTodoPeliculasFiltro(reporteRequest);
+        }
+
         if (reporteRequest.validarRequest()) {
 
-            ReportePeliculasDB reporteSalaCineDb = new ReportePeliculasDB();
             return reporteSalaCineDb.obtenerReportePeliculasFiltro(reporteRequest);
         }
 
@@ -152,14 +180,28 @@ public class ReportePeliculaService {
         }
 
         try {
+
+            ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+                reporteTodoRequest.setIdSala(idSala);
+
+                if (reporteTodoRequest.validarVacio()) {
+                    int cantidad = reportePeliculasDb.cantidadTodoReportesFiltro(reporteTodoRequest);
+
+                    return new CantidadReportesDTO(cantidad);
+                }
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteRequest = new ReporteRequest(idSala, inicio, fin, 0, 0);
 
             if (reporteRequest.validarRequestFiltro()) {
-
-                ReportePeliculasDB reportePeliculasDb = new ReportePeliculasDB();
 
                 int cantidad = reportePeliculasDb.cantidadReportesFiltro(reporteRequest);
 
