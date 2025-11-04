@@ -109,12 +109,15 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    if (!fechaInicio || !fechaFin) return;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
 
-    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
-    const finISO = new Date(fechaFin).toISOString().split('T')[0];
-
-    if (!inicioISO || !finISO) return;
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
 
 
     if (!this.estaFiltrado) {
@@ -141,7 +144,9 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
       const { idSala } = this.filtroSalaForm.value;
 
-      if (idSala == null || idSala == '') {
+      if (!idSala || idSala.trim() === '') {
+        const mensaje = 'No puedes dejar vacío el campo de id de la sala';
+        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
         return;
       }
 
@@ -190,10 +195,16 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : null;
-    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : null;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
 
-    if (!inicioISO || !finISO) return;
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
+
 
     if (this.estaFiltrado) {
       this.limpiarSala();
@@ -224,10 +235,15 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    if (!fechaInicio || !fechaFin) return;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
 
-    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
-    const finISO = new Date(fechaFin).toISOString().split('T')[0];
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
 
     this.cargarMasReportes(inicioISO, finISO);
 
@@ -260,16 +276,21 @@ export class ReportePeliculasProyectadasComponent implements OnInit {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;
 
-    if (!fechaInicio || !fechaFin) return;
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
 
-    const inicioISO = new Date(fechaInicio).toISOString().split('T')[0];
-    const finISO = new Date(fechaFin).toISOString().split('T')[0];
-
-    if (!inicioISO || !finISO) return;
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
 
     const { idSala } = this.filtroSalaForm.value;
 
-    if (idSala == null || idSala == '') {
+    if (!idSala || idSala.trim() === '') {
+      const mensaje = 'No puedes dejar vacío el campo de id de la sala';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
       return;
     }
 
