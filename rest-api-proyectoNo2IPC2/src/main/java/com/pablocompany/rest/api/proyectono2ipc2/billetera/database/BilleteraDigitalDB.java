@@ -35,7 +35,7 @@ public class BilleteraDigitalDB {
     private final String RECARGAR_BILLETERA = "UPDATE billetera_digital SET  saldo = ? WHERE id_usuario = ?";
 
     //Metodo delegado para poder reestablecer/cambiar la password del usuario
-    public boolean recargarBilletera(BilleteraDigital billeteraDigital) throws ErrorInesperadoException, FormatoInvalidoException {
+    public boolean recargarBilletera(BilleteraDigital billeteraDigital, double saldoActual) throws ErrorInesperadoException, FormatoInvalidoException {
 
         if (billeteraDigital == null) {
             throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre la transaccion");
@@ -46,7 +46,9 @@ public class BilleteraDigitalDB {
         try (PreparedStatement preparedStmt = conexion.prepareStatement(RECARGAR_BILLETERA);) {
 
             conexion.setAutoCommit(false);
-            preparedStmt.setBigDecimal(1, new BigDecimal(billeteraDigital.getSaldo()));
+
+            double saldoActualizado = billeteraDigital.getSaldo() + saldoActual;
+            preparedStmt.setBigDecimal(1, new BigDecimal(saldoActualizado));
             preparedStmt.setString(2, billeteraDigital.getIdUsuario());
 
             int filasAfectadas = preparedStmt.executeUpdate();

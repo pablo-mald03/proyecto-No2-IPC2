@@ -37,3 +37,10 @@
         <div class="mensaje" *ngIf="mensaje">{{ mensaje }}</div>
     </section>
 </main>
+
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>

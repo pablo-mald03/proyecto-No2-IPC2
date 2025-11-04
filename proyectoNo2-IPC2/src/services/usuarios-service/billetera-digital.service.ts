@@ -20,4 +20,8 @@ export class BilleteraDigitalService {
         return this.httpClient.get<SaldoBilleteraDTO>(`${this.restConstants.getApiURL()}billetera/${id}`);
     }
 
+    //Endpoint utilizado para poder recargar el saldo nuevo de la cuenta 
+    public recargarSaldo(saldo: BilleteraDigital): Observable<void> {
+        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}billetera`, saldo);
+    }
 }

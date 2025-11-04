@@ -6,12 +6,15 @@ import { BilleteraDigital } from '../../models/usuarios/billetera-digital';
 import { BilleteraDigitalService } from '../../services/usuarios-service/billetera-digital.service';
 import { SaldoBilleteraDTO } from '../../models/usuarios/saldo-billetera-dto';
 import { UserLoggedDTO } from '../../models/usuarios/user-logged-dto';
+import { Popup } from '../../shared/popup/popup';
+import { SharedPopupComponent } from '../pop-ups/shared-popup.component/shared-popup.component';
 
 @Component({
   selector: 'app-billetera-digital',
-  imports: [NgIf, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [NgIf, FormsModule, ReactiveFormsModule, CommonModule, SharedPopupComponent],
   templateUrl: './billetera-digital.component.html',
-  styleUrl: './billetera-digital.component.scss'
+  styleUrl: './billetera-digital.component.scss',
+  providers: [Popup],
 })
 export class BilleteraDigitalComponent implements OnInit {
 
@@ -22,10 +25,18 @@ export class BilleteraDigitalComponent implements OnInit {
   saldoActual: number | null = null;
 
 
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private billeteraService: BilleteraDigitalService,
+    private popUp: Popup,
   ) { }
 
   //Inicializa el formulario
@@ -42,14 +53,32 @@ export class BilleteraDigitalComponent implements OnInit {
       ]
     });
 
-    // === Recuperar usuario del localStorage ===
+    this.popUp.popup$.subscribe(data => {
+      // Se actualiza el contenido del popup
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      this.mostrarPopup = false;
+
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
+      }
+    });
+
     const usuarioStr = localStorage.getItem('angularUserCinema');
     if (!usuarioStr) {
       this.router.navigateByUrl('/login');
       return;
     }
 
-   const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
+    const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
     this.idUsuario = usuario.id;
 
     this.obtenerSaldoActual();
@@ -67,18 +96,25 @@ export class BilleteraDigitalComponent implements OnInit {
       },
       error: (error: any) => {
 
-        /*let mensaje = 'Ocurrió un error';
-
-        if (error.error && error.error.mensaje) {
-          mensaje = error.error.mensaje;
-        } else if (error.message) {
-          mensaje = error.message;
-        }
-
-        this.popUp.mostrarPopup({ mensaje, tipo: 'error' });*/
+        this.mostrarError(error);
 
       }
     });
+
+  }
+
+  //Metodo que muestra el mensaje de error
+  mostrarError(error: any): void {
+
+    let mensaje = 'Ocurrió un error';
+
+    if (error.error && error.error.mensaje) {
+      mensaje = error.error.mensaje;
+    } else if (error.message) {
+      mensaje = error.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
 
   }
 
@@ -100,26 +136,28 @@ export class BilleteraDigitalComponent implements OnInit {
       return;
     }
 
-    const usuario = JSON.parse(usuarioStr);
+    const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
     const request: BilleteraDigital = {
       saldo: Number(this.saldo?.value),
-      idUsuario: usuario.idUsuario
+      idUsuario: usuario.id
     };
 
     this.cargando = true;
     this.mensaje = '';
 
-    /*this.http.post('/api/billetera/recargar', request).subscribe({
-      next: () => {
-        this.mensaje = 'Recarga realizada con éxito.';
+    this.billeteraService.recargarSaldo(request).subscribe({
+      next: (response: any) => {
+        let mensaje = 'Recarga realizada con exito';
+        this.popUp.mostrarPopup({ mensaje, tipo: 'exito' });
         this.cargando = false;
+        this.obtenerSaldoActual();
         this.formRecarga.reset();
       },
-      error: (err) => {
-        console.error(err);
+      error: (err: any) => {
+        this.mostrarError(err);
         this.cargando = false;
       }
-    });*/
+    });
   }
 
 }

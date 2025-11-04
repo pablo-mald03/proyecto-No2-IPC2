@@ -33,13 +33,15 @@ public class BilleteraDigitalCrudService {
     }
 
     //Metodo que permite recargar el saldo de la cuenta de la billetera digital del usuario
-    public boolean recargarBilletera(BilleteraDigitalRequest billeteraRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+    public boolean recargarBilletera(BilleteraDigitalRequest billeteraRequest) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         BilleteraDigital billeteraDigital = extraerDatos(billeteraRequest);
         
         BilleteraDigitalDB billeteraDigitalDb = new BilleteraDigitalDB();
         
-        return billeteraDigitalDb.recargarBilletera(billeteraDigital);
+        double dineroActual = billeteraDigitalDb.obtenerSaldoActual(billeteraDigital.getIdUsuario()).getSaldo();
+        
+        return billeteraDigitalDb.recargarBilletera(billeteraDigital, dineroActual);
 
     }
 
@@ -54,8 +56,8 @@ public class BilleteraDigitalCrudService {
             throw new FormatoInvalidoException("El saldo a recargar no fue especificado");
         }
 
-        if (!StringUtils.isNumeric(billeteraRequest.getSaldo())) {
-            throw new FormatoInvalidoException("El saldo a recargar no es numerico");
+        if (StringUtils.isBlank(billeteraRequest.getSaldo())) {
+            throw new FormatoInvalidoException("El saldo a recargar esta vacio");
         }
         
         try {

@@ -57,7 +57,7 @@ public class BilleteraDigitalResource {
 
             if (billeteraDigitalCrudService.recargarBilletera(request)) {
 
-                return Response.ok(Response.ok()).build();
+                return Response.ok().build();
             } else {
                 throw new ErrorInesperadoException("No se ha podido generar la transaccion");
             }
@@ -66,6 +66,8 @@ public class BilleteraDigitalResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (ErrorInesperadoException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }
