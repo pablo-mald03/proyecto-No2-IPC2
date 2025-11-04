@@ -4,14 +4,13 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.usuarios.services;
 
+import com.pablocompany.rest.api.proyectono2ipc2.billetera.models.BilleteraDigital;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
-import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadNoExistenteException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.database.RolDB;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.database.UsuarioDB;
-import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UsuarioDatosResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.DatosUsuario;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.TipoUsuarioEnum;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
@@ -47,8 +46,8 @@ public class UsuarioCrudService {
                 }
 
                 if (!usuarioDb.exiteUsuario(usuarioNuevo)) {
-
-                    return usuarioDb.insertarUsuario(usuarioNuevo, fotoPerfil, codigoRol);
+                    BilleteraDigital billetera = new BilleteraDigital(0, usuarioNuevo.getId());
+                    return usuarioDb.insertarUsuario(usuarioNuevo, fotoPerfil, codigoRol, billetera);
                 }
 
             } catch (IllegalArgumentException e) {

@@ -1,0 +1,39 @@
+<main class="recarga-wrapper">
+    <section class="recarga-container">
+        <h2 class="titulo1 fw-bold">Billetera Digital</h2>
+
+        <div class="saldo-card" *ngIf="saldoActual !== null; else cargandoSaldo">
+            <p class="saldo-label">Tu saldo actual:</p>
+            <h3 class="saldo-monto">Q{{ saldoActual | number:'1.2-2' }}</h3>
+        </div>
+
+        <ng-template #cargandoSaldo>
+            <div class="saldo-card cargando">
+                <p>Cargando saldo...</p>
+            </div>
+        </ng-template>
+
+        <hr class="divider" />
+
+        <h3 class="titulo2 fw-semibold">Recargar saldo</h3>
+
+        <form [formGroup]="formRecarga" (ngSubmit)="onSubmit()" class="recarga-form">
+            <div class="form-group">
+                <label for="saldo">Monto a recargar:</label>
+                <input type="number" id="saldo" formControlName="saldo" placeholder="Ej: 50.00" step="0.01" min="0" />
+
+                <div class="error" *ngIf="saldo?.invalid && (saldo?.dirty || saldo?.touched)">
+                    <small *ngIf="saldo?.errors?.['required']">El monto es obligatorio.</small>
+                    <small *ngIf="saldo?.errors?.['pattern']">Ingrese un número válido.</small>
+                    <small *ngIf="saldo?.errors?.['min']">Debe ser mayor que 0.</small>
+                </div>
+            </div>
+
+            <button type="submit" [disabled]="formRecarga.invalid || cargando">
+                {{ cargando ? 'Procesando...' : 'Recargar' }}
+            </button>
+        </form>
+
+        <div class="mensaje" *ngIf="mensaje">{{ mensaje }}</div>
+    </section>
+</main>

@@ -1,0 +1,168 @@
+.recarga-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.recarga-container {
+  width: 100%;
+  max-width: 520px;
+  padding: 40px 35px;
+  background: #eed4d4;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  animation: fadeInUp 0.6s ease;
+}
+
+/* Título principal */
+.titulo1 {
+  color: #222;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+/* Título secundario */
+.titulo2 {
+  color: #333;
+  font-size: 1.3rem;
+  margin: 25px 0 10px;
+}
+
+/* Tarjeta de saldo */
+.saldo-card {
+  background: linear-gradient(135deg, #df8b0e, #f2b94a);
+  border-radius: 15px;
+  padding: 25px;
+  color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.saldo-label {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.saldo-monto {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+.saldo-card.cargando {
+  background: #f5f5f5;
+  color: #555;
+  font-weight: 500;
+}
+
+.divider {
+  margin: 15px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.recarga-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+input[type='number'] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 17px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+input[type='number']:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error small {
+  color: #ff3b3b;
+  font-size: 13px;
+  display: block;
+  margin-top: 5px;
+}
+
+.mensaje {
+  margin-top: 20px;
+  font-weight: 500;
+  color: #333;
+  animation: fadeIn 0.4s ease-in;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  color: #666;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

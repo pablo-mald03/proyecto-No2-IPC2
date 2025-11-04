@@ -57,7 +57,7 @@ public class BilleteraDigitalResource {
 
             if (billeteraDigitalCrudService.recargarBilletera(request)) {
 
-                return Response.ok().build();
+                return Response.ok(Response.ok()).build();
             } else {
                 throw new ErrorInesperadoException("No se ha podido generar la transaccion");
             }
