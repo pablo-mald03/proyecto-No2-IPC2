@@ -29,9 +29,15 @@ public class ReporteComentariosSalaService {
 
         ReporteRequest reporteSalasCineComentarios = extraerDatosReporte(fechaInicio, fechaFin, limit, offset);
 
+        ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+
+        //Retorna todo el listado 
+        if (reporteSalasCineComentarios.estaVacia()) {
+            return reporteSalaCineDb.obtenerReporteTodoComentarios(reporteSalasCineComentarios);
+        }
+
         if (reporteSalasCineComentarios.validarRequest()) {
 
-            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
             return reporteSalaCineDb.obtenerReporteComentarios(reporteSalasCineComentarios);
         }
 
@@ -65,6 +71,12 @@ public class ReporteComentariosSalaService {
             throw new FormatoInvalidoException("El limite inferior de la peticion no es numerico");
         }
 
+        if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+            return new ReporteRequest(
+                    Integer.parseInt(offset),
+                    Integer.parseInt(limit));
+        }
+
         try {
             // Parsear a formato ISO (yyyy-MM-dd)
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
@@ -96,12 +108,23 @@ public class ReporteComentariosSalaService {
         }
 
         try {
+
+            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+
+                int cantidad = reporteSalaCineDb.cantidadReportesTodoSinFiltro(reporteTodoRequest);
+
+                return new CantidadReportesDTO(cantidad);
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteSalasCineComentariosRequest = new ReporteRequest(inicio, fin, 0, 0);
-
-            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
 
             int cantidad = reporteSalaCineDb.cantidadReportesSinFiltro(reporteSalasCineComentariosRequest);
             return new CantidadReportesDTO(cantidad);
@@ -130,12 +153,26 @@ public class ReporteComentariosSalaService {
         }
 
         try {
+
+            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+
+            if (fechaInicio.equals("null") && fechaFin.equals("null")) {
+
+                ReporteRequest reporteTodoRequest = new ReporteRequest(0, 0);
+                reporteTodoRequest.setIdSala(idSala);
+
+                if (reporteTodoRequest.validarVacio()) {
+                    int cantidad = reporteSalaCineDb.cantidadReportesTodoFiltro(reporteTodoRequest);
+
+                    return new CantidadReportesDTO(cantidad);
+                }
+
+            }
+
             LocalDate inicio = LocalDate.parse(fechaInicio, DateTimeFormatter.ISO_LOCAL_DATE);
             LocalDate fin = LocalDate.parse(fechaFin, DateTimeFormatter.ISO_LOCAL_DATE);
 
             ReporteRequest reporteSalasCineComentariosRequest = new ReporteRequest(idSala.trim(), inicio, fin, 0, 0);
-
-            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
 
             int cantidad = reporteSalaCineDb.cantidadReportesFiltro(reporteSalasCineComentariosRequest);
             return new CantidadReportesDTO(cantidad);
@@ -157,10 +194,16 @@ public class ReporteComentariosSalaService {
             throw new FormatoInvalidoException("El id de la sala se encuentra vacio");
         }
 
-        reporteRequest.setIdSala(idSala);
+        reporteRequest.setIdSala(idSala.trim());
+
+        ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+
+        if (reporteRequest.estaVacia() && reporteRequest.validarVacio()) {
+            return reporteSalaCineDb.obtenerReporteTodoComentariosFiltro(reporteRequest);
+        }
 
         if (reporteRequest.validarRequestFiltro()) {
-            ReporteSalaCineDB reporteSalaCineDb = new ReporteSalaCineDB();
+
             return reporteSalaCineDb.obtenerReporteComentariosFiltro(reporteRequest);
         }
 
