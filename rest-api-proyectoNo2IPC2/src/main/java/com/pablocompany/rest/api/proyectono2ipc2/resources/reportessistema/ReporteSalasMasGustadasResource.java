@@ -4,13 +4,14 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources.reportessistema;
 
-import com.pablocompany.rest.api.proyectono2ipc2.resources.reportescine.*;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.SalaMasGustadaDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteSalasMasGustadasService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -26,11 +27,8 @@ import java.util.Map;
  */
 @Path("reportes/sistema/salas/gustadas")
 public class ReporteSalasMasGustadasResource {
-    
-    
-    //PENDIENTE=
 
-    //Endpoint que permite obtener las 5 salas mas gustadas sin filtro
+    //Endpoint que permite obtener las 5 salas mas gustadas
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,10 +38,10 @@ public class ReporteSalasMasGustadasResource {
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteSalasMasGustadasService reporteSalasGustadasService = new ReporteSalasMasGustadasService();
 
         try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<SalaMasGustadaDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustada(fechaInicio, fechaFin, limite, inicio);
 
             return Response.ok(reporteSalasGustadasDto).build();
 
@@ -63,62 +61,11 @@ public class ReporteSalasMasGustadasResource {
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
+        ReporteSalasMasGustadasService reporteSalasGustadasService = new ReporteSalasMasGustadasService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
-            return Response.ok(cantidadReportes).build();
-
-        } catch (FormatoInvalidoException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
-        } catch (ErrorInesperadoException ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
-        } catch (DatosNoEncontradosException ex) {
-            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
-        }
-    }
-
-    //Endpoint que permite obtener la sala mas gustadas con filtro 
-    @GET
-    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}/limit/{limite}/offset/{inicio}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteSalasGustadasFiltro(
-            @PathParam("fechaInicio") String fechaInicio,
-            @PathParam("fechaFin") String fechaFin,
-            @PathParam("limite") String limite,
-            @PathParam("inicio") String inicio,
-            @PathParam("idSala") String idSala) {
-
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
-
-        try {
-            List<ReporteSalasGustadasDTO> reporteSalasGustadasDto = reporteSalasGustadasService.obtenerReporteSalaGustadaFiltro(fechaInicio, fechaFin, limite, inicio, idSala);
-
-            return Response.ok(reporteSalasGustadasDto).build();
-
-        } catch (FormatoInvalidoException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
-        } catch (ErrorInesperadoException ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
-        }
-
-    }
-
-    //Enpoint que permite obtener la cantidad de salas mas gustadas con filtro
-    @GET
-    @Path("/cantidad/filtro/{idSala}/inicio/{fechaInicio}/fin/{fechaFin}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadsalasConFiltro(
-            @PathParam("fechaInicio") String fechaInicio,
-            @PathParam("fechaFin") String fechaFin,
-            @PathParam("idSala") String idSala) {
-
-        ReporteSalasGustadasService reporteSalasGustadasService = new ReporteSalasGustadasService();
-
-        try {
-
-            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportesConFiltro(fechaInicio, fechaFin, idSala);
+            CantidadReportesDTO cantidadReportes = reporteSalasGustadasService.cantidadReportes(fechaInicio, fechaFin);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
