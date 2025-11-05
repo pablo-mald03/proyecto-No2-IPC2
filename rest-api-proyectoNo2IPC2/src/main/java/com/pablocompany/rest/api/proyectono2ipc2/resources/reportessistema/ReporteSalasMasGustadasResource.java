@@ -26,6 +26,9 @@ import java.util.Map;
  */
 @Path("reportes/sistema/salas/gustadas")
 public class ReporteSalasMasGustadasResource {
+    
+    
+    //PENDIENTE=
 
     //Endpoint que permite obtener las 5 salas mas gustadas sin filtro
     @GET

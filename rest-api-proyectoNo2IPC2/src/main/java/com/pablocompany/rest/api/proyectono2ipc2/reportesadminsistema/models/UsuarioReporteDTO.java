@@ -12,11 +12,9 @@ package com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models;
 public class UsuarioReporteDTO {
 
     private String id;
-
     private String nombre;
     private String correo;
     private int boletosComprados;
-
     private double totalPagado;
 
     public UsuarioReporteDTO(String id, String nombre, String correo, int boletosComprados, double totalPagado) {

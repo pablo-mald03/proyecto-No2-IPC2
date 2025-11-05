@@ -15,6 +15,7 @@ import java.util.List;
 public class SalaMasGustadaDTO {
 
     private String codigo;
+    private String cineAsociado;
     private String nombre;
     private int filas;
     private int columnas;
@@ -22,8 +23,9 @@ public class SalaMasGustadaDTO {
     private double totalVentasBoleto;
     private List<UsuarioReporteDTO> usuarios;
 
-    public SalaMasGustadaDTO(String codigo, String nombre, int filas, int columnas, String ubicacion, double totalVentasBoleto) {
+    public SalaMasGustadaDTO(String codigo,String cineAsociado, String nombre, int filas, int columnas, String ubicacion, double totalVentasBoleto) {
         this.codigo = codigo;
+        this.cineAsociado = cineAsociado; 
         this.nombre = nombre;
         this.filas = filas;
         this.columnas = columnas;
@@ -32,6 +34,14 @@ public class SalaMasGustadaDTO {
         this.usuarios = new ArrayList<>();
     }
 
+    public String getCineAsociado() {
+        return cineAsociado;
+    }
+
+    public void setCineAsociado(String cineAsociado) {
+        this.cineAsociado = cineAsociado;
+    }
+    
     public String getCodigo() {
         return codigo;
     }
