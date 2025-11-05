@@ -8,8 +8,6 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.SalaMasGustadaDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteSalasMasGustadasService;
 import jakarta.ws.rs.GET;
