@@ -36,65 +36,6 @@ export class ReporteSalasGustadasComponent implements OnInit {
       fechaFin: [null]
     });
 
-    this.reporteSalaGustada = [
-      {
-        codigo: "S001",
-        nombre: "Sala Premium 3D",
-        filas: 12,
-        columnas: 20,
-        ubicacion: "Primer Nivel Interplaza",
-        totalVentasBoleto: 450,
-        usuarios: [
-          {
-            id: "juan-U001",
-            identificacion: "pilininsanotr2",
-            nombre: "Carlos López",
-            correo: "pablomaldonado@mail.com"
-          },
-          {
-            id: "U002",
-            identificacion: "123456789",
-            nombre: "Ana Pérez",
-            correo: "ana.perez@mail.com"
-          },
-          {
-            id: "U003",
-            identificacion: "654987321",
-            nombre: "Luis Martínez",
-            correo: "luis.martinez@mail.com"
-          }
-        ]
-      },
-      {
-        codigo: "S002",
-        nombre: "Sala Adultos 2D",
-        filas: 13,
-        columnas: 15,
-        ubicacion: "Segundo nivel walmart",
-        totalVentasBoleto: 350,
-        usuarios: [
-          {
-            id: "U001",
-            identificacion: "987654321",
-            nombre: "Carlos López",
-            correo: "carlos.lopez@mail.com"
-          },
-          {
-            id: "U002",
-            identificacion: "123456789",
-            nombre: "Ana Pérez",
-            correo: "ana.perez@mail.com"
-          },
-          {
-            id: "U003",
-            identificacion: "654987321",
-            nombre: "Luis Martínez",
-            correo: "luis.martinez@mail.com"
-          }
-        ]
-      }
-    ];
-
 
 
     this.cargarMasReportes();
