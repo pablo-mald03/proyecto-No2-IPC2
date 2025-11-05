@@ -97,6 +97,7 @@ public class AdministradorSistemaResource {
         }
     }
 
+    //Endpoint que permite obtener la cantidad de registros de administraodres de sistema
     @GET
     @Path("/cantidad")
     @Produces(MediaType.APPLICATION_JSON)

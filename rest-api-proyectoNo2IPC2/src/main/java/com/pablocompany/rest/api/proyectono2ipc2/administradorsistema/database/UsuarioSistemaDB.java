@@ -9,8 +9,10 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.database.UsuarioDB;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UsuarioDatosResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.DatosUsuario;
+import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,13 +34,13 @@ public class UsuarioSistemaDB {
     private final String CANTIDAD_ADMINISTRADORES = "SELECT COUNT(*) FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.codigo_rol = ?";
 
     //Metodo delegado para obtener la cantidad de usuarios administradores de cine registrados
-    public int cantidadRegistros(AdministradoresRequest request) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadRegistros(String codigoRol) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_ADMINISTRADORES);) {
 
-            query.setString(1, "3");
+            query.setString(1, codigoRol);
 
             ResultSet result = query.executeQuery();
             if (result.next()) {
@@ -52,9 +54,53 @@ public class UsuarioSistemaDB {
             throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de boletos vendidos Sin filtro" + e.getMessage());
         }
     }
+    
+    
+    //Metodo delegado para poder crear administradores de sistema 
+    public boolean crearAdministrador(Usuario referenciUsuario, byte[] fotoPerfil, String codigoRol) throws ErrorInesperadoException, FormatoInvalidoException{
+        
+        Connection conexion = DBConnectionSingleton.getInstance().getConnection();
+
+        try {
+
+            conexion.setAutoCommit(false);
+
+            UsuarioDB usuarioDb = new UsuarioDB();
+            int filasAfectadas = usuarioDb.crearUsuario(referenciUsuario, fotoPerfil, codigoRol, conexion);
+
+            if (filasAfectadas > 0 ) {
+                conexion.commit();
+                return true;
+
+            } else {
+                conexion.rollback();
+                throw new ErrorInesperadoException("No se ha podido registrar el administrador de sistema. ");
+            }
+
+        } catch (SQLException ex) {
+
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new ErrorInesperadoException("Error al hacer Rollback. Contactar a soporte tecnico al crear el administrador de sistema");
+            }
+
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al crear administrador de sistema.");
+        } finally {
+
+            try {
+
+                conexion.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                System.out.println("Error al reactivar la autoconfirmacion al insertar el administrador. Contactar Soporte tecnico.");
+            }
+        }
+        
+    }
 
     //Metodo que retorna todo el listado de usuarios 
-    public List<UsuarioDatosResponse> obtenerTodos(AdministradoresRequest request) throws ErrorInesperadoException, FormatoInvalidoException {
+    public List<UsuarioDatosResponse> obtenerTodos(AdministradoresRequest request, String codigoRol) throws ErrorInesperadoException, FormatoInvalidoException {
 
         if (request == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -66,7 +112,7 @@ public class UsuarioSistemaDB {
 
         try (PreparedStatement query = connection.prepareStatement(LISTADO_ADMINISTRADORES);) {
 
-            query.setString(1, "3");
+            query.setString(1, codigoRol);
             query.setInt(2, request.getLimit());
             query.setInt(3, request.getOffset());
 

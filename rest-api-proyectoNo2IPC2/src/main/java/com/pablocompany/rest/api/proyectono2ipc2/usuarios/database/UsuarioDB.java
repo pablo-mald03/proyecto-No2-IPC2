@@ -270,7 +270,7 @@ public class UsuarioDB {
     }
 
     //Metodo que sirve para poder generar la transaccion para insertar al usuario y crearle su registro a su bileltera digital
-    private int crearUsuario(Usuario referenciUsuario, byte[] fotoPerfil, String codigoRol, Connection conexion) throws SQLException, FormatoInvalidoException {
+    public int crearUsuario(Usuario referenciUsuario, byte[] fotoPerfil, String codigoRol, Connection conexion) throws SQLException, FormatoInvalidoException {
 
         try (PreparedStatement preparedStmt = conexion.prepareStatement(INSERTAR_USUARIO);) {
 

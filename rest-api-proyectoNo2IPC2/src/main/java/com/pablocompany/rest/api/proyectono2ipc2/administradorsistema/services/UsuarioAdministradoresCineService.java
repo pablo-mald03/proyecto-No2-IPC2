@@ -25,10 +25,12 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author pablo
  */
-//Clase delegada para poder gestionar las interacciones para obtener los datos o crear usuarios desde la api 
-public class UsuariosAdministradoresSistemaService {
+//Clase delegada para poder crear o manejar el servicio de los administradores de cine
+public class UsuarioAdministradoresCineService {
 
-    //Metodo delegado para poder crear los administradores de sistema 
+    //MUY PENDIENTE
+    
+    //Metodo delegado para poder crear los administradores de cine 
     public boolean crearAdministrador(Usuario usuarioNuevo, String confirmPassword) throws EntidadExistenteException, FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         if (usuarioNuevo.esUsuarioValido(confirmPassword, 0)) {
@@ -37,7 +39,7 @@ public class UsuariosAdministradoresSistemaService {
 
             try {
 
-                TipoUsuarioEnum tipoUsuario = TipoUsuarioEnum.ADMINISTRADOR_SISTEMA;
+                TipoUsuarioEnum tipoUsuario = TipoUsuarioEnum.ADMINISTRADOR_CINE;
 
                 String codigoRol = rolDb.obtenerCodigoRol(tipoUsuario);
 
@@ -50,10 +52,8 @@ public class UsuariosAdministradoresSistemaService {
                 }
 
                 if (!usuarioDb.exiteUsuario(usuarioNuevo)) {
-
-                    UsuarioSistemaDB usuarioSistemaDb = new UsuarioSistemaDB();
-
-                    return usuarioSistemaDb.crearAdministrador(usuarioNuevo, fotoPerfil, codigoRol);
+                    BilleteraDigital billetera = new BilleteraDigital(0, usuarioNuevo.getId());
+                    return usuarioDb.insertarUsuario(usuarioNuevo, fotoPerfil, codigoRol, billetera);
                 }
 
             } catch (IllegalArgumentException e) {
@@ -66,16 +66,9 @@ public class UsuariosAdministradoresSistemaService {
 
         throw new ErrorInesperadoException("No se ha podido registrar al administrador de sistema");
     }
-
-    //Metodo delegado para obtener el listado de administradores de sistema
-    public List<UsuarioDatosResponse> obtenerAdministradores(String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
-
-        AdministradoresRequest reporteRequest = extraerDatos(limit, offset);
-
-        UsuarioSistemaDB usuarioSistemaDb = new UsuarioSistemaDB();
-
-        return usuarioSistemaDb.obtenerTodos(reporteRequest, "3");
-    }
+    
+    
+    
 
     //Metodo delegado para poder validar y extraer la solicitud de request
     private AdministradoresRequest extraerDatos(String limit, String offset) throws FormatoInvalidoException {
@@ -110,14 +103,24 @@ public class UsuariosAdministradoresSistemaService {
 
     }
 
-    //Metodo que sirve para retornar la cantidad de usuarios administradores de sistema registrados en el sistema
+    //Metodo delegado para obtener el listado de administradores de cine
+    public List<UsuarioDatosResponse> obtenerAdministradores(String limit, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        AdministradoresRequest reporteRequest = extraerDatos(limit, offset);
+
+        UsuarioSistemaDB usuarioSistemaDb = new UsuarioSistemaDB();
+
+        return usuarioSistemaDb.obtenerTodos(reporteRequest, "4");
+    }
+
+    //Metodo que sirve para retornar la cantidad de usuarios administradores de cine registrados en el sistema
     public CantidadRegistrosDTO cantidadRegistros() throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         try {
 
             UsuarioSistemaDB usuarioSistemaDb = new UsuarioSistemaDB();
 
-            int cantidad = usuarioSistemaDb.cantidadRegistros("3");
+            int cantidad = usuarioSistemaDb.cantidadRegistros("4");
 
             return new CantidadRegistrosDTO(cantidad);
 
@@ -126,4 +129,5 @@ public class UsuariosAdministradoresSistemaService {
         }
 
     }
+
 }
