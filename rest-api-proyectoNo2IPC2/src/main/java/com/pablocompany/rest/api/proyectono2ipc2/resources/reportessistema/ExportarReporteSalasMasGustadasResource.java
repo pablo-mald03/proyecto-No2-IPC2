@@ -6,10 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportessistema;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasGustadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarSalasGustadasService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteSalasGustadasService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.SalaMasGustadaDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarSalasMasGustadasService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteSalasMasGustadasService;
