@@ -32,7 +32,7 @@ public class UsuarioSistemaDB {
     private final String CANTIDAD_ADMINISTRADORES = "SELECT COUNT(*) FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.codigo_rol = ?";
 
     //Metodo delegado para obtener la cantidad de usuarios administradores de cine registrados
-    public int cantidadReportesSinFiltro(AdministradoresRequest request) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadRegistros(AdministradoresRequest request) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
