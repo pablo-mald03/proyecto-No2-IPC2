@@ -32,7 +32,7 @@ import { rolUsuarioGuard } from './guards/rol-usuario-guard';
 import { ReestablecerCredencialesPageComponent } from '../pages/reestablecer-credenciales-page/reestablecer-credenciales-page.component';
 import { VerPerfilComponent } from '../components/usuario-general/ver-perfil/ver-perfil.component';
 import { PrincipalCinesComponent } from '../components/usuario-paginas/principal-cines/principal-cines.component';
-import { BilleteraDigitalComponent } from '../components/billetera-digital.component/billetera-digital.component';
+import { BilleteraDigitalComponent } from '../components/billetera-digital/billetera-digital.component';
 
 
 export const routes: Routes = [

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Usuario } from '../../../models/usuarios/usuario';
+import { UsuarioDatosDTO } from '../../../models/usuarios/usuario-datos-dto';
 
 @Component({
   selector: 'app-admins-sistema-card',
@@ -9,7 +10,7 @@ import { Usuario } from '../../../models/usuarios/usuario';
 })
 export class AdminsSistemaCardComponent {
 
-  @Input() admin!: Usuario;
+  @Input() admin!: UsuarioDatosDTO;
 
   get fotoUrl(): string {
     if (this.admin?.foto) {
@@ -19,10 +20,10 @@ export class AdminsSistemaCardComponent {
   }
 
   get rolNombre(): string {
-    switch (this.admin.codigoRol) {
-      case 'ROL-1':
+    switch (this.admin.rol) {
+      case '3':
         return 'Administrador del Sistema';
-      case 'ROL-2':
+      case '4':
         return 'Administrador de Cine';
       default:
         return 'Usuario';

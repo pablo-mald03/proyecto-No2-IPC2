@@ -31,7 +31,7 @@ public class UsuarioSistemaDB {
     private final String LISTADO_ADMINISTRADORES = "SELECT us.id, us.correo, us.nombre, us.foto, us.telefono, us.pais, us.identificacion, r.nombre AS `rol` FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.codigo_rol = ? LIMIT ? OFFSET ?";
 
     //Constante utilizada para saber la cantidad total de administradores de sistema
-    private final String CANTIDAD_ADMINISTRADORES = "SELECT COUNT(*) FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.codigo_rol = ?";
+    private final String CANTIDAD_ADMINISTRADORES = "SELECT COUNT(*) AS `cantidad` FROM usuario us JOIN rol r  ON us.codigo_rol = r.codigo WHERE us.codigo_rol = ?";
 
     //Metodo delegado para obtener la cantidad de usuarios administradores de cine registrados
     public int cantidadRegistros(String codigoRol) throws ErrorInesperadoException, DatosNoEncontradosException {
@@ -47,11 +47,11 @@ public class UsuarioSistemaDB {
                 return result.getInt("cantidad");
             } else {
 
-                throw new DatosNoEncontradosException("No hay registros de reportes de boletos comprados en salas de cine sin filtros");
+                throw new DatosNoEncontradosException("No hay registros de administradores en el sistema");
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de boletos vendidos Sin filtro" + e.getMessage());
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de administradores en el sistema" );
         }
     }
     

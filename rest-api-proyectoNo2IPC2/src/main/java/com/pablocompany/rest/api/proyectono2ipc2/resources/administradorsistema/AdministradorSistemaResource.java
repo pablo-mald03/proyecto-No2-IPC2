@@ -14,6 +14,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UsuarioDatosRespo
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.models.Usuario;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -33,7 +34,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 public class AdministradorSistemaResource {
 
     //Endpont que comunica al administrador de sistema para poder crear administradores de sistema
-    @GET
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response crearAdministrador(
             @FormDataParam("id") String id,

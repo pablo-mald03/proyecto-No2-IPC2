@@ -2,6 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AdminsSistemaCardComponent } from "../admins-sistema-card/admins-sistema-card.component";
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Usuario } from '../../../models/usuarios/usuario';
+import { UsuarioDatosDTO } from '../../../models/usuarios/usuario-datos-dto';
+import { UsuariosSistemaService } from '../../../services/admin-sistema-service/usuarios-sistema.service';
+import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 
 @Component({
   selector: 'app-admins-req-sistema',
@@ -9,85 +12,91 @@ import { Usuario } from '../../../models/usuarios/usuario';
   templateUrl: './admins-req-sistema.component.html',
   styleUrl: './admins-req-sistema.component.scss'
 })
-export class AdminsReqSistemaComponent implements OnInit{
+export class AdminsReqSistemaComponent implements OnInit {
 
-  administradores: Usuario[] = [];
-  administradoresMostrados: Usuario[] = [];
+  administradores: UsuarioDatosDTO[] = [];
+  administradoresMostrados: UsuarioDatosDTO[] = [];
+
+
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
 
   router = inject(Router);
 
+  constructor(
+
+    private usuariosSistemaService: UsuariosSistemaService,
+
+
+  ) { }
+
+  //Metodo que carga la cantidad de registros al iniciar la pagina 
   ngOnInit(): void {
 
-    this.administradores = [
-      {
-        id: 'carlos-01',
-        correo: 'admin1@cineapp.com',
-        nombre: 'Carlos López',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-1234',
-        pais: 'Guatemala',
-        identificacion: '123456789',
-        codigoRol: 'ROL-1'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-1'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-1'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-1'
-      }
-    ];
+    this.indiceActual = 0;
+    this.administradoresMostrados = [];
+    this.todosCargados = true;
 
-    this.cargarMasUsuarios();
+    this.usuariosSistemaService.cantidadRegistros().subscribe({
+      next: (cantidadDTO: CantidadRegistrosDTO) => {
+
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.administradoresMostrados = [];
+        this.todosCargados = false;
+
+        this.cargarMasUsuarios();
+      },
+      error: (error: any) => {
+
+        //this.mostrarError(error);
+
+      }
+    });
   }
 
+  //Metodo que ayuda a volver
   volver() {
     this.router.navigateByUrl('/menu-admin-sistema/usuarios')
 
   }
 
+  //Metodo que va cargando dinamicamente los usuarios
   cargarMasUsuarios(): void {
-    const siguienteBloque = this.administradores.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
 
-    this.administradoresMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
+    if (this.todosCargados) return;
 
-    if (this.indiceActual >= this.administradores.length) {
+    this.usuariosSistemaService.listadoRegistros(this.cantidadPorCarga, this.indiceActual).subscribe({
+      next: (response: UsuarioDatosDTO[]) => {
+        this.ampliarResultados(response);
+
+      },
+      error: (error: any) => {
+
+        //this.mostrarError(error);
+
+      }
+    });
+  }
+
+  //Metodo encargado de ir ampliando dinamicamente los usuarios registrados
+  ampliarResultados(response: UsuarioDatosDTO[]): void {
+
+    if (!response || response.length === 0) {
+      this.todosCargados = true;
+      return;
+    }
+
+    this.administradoresMostrados.push(...response);
+    this.indiceActual += response.length;
+
+    if (this.indiceActual >= this.totalReportes) {
       this.todosCargados = true;
     }
+
   }
 
 }
