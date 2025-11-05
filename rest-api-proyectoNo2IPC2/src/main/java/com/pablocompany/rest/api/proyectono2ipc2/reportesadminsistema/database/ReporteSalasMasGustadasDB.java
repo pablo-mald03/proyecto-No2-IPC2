@@ -80,21 +80,28 @@ public class ReporteSalasMasGustadasDB {
 
     //Constante que permite obtener la cantidad total de salas populares (sin filtro de fechas)
     private final String CANTIDAD_SALAS_TODO_POPULARES
-            = "SELECT COUNT(DISTINCT sa.codigo) AS `cantidadTotal` "
-            + "FROM sala AS `sa` "
-            + "JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
-            + "JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala "
-            + "LEFT JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala;";
+            = "SELECT COUNT(*) AS `cantidad` "
+            + "FROM ( "
+            + "  SELECT sa.codigo "
+            + "  FROM sala AS `sa` "
+            + "  JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
+            + "  JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala "
+            + "  LEFT JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala AND pb.fecha_pago  "
+            + "  GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion LIMIT 5"
+            + ") AS subconsulta ";
 
     //Constante que permite obtener la cantidad total de salas populares dentro de un intervalo de fechas
     private final String CANTIDAD_SALAS_POPULARES
-            = "SELECT COUNT(DISTINCT sa.codigo) AS `cantidad` "
-            + "FROM sala AS `sa` "
-            + "JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
-            + "JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala "
-            + "LEFT JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala "
-            + "AND pb.fecha_pago BETWEEN ? AND ? "
-            + "WHERE va.fecha_posteo BETWEEN ? AND ?;";
+            = "SELECT COUNT(*) AS `cantidad` "
+            + "FROM ( "
+            + "  SELECT sa.codigo "
+            + "  FROM sala AS `sa` "
+            + "  JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
+            + "  JOIN valoracion_sala AS `va` ON sa.codigo = va.codigo_sala "
+            + "  LEFT JOIN pago_boleto AS `pb` ON sa.codigo = pb.codigo_sala AND pb.fecha_pago BETWEEN ? AND ? "
+            + "  WHERE va.fecha_posteo BETWEEN ? AND ? "
+            + "  GROUP BY sa.codigo, ci.nombre, sa.nombre, sa.filas, sa.columnas, sa.ubicacion LIMIT 5"
+            + ") AS subconsulta ";
 
     //Metodo delegado para obtener la cantidad de reportes de 5 salas mas gustadas que se tienen en el intervalo de fechas
     public int cantidadReportes(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
