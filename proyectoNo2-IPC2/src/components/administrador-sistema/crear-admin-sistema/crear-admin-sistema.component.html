@@ -14,7 +14,7 @@
             </h2>
         </div>
 
-        <form [formGroup]="nuevoRegistroForm" (submit)="submit()" autocomplete="off" class="text-start">
+        <form [formGroup]="nuevoRegistroFormulario" (submit)="submit()" autocomplete="off" class="text-start">
 
             <div class="row g-3">
 
@@ -22,10 +22,10 @@
                     <label class="form-label">Nombre Completo</label>
                     <input type="text" class="form-control form-control-lg" placeholder="Tu Nombre" name="nombre"
                         id="nombre" formControlName="nombre"
-                        [class.is-invalid]="nuevoRegistroForm.controls['nombre'].dirty && nuevoRegistroForm.controls['nombre'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['nombre'].dirty && nuevoRegistroFormulario.controls['nombre'].invalid">
 
-                    @if (nuevoRegistroForm.controls['nombre'].invalid &&
-                    nuevoRegistroForm.controls['nombre'].touched) {
+                    @if (nuevoRegistroFormulario.controls['nombre'].invalid &&
+                    nuevoRegistroFormulario.controls['nombre'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese un nombre valido
@@ -38,10 +38,10 @@
                     <label class="form-label">Identificación / Pasaporte</label>
                     <input type="text" class="form-control form-control-lg" placeholder="Ingresa tu identificación"
                         name="identificacion" id="identificacion" formControlName="identificacion"
-                        [class.is-invalid]="nuevoRegistroForm.controls['identificacion'].dirty && nuevoRegistroForm.controls['identificacion'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['identificacion'].dirty && nuevoRegistroFormulario.controls['identificacion'].invalid">
 
-                    @if (nuevoRegistroForm.controls['identificacion'].invalid &&
-                    nuevoRegistroForm.controls['identificacion'].touched) {
+                    @if (nuevoRegistroFormulario.controls['identificacion'].invalid &&
+                    nuevoRegistroFormulario.controls['identificacion'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese una identificaion valida
@@ -54,10 +54,10 @@
                     <label class="form-label">Identificador de usuario</label>
                     <input type="text" class="form-control form-control-lg" placeholder="nombre-00" name="id" id="id"
                         formControlName="id"
-                        [class.is-invalid]="nuevoRegistroForm.controls['id'].dirty && nuevoRegistroForm.controls['id'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['id'].dirty && nuevoRegistroFormulario.controls['id'].invalid">
 
-                    @if (nuevoRegistroForm.controls['id'].invalid &&
-                    nuevoRegistroForm.controls['id'].touched) {
+                    @if (nuevoRegistroFormulario.controls['id'].invalid &&
+                    nuevoRegistroFormulario.controls['id'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese un Identificador de usuario valido
@@ -70,10 +70,10 @@
                     <label class="form-label">Contraseña</label>
                     <input type="password" class="form-control form-control-lg" placeholder="Ingresar contraseña"
                         name="password" id="password" formControlName="password"
-                        [class.is-invalid]="nuevoRegistroForm.controls['password'].dirty && nuevoRegistroForm.controls['password'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['password'].dirty && nuevoRegistroFormulario.controls['password'].invalid">
 
-                    @if (nuevoRegistroForm.controls['password'].invalid &&
-                    nuevoRegistroForm.controls['password'].touched) {
+                    @if (nuevoRegistroFormulario.controls['password'].invalid &&
+                    nuevoRegistroFormulario.controls['password'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese una contraseña con 8 caracteres minimo
@@ -85,28 +85,40 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Confirmar Contraseña</label>
-                    <input type="password" class="form-control form-control-lg" name="confirmpassword"
-                        id="confirmpassword" placeholder="Confirmar contraseña" formControlName="confirmpassword"
-                        [class.is-invalid]="nuevoRegistroForm.controls['confirmpassword'].dirty && nuevoRegistroForm.controls['confirmpassword'].invalid">
+                    <input type="password" class="form-control form-control-lg" name="confirmPassword"
+                        id="confirmPassword" placeholder="Confirmar contraseña" formControlName="confirmPassword"
+                        [class.is-invalid]="nuevoRegistroFormulario.get('confirmPassword')?.invalid &&
+                          nuevoRegistroFormulario.get('confirmPassword')?.touched">
 
-                    @if (nuevoRegistroForm.controls['confirmpassword'].invalid &&
-                    nuevoRegistroForm.controls['confirmpassword'].touched) {
-                    <div class="invalid-feedback">
-                        <div>
-                            Ingrese una contraseña con 8 caracteres minimo
-                        </div>
+
+                    @if (nuevoRegistroFormulario.get('confirmPassword')?.touched) {
+                    @if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('required')) {
+                    <div class="invalid-feedback d-block">
+                        <div>Debe ingresar una contraseña</div>
                     </div>
                     }
+                    @else if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('minlength')) {
+                    <div class="invalid-feedback d-block">
+                        <div>Ingrese una contraseña con 5 caracteres mínimo</div>
+                    </div>
+                    }
+                    @else if (nuevoRegistroFormulario.get('confirmPassword')?.hasError('mismatch')) {
+                    <div class="invalid-feedback d-block">
+                        <div>Las contraseñas no coinciden</div>
+                    </div>
+                    }
+                    }
+
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control form-control-lg" name="correo" id="correo"
                         placeholder="tunombre@admin.com" formControlName="correo"
-                        [class.is-invalid]="nuevoRegistroForm.controls['correo'].dirty && nuevoRegistroForm.controls['correo'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['correo'].dirty && nuevoRegistroFormulario.controls['correo'].invalid">
 
-                    @if (nuevoRegistroForm.controls['correo'].invalid &&
-                    nuevoRegistroForm.controls['correo'].touched) {
+                    @if (nuevoRegistroFormulario.controls['correo'].invalid &&
+                    nuevoRegistroFormulario.controls['correo'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese un correo electronico valido con @admin.com
@@ -119,10 +131,10 @@
                     <label class="form-label">Número de Teléfono</label>
                     <input type="tel" class="form-control form-control-lg" name="telefono" id="telefono"
                         placeholder="58630000" formControlName="telefono"
-                        [class.is-invalid]="nuevoRegistroForm.controls['telefono'].dirty && nuevoRegistroForm.controls['telefono'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['telefono'].dirty && nuevoRegistroFormulario.controls['telefono'].invalid">
 
-                    @if (nuevoRegistroForm.controls['telefono'].invalid &&
-                    nuevoRegistroForm.controls['telefono'].touched) {
+                    @if (nuevoRegistroFormulario.controls['telefono'].invalid &&
+                    nuevoRegistroFormulario.controls['telefono'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese un numero telefonico valido
@@ -136,10 +148,10 @@
                     <label class="form-label">País de Procedencia</label>
                     <input type="text" class="form-control form-control-lg" name="pais" id="pais"
                         placeholder="Guatemala" formControlName="pais"
-                        [class.is-invalid]="nuevoRegistroForm.controls['pais'].dirty && nuevoRegistroForm.controls['pais'].invalid">
+                        [class.is-invalid]="nuevoRegistroFormulario.controls['pais'].dirty && nuevoRegistroFormulario.controls['pais'].invalid">
 
-                    @if (nuevoRegistroForm.controls['pais'].invalid &&
-                    nuevoRegistroForm.controls['pais'].touched) {
+                    @if (nuevoRegistroFormulario.controls['pais'].invalid &&
+                    nuevoRegistroFormulario.controls['pais'].touched) {
                     <div class="invalid-feedback">
                         <div>
                             Ingrese un pais valido
@@ -151,8 +163,9 @@
 
                 <div class="col-12">
                     <label class="form-label">Foto de Perfil</label>
-                    <input class="form-control form-control-lg" type="file" accept=".png, .jpg, .jpeg, image/png, image/jpeg" id="foto" name="foto"
-                        (change)="seleccionHecha($event)">
+                    <input class="form-control form-control-lg" type="file"
+                        accept=".png, .jpg, .jpeg, image/png, image/jpeg" id="foto" name="foto"
+                        (change)="onFileChange($event)">
                 </div>
 
             </div>
@@ -162,7 +175,8 @@
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <button type="button" class="btn btn-outline-light px-4 py-2 rounded-pill"
                     (click)="reiniciar()">Limpiar</button>
-                <button type="submit" class="btn btn-gradient text-white px-4 py-2 rounded-pill fw-semibold" [disabled]="nuevoRegistroForm.invalid" >
+                <button type="submit" class="btn btn-gradient text-white px-4 py-2 rounded-pill fw-semibold"
+                    [disabled]="nuevoRegistroFormulario.invalid">
                     <i class="bi bi-check-circle me-2"></i> Registrar Administrador
                 </button>
             </div>
@@ -170,3 +184,13 @@
         </form>
     </div>
 </main>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>

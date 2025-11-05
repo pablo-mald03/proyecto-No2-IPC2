@@ -1,0 +1,13 @@
+<div *ngIf="mostrar" class="modal-backdrop">
+    <div class="modal-contenido" [ngClass]="tipo">
+        <div class="modal-icono">
+            <ng-container [ngSwitch]="tipo">
+                <span *ngSwitchCase="'exito'" class="icono-exito">&#10004;</span>
+                <span *ngSwitchCase="'error'" class="icono-error">&#10006;</span>
+                <span *ngSwitchCase="'info'" class="icono-info">&#8505;</span>
+            </ng-container>
+        </div>
+        <div class="modal-mensaje">{{ mensaje }}</div>
+        <button class="modal-cerrar" (click)="cerrar()">X</button>
+    </div>
+</div>

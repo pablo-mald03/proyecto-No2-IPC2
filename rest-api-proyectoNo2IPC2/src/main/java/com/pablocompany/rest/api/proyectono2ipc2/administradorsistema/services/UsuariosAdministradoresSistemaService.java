@@ -31,7 +31,7 @@ public class UsuariosAdministradoresSistemaService {
     //Metodo delegado para poder crear los administradores de sistema 
     public boolean crearAdministrador(Usuario usuarioNuevo, String confirmPassword) throws EntidadExistenteException, FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
-        if (usuarioNuevo.esUsuarioValido(confirmPassword, 0)) {
+        if (usuarioNuevo.esUsuarioValido(confirmPassword, 1)) {
 
             RolDB rolDb = new RolDB();
 
