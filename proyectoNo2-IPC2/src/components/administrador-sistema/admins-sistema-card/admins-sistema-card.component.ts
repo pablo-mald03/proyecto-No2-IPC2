@@ -19,6 +19,7 @@ export class AdminsSistemaCardComponent {
     return 'icons-app/defalutUser.png';
   }
 
+  //Metodo que ayuda a mostrar el nombre de los roles
   get rolNombre(): string {
     switch (this.admin.rol) {
       case '3':

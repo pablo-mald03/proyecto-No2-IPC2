@@ -7,10 +7,11 @@ import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 import { Usuario } from '../../../models/usuarios/usuario';
+import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
 
 @Component({
   selector: 'app-form-registro',
-  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, SharedPopupComponent],
+  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, SharedPopupComponent, FullscreenModalComponent],
   templateUrl: './form-registro.component.html',
   styleUrl: './form-registro.component.scss',
   providers: [Popup]
@@ -30,6 +31,11 @@ export class FormRegistroComponent implements OnInit {
   tipoPopup: 'error' | 'exito' | 'info' = 'info';
   popupKey = 0;
 
+  //Atributos del modal 
+  mostrarModal = false;
+  mensajeModal = '';
+  tipoModal: 'exito' | 'error' | 'info' = 'info';
+
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
@@ -37,6 +43,13 @@ export class FormRegistroComponent implements OnInit {
 
   ) {
 
+  }
+
+  //Metodo utilizado para abrir el modal
+  abrirModal(mensaje: string, tipo: 'exito' | 'error' | 'info' = 'info') {
+    this.mensajeModal = mensaje;
+    this.tipoModal = tipo;
+    this.mostrarModal = true;
   }
 
   ngOnInit(): void {
@@ -111,9 +124,7 @@ export class FormRegistroComponent implements OnInit {
       this.usuarioService.crearNuevoUsuario(formData).subscribe({
         next: () => {
 
-          let mensaje = 'Te has registrado correctamente';
-
-          this.popUp.mostrarPopup({ mensaje, tipo: 'exito' });
+          this.abrirModal('Bienvenido a CinemaApp Usuario. \nDisfruta de nuestras funcionalidades', 'exito');
           this.reiniciar();
         },
         error: (error) => {

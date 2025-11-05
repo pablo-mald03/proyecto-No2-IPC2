@@ -13,7 +13,7 @@ export class FullscreenModalComponent implements OnChanges {
   @Input() mensaje: string = '';
   @Input() tipo: 'exito' | 'error' | 'info' = 'info';
   @Input() mostrar: boolean = false;
-  @Input() duracion: number = 2000;
+  @Input() duracion: number = 3000;
 
   @Output() cerrarEvent = new EventEmitter<void>();
 

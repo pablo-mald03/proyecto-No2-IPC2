@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminsCineCardsComponent } from "../admins-cine-cards/admins-cine-cards.component";
 import { Usuario } from '../../../models/usuarios/usuario';
+import { UsuarioDatosDTO } from '../../../models/usuarios/usuario-datos-dto';
+import { UsuarioAdminCineService } from '../../../services/admin-sistema-service/admin-cine.service';
+import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 
 @Component({
   selector: 'app-admins-req-cine',
@@ -9,79 +12,88 @@ import { Usuario } from '../../../models/usuarios/usuario';
   templateUrl: './admins-req-cine.component.html',
   styleUrl: './admins-req-cine.component.scss'
 })
-export class AdminsReqCineComponent implements OnInit{
+export class AdminsReqCineComponent implements OnInit {
 
-  administradores: Usuario[] = [];
-  administradoresMostrados: Usuario[] = [];
+  administradores: UsuarioDatosDTO[] = [];
+  administradoresMostrados: UsuarioDatosDTO[] = [];
+
+
+
+
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
+
+  router = inject(Router);
+
+  constructor(
+
+    private usuariosCineService: UsuarioAdminCineService,
+
+
+  ) { }
+
 
   ngOnInit(): void {
 
-    this.administradores = [
-      {
-        id: 'carlos-01',
-        correo: 'admin1@cineapp.com',
-        nombre: 'Carlos López',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-1234',
-        pais: 'Guatemala',
-        identificacion: '123456789',
-        codigoRol: 'ROL-2'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-2'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-2'
-      },
-      {
-        id: 'mariap-02',
-        correo: 'admin2@cineapp.com',
-        nombre: 'María Pérez',
-        foto: '',
-        password: '',
-        telefono: '+502 5555-5678',
-        pais: 'Guatemala',
-        identificacion: '987654321',
-        codigoRol: 'ROL-2'
-      }
-    ];
+    this.indiceActual = 0;
+    this.administradoresMostrados = [];
+    this.todosCargados = true;
 
-    this.cargarMasAdministradores();
+    this.usuariosCineService.cantidadRegistros().subscribe({
+      next: (cantidadDTO: CantidadRegistrosDTO) => {
+
+        this.totalReportes = cantidadDTO.cantidad;
+
+        this.indiceActual = 0;
+        this.administradoresMostrados = [];
+        this.todosCargados = false;
+
+        this.cargarMasAdministradores();
+      },
+      error: (error: any) => {
+
+        console.log(error);
+
+      }
+    });
   }
 
 
+  //Metodo que sirve para cargar dinamicamente a los administradores 
   cargarMasAdministradores(): void {
-    const siguienteBloque = this.administradores.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
+    if (this.todosCargados) return;
 
-    this.administradoresMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
+    this.usuariosCineService.listadoRegistros(this.cantidadPorCarga, this.indiceActual).subscribe({
+      next: (response: UsuarioDatosDTO[]) => {
+        this.ampliarResultados(response);
 
-    if (this.indiceActual >= this.administradores.length) {
+      },
+      error: (error: any) => {
+
+        //this.mostrarError(error);
+
+      }
+    });
+  }
+
+  //Metodo encargado de ir ampliando dinamicamente los usuarios registrados
+  ampliarResultados(response: UsuarioDatosDTO[]): void {
+
+    if (!response || response.length === 0) {
+      this.todosCargados = true;
+      return;
+    }
+
+    this.administradoresMostrados.push(...response);
+    this.indiceActual += response.length;
+
+    if (this.indiceActual >= this.totalReportes) {
       this.todosCargados = true;
     }
+
   }
 
 
