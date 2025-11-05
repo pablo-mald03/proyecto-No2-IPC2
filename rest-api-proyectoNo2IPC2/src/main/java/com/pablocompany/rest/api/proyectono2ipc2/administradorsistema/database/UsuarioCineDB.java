@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos;
+package com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.database;
 
 /**
  *
  * @author pablo
  */
-public class NuevoUsuarioRequest {
+//Clase delegada para gestionar la creacion de administradores de cine
+public class UsuarioCineDB {
+    
+    
     
 }
