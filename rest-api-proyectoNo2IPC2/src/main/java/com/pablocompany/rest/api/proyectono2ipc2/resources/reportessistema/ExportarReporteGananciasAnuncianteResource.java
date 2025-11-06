@@ -6,10 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportessistema;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ExportarSalaComentarosService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReporteComentariosSalaService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarGananciasAnuncianteService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasAnuncianteService;
@@ -34,7 +31,7 @@ public class ExportarReporteGananciasAnuncianteResource {
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces("application/pdf")
-    public Response reporteComentarios(
+    public Response reporteGananciasSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
@@ -74,9 +71,9 @@ public class ExportarReporteGananciasAnuncianteResource {
 
     //Endpoint que sirve para exportar a pdf el listado de reporte de ganancias de anunciantes
     @GET
-    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idSala}/limit/{limite}/offset/{tope}")
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idUsuario}/limit/{limite}/offset/{tope}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteComentariosFiltro(
+    public Response reporteGananciasConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idUsuario") String idUsuario,

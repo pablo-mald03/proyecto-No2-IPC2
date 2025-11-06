@@ -3,22 +3,29 @@ import { GananciasAnuncianteCardsComponent } from "../ganancias-anunciante-cards
 import { ReporteAnuncianteDTO } from '../../../models/reportes/anunciante-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { Popup } from '../../../shared/popup/popup';
+import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 
 @Component({
   selector: 'app-reporte-ganancias-anunciante.component',
-  imports: [GananciasAnuncianteCardsComponent, ReactiveFormsModule, NgClass],
+  imports: [GananciasAnuncianteCardsComponent, ReactiveFormsModule, NgClass, SharedPopupComponent],
   templateUrl: './reporte-ganancias-anunciante.component.html',
-  styleUrl: './reporte-ganancias-anunciante.component.scss'
+  styleUrl: './reporte-ganancias-anunciante.component.scss',
+  providers: [Popup],
 })
 export class ReporteGananciasAnuncianteComponent implements OnInit {
 
   reporteAnunciante: ReporteAnuncianteDTO[] = [];
   reportesMostrados: ReporteAnuncianteDTO[] = [];
 
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
 
+  //Flag que sirve para saber si se ha filtrado
+  estaFiltrado = false;
 
   //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
@@ -44,7 +51,7 @@ export class ReporteGananciasAnuncianteComponent implements OnInit {
       idUsuario: ['']
     });
 
-  
+
 
 
     this.cargarMasReportes();
