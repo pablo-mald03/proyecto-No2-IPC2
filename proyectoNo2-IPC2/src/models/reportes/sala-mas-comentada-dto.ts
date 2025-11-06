@@ -4,6 +4,7 @@ export interface SalaMasComenadaDTO {
 
     codigo: string,
     nombre: string,
+    cineAsociado: String,
     filas: number,
     columnas: number,
     ubicacion: string,

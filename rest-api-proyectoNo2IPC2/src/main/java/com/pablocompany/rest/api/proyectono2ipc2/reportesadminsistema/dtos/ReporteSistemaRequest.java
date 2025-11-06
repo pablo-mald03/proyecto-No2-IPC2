@@ -14,7 +14,7 @@ import java.time.format.DateTimeParseException;
  * @author pablo
  */
 //Clase delegada para poder manejar los request que vienen de fechas 
-public class ReporteRequest {
+public class ReporteSistemaRequest {
 
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
@@ -25,7 +25,7 @@ public class ReporteRequest {
     private boolean estaVacia;
 
     //String utilizado para encontrar los reportes en un intervalo de fechas
-    public ReporteRequest(LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
+    public ReporteSistemaRequest(LocalDate fechaInicio, LocalDate fechaFin, int offset, int limit) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.offset = offset;
@@ -34,7 +34,7 @@ public class ReporteRequest {
     }
 
     //Constructor utilizado simplemente para poder instanciar el request vacio 
-    public ReporteRequest(int offset, int limit) {
+    public ReporteSistemaRequest(int offset, int limit) {
         this.offset = offset;
         this.limit = limit;
         this.estaVacia = true;

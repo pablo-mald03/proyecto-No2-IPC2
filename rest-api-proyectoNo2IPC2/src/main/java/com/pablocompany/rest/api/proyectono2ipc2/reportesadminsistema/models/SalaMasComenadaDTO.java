@@ -17,18 +17,28 @@ public class SalaMasComenadaDTO {
 
     private String codigo;
     private String nombre;
+    private String cineAsociado;
     private int filas;
     private int columnas;
     private String ubicacion;
     private List<SalaComentarioDTO> comentarios;
 
-    public SalaMasComenadaDTO(String codigo, String nombre, int filas, int columnas, String ubicacion) {
+    public SalaMasComenadaDTO(String codigo, String nombre, String cineAsociado, int filas, int columnas, String ubicacion) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.cineAsociado = cineAsociado;
         this.filas = filas;
         this.columnas = columnas;
         this.ubicacion = ubicacion;
         this.comentarios = new ArrayList<>();
+    }
+
+    public String getCineAsociado() {
+        return cineAsociado;
+    }
+
+    public void setCineAsociado(String cineAsociado) {
+        this.cineAsociado = cineAsociado;
     }
 
     public String getCodigo() {

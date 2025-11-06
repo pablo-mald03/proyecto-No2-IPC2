@@ -8,9 +8,9 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.dtos.ReporteRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalasComentadasDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.SalaComentarioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteSistemaRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.SalaMasComenadaDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -88,7 +88,7 @@ public class ReporteSalasMasComentadasDB {
             + "ORDER BY co.fecha_posteo DESC";
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas
-    public int cantidadReportes(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportes(ReporteSistemaRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -106,21 +106,16 @@ public class ReporteSalasMasComentadasDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de salas de cine");
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de reportes de comentarios en salas de cine");
         }
     }
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en todo intervalo de fechas
-    public int cantidadTodoReportes(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadTodoReportes(ReporteSistemaRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_TODO_REPORTES);) {
-
-            query.setString(1, reporteSalas.getIdSala());
-            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
-            query.setDate(3, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
-
             ResultSet result = query.executeQuery();
             if (result.next()) {
                 return result.getInt("cantidad");
@@ -135,13 +130,13 @@ public class ReporteSalasMasComentadasDB {
     }
 
     //Metodo que sirve para poder consultar el reporte de comentarios SIN FLITRO
-    public List<ReporteSalasComentadasDTO> obtenerReporteComentarios(ReporteRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
+    public List<SalaMasComenadaDTO> obtenerReporteSalas(ReporteSistemaRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
         }
 
-        List<ReporteSalasComentadasDTO> listadoReportes = new ArrayList<>();
+        List<SalaMasComenadaDTO> listadoReportes = new ArrayList<>();
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -155,7 +150,7 @@ public class ReporteSalasMasComentadasDB {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                ReporteSalasComentadasDTO comentarioEncontrado = new ReporteSalasComentadasDTO(
+                SalaMasComenadaDTO salaComentada = new SalaMasComenadaDTO(
                         resultSet.getString("codigo"),
                         resultSet.getString("cineAsociado"),
                         resultSet.getString("nombre"),
@@ -164,10 +159,10 @@ public class ReporteSalasMasComentadasDB {
                         resultSet.getString("ubicacion")
                 );
 
-                listadoReportes.add(comentarioEncontrado);
+                listadoReportes.add(salaComentada);
             }
 
-            for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
+            for (SalaMasComenadaDTO listadoReporte : listadoReportes) {
                 listadoReporte.setComentarios(obtenerComentarios(reporteSalas, listadoReporte.getCodigo()));
             }
 
@@ -178,9 +173,8 @@ public class ReporteSalasMasComentadasDB {
         return listadoReportes;
     }
 
-
     //Metodo que sirve para obtener los comentarios relacionados a una sala
-    private List< SalaComentarioDTO> obtenerComentarios(ReporteRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    private List< SalaComentarioDTO> obtenerComentarios(ReporteSistemaRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -215,9 +209,9 @@ public class ReporteSalasMasComentadasDB {
         return listadoComentarios;
 
     }
-    
+
     //Metodo delegado para obtener la cantidad de reportes que se tienen EN TODO INTERVALO DE FECHAS
-    public int cantidadReportesTodo(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesTodo(ReporteSistemaRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -236,54 +230,8 @@ public class ReporteSalasMasComentadasDB {
         }
     }
 
-
     //Metodo que sirve para poder consultar el reporte de comentarios de las 5 salas de cine 
-    public List<ReporteSalasComentadasDTO> obtenerReporteTodoComentarios(ReporteRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
-
-        if (reporteSalas == null) {
-            throw new FormatoInvalidoException("La referencia de request esta vacia");
-        }
-
-        List<ReporteSalasComentadasDTO> listadoReportes = new ArrayList<>();
-
-        Connection connection = DBConnectionSingleton.getInstance().getConnection();
-
-        try (PreparedStatement query = connection.prepareStatement(SALAS_TODO_COMENTADAS);) {
-
-
-            query.setInt(1, reporteSalas.getLimit());
-            query.setInt(2, reporteSalas.getOffset());
-
-            ResultSet resultSet = query.executeQuery();
-
-            while (resultSet.next()) {
-                ReporteSalasComentadasDTO comentarioEncontrado = new ReporteSalasComentadasDTO(
-                        resultSet.getString("codigo"),
-                        resultSet.getString("cineAsociado"),
-                        resultSet.getString("nombre"),
-                        resultSet.getInt("filas"),
-                        resultSet.getInt("columnas"),
-                        resultSet.getString("ubicacion")
-                );
-
-                listadoReportes.add(comentarioEncontrado);
-            }
-
-            for (ReporteSalasComentadasDTO listadoReporte : listadoReportes) {
-                listadoReporte.setComentarios(obtenerTodoComentarios(reporteSalas, listadoReporte.getCodigo()));
-            }
-
-        } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de reportes de las 5 salas mas comentadas ");
-        }
-
-        return listadoReportes;
-    }
-
-
-
-    //Metodo que sirve para obtener todos los registros de los comentarios relacionados a una sala 
-    private List< SalaComentarioDTO> obtenerTodoComentarios(ReporteRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
+    private List< SalaComentarioDTO> obtenerComentariosTodo(ReporteSistemaRequest reporteSalas, String idSala) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (reporteSalas == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
@@ -316,7 +264,49 @@ public class ReporteSalasMasComentadasDB {
         return listadoComentarios;
 
     }
-    
+
+    //Metodo que sirve para obtener todos los registros de las salas mas comentadas en todo intervalo
+     public List<SalaMasComenadaDTO> obtenerReporteTodoSalas(ReporteSistemaRequest reporteSalas) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        if (reporteSalas == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        List<SalaMasComenadaDTO> listadoReportes = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(SALAS_TODO_COMENTADAS);) {
+
+            query.setDate(1, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
+            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+            query.setInt(3, reporteSalas.getLimit());
+            query.setInt(4, reporteSalas.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                SalaMasComenadaDTO salaComentada = new SalaMasComenadaDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("cineAsociado"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("filas"),
+                        resultSet.getInt("columnas"),
+                        resultSet.getString("ubicacion")
+                );
+
+                listadoReportes.add(salaComentada);
+            }
+
+            for (SalaMasComenadaDTO listadoReporte : listadoReportes) {
+                listadoReporte.setComentarios(obtenerComentariosTodo(reporteSalas, listadoReporte.getCodigo()));
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de las 5 salas mas comentadas ");
+        }
+
+        return listadoReportes;
+    }
+
 }
-
-

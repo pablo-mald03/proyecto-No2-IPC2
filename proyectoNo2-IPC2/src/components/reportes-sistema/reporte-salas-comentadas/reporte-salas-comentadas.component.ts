@@ -37,20 +37,6 @@ export class ReporteSalasComentadasComponent {
       fechaFin: [null]
     });
 
-    this.reporteSalaComentada = [
-      {
-        codigo: 'S001',
-        nombre: 'Sala Premium 3D',
-        filas: 12,
-        columnas: 20,
-        ubicacion: 'Nivel 2, ala norte',
-        comentarios: [
-          { idUsuario: 'U001', contenido: 'Excelente experiencia, la imagen es muy nítida.', fechaPosteo: new Date('2025-10-10') },
-          { idUsuario: 'U002', contenido: 'Muy cómodos los asientos.', fechaPosteo: new Date('2025-10-12') }
-        ]
-      },
-    ];
-
 
 
     this.cargarMasReportes();
