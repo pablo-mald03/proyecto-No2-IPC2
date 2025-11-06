@@ -17,7 +17,7 @@ export class ExportarGananciasAnuncianteService {
 
     //Endpoint que retorna el pdf del listado de ganancias por anunciante en un intervalo de tiempo
     public exportarReportesGananciaAnunciantesSinFiltro(fechaInicio: string, fechaFin: string, limite: number, inicio: number): Observable<HttpResponse<Blob>> {
-        return this.httpClient.get(`${this.restConstants.getApiURL()}reportes/sistema/ganancias/anunciantes/exportar/inicio/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`, {
+        return this.httpClient.get(`${this.restConstants.getApiURL()}reportes/sistema/ganancias/anunciantes/exportar/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`, {
             responseType: 'blob',
             observe: 'response'
         });

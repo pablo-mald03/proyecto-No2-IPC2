@@ -199,12 +199,12 @@ public class ReporteGananciasAnuncianteService {
         ReporteAnuncianteDB reporteAnunciante = new ReporteAnuncianteDB();
 
         if (reporteRequest.estaVacia() && reporteRequest.validarVacio()) {
-            return reporteAnunciante.obtenerReporteTodoAnunciante(reporteRequest);
+            return reporteAnunciante.obtenerReporteTodoAnunciantesFiltro(reporteRequest);
         }
 
         if (reporteRequest.validarRequestFiltro()) {
 
-            return reporteAnunciante.obtenerReporteTodoAnunciantesFiltro(reporteRequest);
+            return reporteAnunciante.obtenerReporteAnunciantesFiltro(reporteRequest);
         }
 
         throw new ErrorInesperadoException("No se ha podido procesar la solicitud del reporte");

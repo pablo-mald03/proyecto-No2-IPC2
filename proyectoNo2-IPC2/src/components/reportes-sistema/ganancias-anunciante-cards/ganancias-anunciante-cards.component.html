@@ -20,6 +20,7 @@
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Estado</th>
+                        <th>Tipo</th>
                         <th>Fecha Compra</th>
                         <th>Fecha Expiración</th>
                     </tr>
@@ -34,6 +35,7 @@
                                 {{ anuncio.estado ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
+                        <td>{{ anuncio.tipo }}</td>
                         <td>{{ anuncio.fechaCompra | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ anuncio.fechaExpiracion | date: 'dd/MM/yyyy' }}</td>
                     </tr>
