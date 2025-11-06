@@ -5,6 +5,44 @@
         <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
             [formGroup]="filtrosForm">
 
+            <div class="px-3">
+                <label for="fechainicio" class="form-label fw-semibold">Fecha Inicio:</label>
+                <input type="date" id="fechainicio" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaInicio" [ngClass]="{'is-invalid': fechaInvalida}" />
+            </div>
+
+            <div class="px-3">
+                <label for="fechafin" class="form-label fw-semibold">Fecha Fin:</label>
+                <input type="date" id="fechafin" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm"
+                    formControlName="fechaFin" [ngClass]="{'is-invalid': fechaInvalida}" />
+
+                @if (fechaInvalida) {
+                <div class="invalid-feedback d-block">
+                    La fecha de inicio no puede ser posterior a la fecha fin.
+                </div>
+                }
+            </div>
+
+            <div class="text-center mt-md-4 d-flex gap-2">
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold"
+                    (click)="generarReporte()">
+                    <i class="bi bi-book me-2"></i> Generar
+                </button>
+
+                <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
+                    (click)="limpiarFechas()">
+                    <i class="bi bi-eraser-fill me-2"></i>Limpiar
+                </button>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
+            [formGroup]="filtrosFormUsuario">
+
             <div class="px-3 text-white">
                 <label for="usuario" class="form-label fw-semibold">ID usuario:</label>
                 <input type="text" id="idUsuario" class="form-control rounded-pill px-3 py-2 border-0 shadow-sm "

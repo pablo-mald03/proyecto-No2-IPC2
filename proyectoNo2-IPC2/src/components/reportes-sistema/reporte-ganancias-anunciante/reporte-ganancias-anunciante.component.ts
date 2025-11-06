@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GananciasAnuncianteCardsComponent } from "../ganancias-anunciante-cards/ganancias-anunciante-cards.component";
 import { ReporteAnuncianteDTO } from '../../../models/reportes/anunciante-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-reporte-ganancias-anunciante.component',
-  imports: [GananciasAnuncianteCardsComponent, ReactiveFormsModule],
+  imports: [GananciasAnuncianteCardsComponent, ReactiveFormsModule, NgClass],
   templateUrl: './reporte-ganancias-anunciante.component.html',
   styleUrl: './reporte-ganancias-anunciante.component.scss'
 })
-export class ReporteGananciasAnuncianteComponent {
+export class ReporteGananciasAnuncianteComponent implements OnInit {
 
   reporteAnunciante: ReporteAnuncianteDTO[] = [];
   reportesMostrados: ReporteAnuncianteDTO[] = [];
@@ -18,85 +19,43 @@ export class ReporteGananciasAnuncianteComponent {
   cantidadPorCarga = 2;
   todosCargados = false;
 
-  //Atributo que permite filtrar por anunciante
+
+  //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
 
+  //Atributo que permite filtrar por anunciante
+  filtrosFormUsuario!: FormGroup;
+
   constructor(
-    private formBuild: FormBuilder
+    private formBuild: FormBuilder,
+    private formBuildUsuario: FormBuilder,
 
   ) { }
 
-
+  //Inicializa todos los botones e interacciones que se tendran para poder solicitar las querys
   ngOnInit(): void {
 
     this.filtrosForm = this.formBuild.group({
-      idUsuario: [null]
+      fechaInicio: [null],
+      fechaFin: [null]
     });
 
-    this.reporteAnunciante = [
-      {
-        id: 'USR001',
-        nombre: 'Cinemark Guatemala',
-        correo: 'cinemark@cine.com',
-        total: 1200.5,
-        anuncios: [
-          {
-            codigo: 'AN001',
-            estado: true,
-            nombre: 'Promo Octubre',
-            fechaCompra: new Date('2025-10-01'),
-            fechaExpiracion: new Date('2025-10-31'),
-          },
-          {
-            codigo: 'AN002',
-            estado: false,
-            nombre: 'Promo Caducada',
-            fechaCompra: new Date('2025-08-15'),
-            fechaExpiracion: new Date('2025-09-15'),
-          }
-        ]
-      },
-      {
-        id: 'USR002',
-        nombre: 'Cinepolis Mixco',
-        correo: 'mixco@cinepolis.com',
-        total: 890.75,
-        anuncios: []
-      },
-      {
-        id: 'USR001',
-        nombre: 'Cinemark Guatemala',
-        correo: 'cinemark@cine.com',
-        total: 1200.5,
-        anuncios: [
-          {
-            codigo: 'AN001',
-            estado: true,
-            nombre: 'Promo Octubre',
-            fechaCompra: new Date('2025-10-01'),
-            fechaExpiracion: new Date('2025-10-31'),
-          },
-          {
-            codigo: 'AN002',
-            estado: false,
-            nombre: 'Promo Caducada',
-            fechaCompra: new Date('2025-08-15'),
-            fechaExpiracion: new Date('2025-09-15'),
-          }
-        ]
-      },
-      {
-        id: 'USR002',
-        nombre: 'Cinepolis Mixco',
-        correo: 'mixco@cinepolis.com',
-        total: 890.75,
-        anuncios: []
-      }
-    ];
+    this.filtrosFormUsuario = this.formBuildUsuario.group({
+      idUsuario: ['']
+    });
 
+  
 
 
     this.cargarMasReportes();
+  }
+
+
+  //Metodo que sirve para generar el reporte
+  generarReporte(): void {
+
+
+
   }
 
 
@@ -123,22 +82,52 @@ export class ReporteGananciasAnuncianteComponent {
 
   //Metodo que sirve para filtrar
   filtrar(): void {
+    const { idUsuario } = this.filtrosFormUsuario.value;
 
-    const { idUsuario } = this.filtrosForm.value;
-
-    if (idUsuario == null || idUsuario == '') {
+    if (!idUsuario) {
       return;
     }
 
-    //Pendiente hacer la query
-    console.log('trilin');
-
+    console.log('Filtrando usuario:', idUsuario);
   }
 
+
+  //Metodo encargado para poder limpiar el id del usuario especificado 
   limpiarUsuario(): void {
-    this.filtrosForm.patchValue({
+    this.filtrosFormUsuario.patchValue({
       idUsuario: ''
     });
+  }
+
+
+  //Metodo get que sirve para validar si la fecha inicial antecede a la final
+  get fechaInvalida(): boolean {
+    const inicio = this.filtrosForm.get('fechaInicio')?.value;
+    const fin = this.filtrosForm.get('fechaFin')?.value;
+
+    if (!inicio || !fin) return false;
+    return new Date(inicio) > new Date(fin);
+  }
+
+  //Sirve para poder validar las fechas
+  validarFechas() {
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
+      this.filtrosForm.setErrors({ fechaInvalida: true });
+    } else {
+      this.filtrosForm.setErrors(null);
+    }
+  }
+
+
+  //Metodo delegador para poder limpiar las fechas
+  limpiarFechas(): void {
+    this.filtrosForm.patchValue({
+      fechaInicio: null,
+      fechaFin: null
+    });
+    this.filtrosForm.setErrors(null);
   }
 
 
