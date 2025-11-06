@@ -388,7 +388,6 @@ export class ReporteGananciasAnuncianteComponent implements OnInit {
         this.estaFiltrado = true;
 
         this.cargarMasReportes(inicioISO, finISO);
-        console.log('pito');
       },
       error: (error: any) => {
 

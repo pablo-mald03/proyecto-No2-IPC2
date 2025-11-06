@@ -20,10 +20,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  *
  * @author pablo
  */
-//Clase delegada que permite exportar los resportes de salas mas gustadas
+//Clase delegada que permite exportar los reportes de las ganancias por anunciante
 public class ExportarGananciasAnuncianteService {
 
-    //Metodo utilizado para retornar el reporte de las 5 salas mas gustadas 
+    //Metodo utilizado para retornar el reporte de las ganancias por anunciante
     public byte[] getReporteGananciaAnunciate(List<ReporteAnuncianteDTO>  listadoGanancias) throws ErrorInesperadoException {
 
         InputStream logoEmpresa = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/img/cinemaAppIcon.png");

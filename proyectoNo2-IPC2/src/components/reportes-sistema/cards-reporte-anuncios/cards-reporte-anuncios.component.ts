@@ -22,7 +22,7 @@ export class CardsReporteAnunciosComponent {
   getImagenBase64(): SafeUrl | null {
     if (!this.anuncio.foto) return null;
 
-    const base64 = `data:image/jpeg;base64,${this.anuncio.foto}`;
+    const base64 = `data:image/png;base64,${this.anuncio.foto}`;
     return this.sanitizer.bypassSecurityTrustUrl(base64);
   }
 
