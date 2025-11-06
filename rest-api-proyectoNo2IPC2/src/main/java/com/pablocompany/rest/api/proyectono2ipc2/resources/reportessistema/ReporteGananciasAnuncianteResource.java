@@ -26,6 +26,8 @@ import java.util.Map;
 @Path("reportes/sistema/ganancias/anunciantes")
 public class ReporteGananciasAnuncianteResource {
 
+    //MUY PENDIENTE
+    
     //Endpoint que permite obtener las ganancias por anunciante sin filtro
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
