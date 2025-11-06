@@ -57,7 +57,7 @@ public class ReporteAnuncianteDB {
     private final String ANUNCIOS_TODO_REPORTES = "SELECT a.codigo, a.estado, a.nombre, ca.tipo, a.fecha_expiracion, a.fecha_compra FROM anuncio AS `a` JOIN configuracion_anuncio AS `ca` ON a.codigo_tipo = ca.codigo WHERE a.id_usuario = ? ORDER BY a.fecha_compra ASC";
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas
-    public int cantidadReportesSinFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesSinFiltro(ReporteAnuncianteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -80,15 +80,15 @@ public class ReporteAnuncianteDB {
     }
 
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas con filtro
-    public int cantidadReportesFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesFiltro(ReporteAnuncianteRequest reporteRequest) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_REPORTES_FILTRO);) {
 
-            query.setString(1, reporteSalas.getIdSala());
-            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
-            query.setDate(3, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
+            query.setString(1, reporteRequest.getIdUsuario());
+            query.setDate(2, java.sql.Date.valueOf(reporteRequest.getFechaInicio()));
+            query.setDate(3, java.sql.Date.valueOf(reporteRequest.getFechaFin()));
 
             ResultSet result = query.executeQuery();
             if (result.next()) {
@@ -229,7 +229,7 @@ public class ReporteAnuncianteDB {
 
     //================================APARTADO DONDE SE MUESTRAN TODOS LOS REPORTES EN CUALQUIER INTERVALO============================
     //Metodo delegado para obtener la cantidad de reportes que se tienen EN TODO INTERVALO DE FECHAS
-    public int cantidadReportesTodoSinFiltro(ReporteRequest reporteSalas) throws ErrorInesperadoException, DatosNoEncontradosException {
+    public int cantidadReportesTodoSinFiltro(ReporteAnuncianteRequest reporteAnunciante) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 

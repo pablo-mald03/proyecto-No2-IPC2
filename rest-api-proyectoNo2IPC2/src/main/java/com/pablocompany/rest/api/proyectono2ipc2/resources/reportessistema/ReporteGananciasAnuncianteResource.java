@@ -8,8 +8,8 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.ReporteSalaPeliculaProyectadaDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.ReportePeliculaService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasAnuncianteService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -26,8 +26,6 @@ import java.util.Map;
 @Path("reportes/sistema/ganancias/anunciantes")
 public class ReporteGananciasAnuncianteResource {
 
-    //MUY PENDIENTE
-    
     //Endpoint que permite obtener las ganancias por anunciante sin filtro
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
@@ -38,12 +36,12 @@ public class ReporteGananciasAnuncianteResource {
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
-            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteAnuncianteDTO> reporteGananciasDto = reporteGananciasAnuncianteService.obtenerReporteSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-            return Response.ok(reportePeliculaProyectadaDTO).build();
+            return Response.ok(reporteGananciasDto).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
@@ -57,15 +55,15 @@ public class ReporteGananciasAnuncianteResource {
     @GET
     @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadPeliculasSinFiltro(
+    public Response cantidadReportesAnuncinateSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
-        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
+        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesSinFiltro(fechaInicio, fechaFin);
+            CantidadReportesDTO cantidadReportes = reporteGananciasAnuncianteService.cantidadReportesSinFiltro(fechaInicio, fechaFin);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
@@ -88,10 +86,10 @@ public class ReporteGananciasAnuncianteResource {
             @PathParam("inicio") String inicio,
             @PathParam("idUsuario") String idUsuario) {
 
-        ReportePeliculaService reportePeliculaService = new ReportePeliculaService();
+        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
-            List<ReporteSalaPeliculaProyectadaDTO> reportePeliculaProyectadaDTO = reportePeliculaService.obtenerReportePeliculaConFiltro(fechaInicio, fechaFin, limite, inicio, idUsuario);
+            List<ReporteAnuncianteDTO> reportePeliculaProyectadaDTO = reporteGananciasAnuncianteService.obtenerReporteConFiltro(idUsuario, fechaInicio, fechaFin, limite, inicio);
 
             return Response.ok(reportePeliculaProyectadaDTO).build();
 
@@ -107,16 +105,16 @@ public class ReporteGananciasAnuncianteResource {
     @GET
     @Path("/cantidad/filtro/{idUsuario}/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadPeliculasConFiltro(
+    public Response cantidadReportesAnuncinateConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("idUsuario") String idUsuario) {
 
-        ReportePeliculaService reportePeliculasProyectadasResource = new ReportePeliculaService();
+        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reportePeliculasProyectadasResource.cantidadReportesConFiltro(fechaInicio, fechaFin, idUsuario);
+            CantidadReportesDTO cantidadReportes = reporteGananciasAnuncianteService.cantidadReportesConFiltro(fechaInicio, fechaFin, idUsuario);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
