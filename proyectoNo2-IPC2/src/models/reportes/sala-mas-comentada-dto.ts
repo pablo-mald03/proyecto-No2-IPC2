@@ -1,6 +1,6 @@
 import { SalaComentarioDTO } from "../salas-cine/sala-comentada-dto";
 
-export interface SalaMasComenadaDTO {
+export interface SalaMasComentadaDTO {
 
     codigo: string,
     nombre: string,

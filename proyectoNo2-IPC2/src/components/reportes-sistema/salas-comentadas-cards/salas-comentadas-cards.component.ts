@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SalaMasComenadaDTO } from '../../../models/reportes/sala-mas-comentada-dto';
+import { SalaMasComentadaDTO } from '../../../models/reportes/sala-mas-comentada-dto';
 import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
@@ -10,6 +10,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 })
 export class SalasComentadasCardsComponent {
 
-  @Input() salaComentada!: SalaMasComenadaDTO;
+  @Input() salaComentada!: SalaMasComentadaDTO
 
 }

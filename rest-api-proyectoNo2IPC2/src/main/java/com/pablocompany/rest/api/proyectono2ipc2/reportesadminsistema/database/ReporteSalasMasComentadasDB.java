@@ -28,7 +28,7 @@ public class ReporteSalasMasComentadasDB {
     //Constante que permite obtener el reporte de las 5 salas mas comentadas
     private final String SALAS_COMENTADAS
             = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, "
-            + "COUNT(co.id) AS `totalComentarios`, "
+            + "COUNT(co.codigo) AS `totalComentarios`, "
             + "MAX(co.fecha_posteo) AS `ultimoComentario` "
             + "FROM sala AS `sa` "
             + "JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
@@ -60,7 +60,7 @@ public class ReporteSalasMasComentadasDB {
     //Constante que permite obtener el TODOS LOS REGISTROS DEL reporte de las 5 salas mas comentadas
     private final String SALAS_TODO_COMENTADAS
             = "SELECT sa.codigo, ci.nombre AS `cineAsociado`, sa.nombre, sa.filas, sa.columnas, sa.ubicacion, "
-            + "COUNT(co.id) AS `totalComentarios`, "
+            + "COUNT(co.codigo) AS `totalComentarios`, "
             + "MAX(co.fecha_posteo) AS `ultimoComentario` "
             + "FROM sala AS `sa` "
             + "JOIN cine AS `ci` ON sa.codigo_cine = ci.codigo "
@@ -167,7 +167,7 @@ public class ReporteSalasMasComentadasDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de las 5 salas mas comentadas ");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de reporte de las 5 salas mas comentadas " + e.getMessage());
         }
 
         return listadoReportes;
@@ -278,10 +278,8 @@ public class ReporteSalasMasComentadasDB {
 
         try (PreparedStatement query = connection.prepareStatement(SALAS_TODO_COMENTADAS);) {
 
-            query.setDate(1, java.sql.Date.valueOf(reporteSalas.getFechaInicio()));
-            query.setDate(2, java.sql.Date.valueOf(reporteSalas.getFechaFin()));
-            query.setInt(3, reporteSalas.getLimit());
-            query.setInt(4, reporteSalas.getOffset());
+            query.setInt(1, reporteSalas.getLimit());
+            query.setInt(2, reporteSalas.getOffset());
 
             ResultSet resultSet = query.executeQuery();
 

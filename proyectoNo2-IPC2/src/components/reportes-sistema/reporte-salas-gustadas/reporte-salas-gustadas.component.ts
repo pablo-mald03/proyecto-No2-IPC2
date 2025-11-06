@@ -79,7 +79,7 @@ export class ReporteSalasGustadasComponent implements OnInit {
 
   }
 
-  //Metodo que sirve para filtrar
+  //Metodo que sirve para generar el reporte
   generarReporte(): void {
 
     if (this.filtrosForm.invalid || this.fechaInvalida) return;
@@ -288,7 +288,6 @@ export class ReporteSalasGustadasComponent implements OnInit {
     this.reportesMostrados = [];
     this.todosCargados = true;
 
-    this.generarReporte();
   }
 
 }

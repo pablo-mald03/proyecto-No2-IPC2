@@ -2,7 +2,7 @@
     <div class="bg-dark bg-opacity-75 rounded-4 shadow-lg text-light p-4">
         <h2 class="fw-bold mb-5 text-center fs-3 text-warning">Reporte de 5 Salas mas Comentadas </h2>
 
-      <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
+        <div class="filtros-container d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3"
             [formGroup]="filtrosForm">
 
             <div class="px-3">
@@ -24,8 +24,8 @@
             </div>
 
             <div class="text-center mt-md-4 d-flex gap-2">
-                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrar()">
-                    <i class="bi bi-funnel-fill me-2"></i>Filtrar
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="generarReporte()">
+                    <i class="bi bi-funnel-fill me-2"></i>Generar
                 </button>
 
                 <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
@@ -41,6 +41,12 @@
             </button>
         </div>
 
+        <ng-container *ngIf="mostrarPopup">
+            <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+                (cerrarEvent)="mostrarPopup = false">
+            </app-shared-popup>
+        </ng-container>
+
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
             @for (salas of reportesMostrados; track salas.codigo) {
@@ -54,7 +60,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <button class="btn btn-cargar-mas" (click)="cargarMasReportes()" [disabled]="todosCargados">
+            <button class="btn btn-cargar-mas" (click)="mostrarMasReportes()" [disabled]="todosCargados">
                 {{ todosCargados ? 'No hay más Salas' : 'Cargar más' }}
             </button>
         </div>
