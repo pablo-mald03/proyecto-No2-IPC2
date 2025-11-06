@@ -95,7 +95,7 @@ export class ReporteGananciasAnuncianteComponent implements OnInit {
   descargarReporte(respuesta: HttpResponse<Blob>) {
     const contentDisposition = respuesta.headers.get('Content-Disposition');
 
-    let fileName = 'ReporteSalasComentadas.pdf';
+    let fileName = 'ReporteGananciasAnunciante.pdf';
     if (contentDisposition) {
       const match = contentDisposition.match(/filename="(.+)"/);
       if (match && match[1]) {
@@ -177,7 +177,7 @@ export class ReporteGananciasAnuncianteComponent implements OnInit {
       const { idUsuario } = this.filtrosFormUsuario.value;
 
       if (!idUsuario || idUsuario.trim() === '') {
-        const mensaje = 'No puedes dejar vacío el campo de id de la sala';
+        const mensaje = 'No puedes dejar vacío el campo de id del anunciante';
         this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
         return;
       }
@@ -264,7 +264,7 @@ export class ReporteGananciasAnuncianteComponent implements OnInit {
   }
 
 
-  //Metodo que sirve para ir cargando dinamicamente los reportes de salas de cine comentadas
+  //Metodo que sirve para ir cargando dinamicamente los reportes de anunciantes
   mostrarMasReportes(): void {
 
     const { fechaInicio, fechaFin } = this.filtrosForm.value;

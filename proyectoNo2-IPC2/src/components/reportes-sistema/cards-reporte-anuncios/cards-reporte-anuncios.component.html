@@ -7,7 +7,7 @@
 
         <ng-container *ngIf="anuncio.foto; else videoBlock">
             <div class="img-container mb-3">
-                <img [src]="anuncio.foto" alt="{{ anuncio.nombre }}" class="anuncio-img rounded" />
+               <img [src]="getImagenBase64()" alt="{{ anuncio.nombre }}" class="anuncio-img rounded" />
             </div>
         </ng-container>
 
@@ -33,6 +33,10 @@
         </p>
         <p class="text-light-50 mb-1 fs-5">
             <i class="bi bi-person-fill me-2"></i>Usuario: {{ anuncio.idUsuario }}
+        </p>
+
+        <p class="text-light-50 mb-1 fs-5">
+            <i class="bi bi-person-fill me-2"></i>Nombre: {{ anuncio.nombreUsuario }}
         </p>
         <p class="fw-semibold text-warning mb-2 fs-4">
             {{ getTipoAnuncio(anuncio.codigoTipo) }}

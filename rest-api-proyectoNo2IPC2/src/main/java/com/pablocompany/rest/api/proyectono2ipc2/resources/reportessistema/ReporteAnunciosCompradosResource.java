@@ -23,14 +23,14 @@ import java.util.Map;
  *
  * @author pablo
  */
-@Path("reportes/sistema/ganancias/anunciantes")
-public class ReporteGananciasAnuncianteResource {
+@Path("reportes/sistema/anuncios/comprados")
+public class ReporteAnunciosCompradosResource {
 
     //Endpoint que permite obtener las ganancias por anunciante sin filtro
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteAnunciantesSinFiltro(
+    public Response reporteAnunciosSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
@@ -55,7 +55,7 @@ public class ReporteGananciasAnuncianteResource {
     @GET
     @Path("/cantidad/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadReportesAnuncinateSinFiltro(
+    public Response cantidadReportesAnunciosSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin) {
 
@@ -77,19 +77,19 @@ public class ReporteGananciasAnuncianteResource {
 
     //Endpoint que permite obtener las ganancias por anunciante con filtro
     @GET
-    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idUsuario}/limit/{limite}/offset/{inicio}")
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{tipo}/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteAnunciantesConFiltro(
+    public Response reporteAnunciosConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio,
-            @PathParam("idUsuario") String idUsuario) {
+            @PathParam("tipo") String tipo) {
 
         ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
-            List<ReporteAnuncianteDTO> reportePeliculaProyectadaDTO = reporteGananciasAnuncianteService.obtenerReporteConFiltro(idUsuario, fechaInicio, fechaFin, limite, inicio);
+            List<ReporteAnuncianteDTO> reportePeliculaProyectadaDTO = reporteGananciasAnuncianteService.obtenerReporteConFiltro(tipo, fechaInicio, fechaFin, limite, inicio);
 
             return Response.ok(reportePeliculaProyectadaDTO).build();
 
@@ -103,18 +103,18 @@ public class ReporteGananciasAnuncianteResource {
 
     //Enpoint que permite obtener las ganancias por anunciante con filtro
     @GET
-    @Path("/cantidad/filtro/{idUsuario}/inicio/{fechaInicio}/fin/{fechaFin}")
+    @Path("/cantidad/filtro/{tipo}/inicio/{fechaInicio}/fin/{fechaFin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadReportesAnuncinateConFiltro(
+    public Response cantidadReportesAnunciosConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
-            @PathParam("idUsuario") String idUsuario) {
+            @PathParam("tipo") String tipo) {
 
         ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
 
         try {
 
-            CantidadReportesDTO cantidadReportes = reporteGananciasAnuncianteService.cantidadReportesConFiltro(fechaInicio, fechaFin, idUsuario);
+            CantidadReportesDTO cantidadReportes = reporteGananciasAnuncianteService.cantidadReportesConFiltro(fechaInicio, fechaFin, tipo);
             return Response.ok(cantidadReportes).build();
 
         } catch (FormatoInvalidoException ex) {
