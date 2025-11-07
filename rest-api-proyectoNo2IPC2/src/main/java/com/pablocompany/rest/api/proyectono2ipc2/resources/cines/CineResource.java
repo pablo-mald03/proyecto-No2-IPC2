@@ -64,9 +64,9 @@ public class CineResource {
         CineCrudService cineCrudService = new CineCrudService();
 
         try {
-            List<CineDTO> reporteSalasGustadasDto = cineCrudService.obtenerCinesAsociados(limite, inicio);
+            List<CineDTO> listadoCines = cineCrudService.obtenerCinesAsociados(limite, inicio);
 
-            return Response.ok(reporteSalasGustadasDto).build();
+            return Response.ok(listadoCines).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();

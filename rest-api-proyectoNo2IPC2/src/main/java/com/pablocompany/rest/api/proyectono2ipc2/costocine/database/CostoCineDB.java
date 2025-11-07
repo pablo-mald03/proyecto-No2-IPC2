@@ -6,6 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.costocine.database;
 
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
+import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoModificacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -74,7 +75,7 @@ public class CostoCineDB {
             query.setString(1, idCine.trim());
             ResultSet result = query.executeQuery();
             if (result.next()) {
-                LocalDate fechaPrincipal = result.getDate("fecha_creacion").toLocalDate();
+                LocalDate fechaPrincipal = result.getDate("fecha_modificacion").toLocalDate();
                 return fechaPrincipal;
             } else {
 
@@ -180,27 +181,26 @@ public class CostoCineDB {
     }
 
     //Metodo que permite obtener el listado completo del costo de ciertos cines
-    public List<CostoCine> obtenerListadoCinesAsociados(CostoCine costo) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<CostoModificacionDTO> obtenerListadoCinesAsociados(String idCine) throws FormatoInvalidoException, ErrorInesperadoException {
 
-        if (costo == null) {
-            throw new FormatoInvalidoException("la referencia de costos de cine esta vacia");
+        if (StringUtils.isBlank(idCine)) {
+            throw new FormatoInvalidoException("El id del cine esta vacio");
         }
 
-        List<CostoCine> listadoCostos = new ArrayList<>();
+        List<CostoModificacionDTO> listadoCostos = new ArrayList<>();
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CONSULTAR_COSTO_CINE);) {
 
-            query.setString(1, costo.getCodigoCine());
+            query.setString(1, idCine.trim());
 
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                CostoCine costoEncontrado = new CostoCine(
+                CostoModificacionDTO costoEncontrado = new CostoModificacionDTO(
                         resultSet.getBigDecimal("costo").doubleValue(),
-                        resultSet.getDate("fecha_modificacion").toLocalDate(),
-                        resultSet.getString("nombre")
+                        resultSet.getDate("fecha_modificacion").toLocalDate()
                 );
 
                 listadoCostos.add(costoEncontrado);

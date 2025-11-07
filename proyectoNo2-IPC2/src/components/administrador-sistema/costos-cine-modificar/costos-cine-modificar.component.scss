@@ -124,6 +124,37 @@
   margin-top: 5px;
 }
 
+.btn-regresar {
+  background-color: #5a035a;
+  color: #f7f7f7;
+  border: none;
+  padding: 6px 16px;
+  font-weight: 600;
+  border-radius: 999px;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.btn-regresar i {
+  font-size: 1.1rem;
+}
+
+.btn-regresar:hover {
+  background-color: #d2e3fc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(26, 115, 232, 0.25);
+}
+
+.btn-regresar:active {
+  background-color: #817f06;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
 .btn-guardar {
   padding: 12px;
   background: linear-gradient(135deg, #e09119, #05c0b7);

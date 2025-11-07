@@ -1,6 +1,13 @@
 <div class="historial-card">
 
+  <button class="btn-regresar mb-3" (click)="regresar()">
+    <i class="bi bi-arrow-left-circle"></i>
+    Regresar
+  </button>
+
+
   <h2 class="titulo">Modificar Costos del Cine</h2>
+  <h4 class="mt-2 text-center fw-bold text-info mb-3 ">Cine: {{codigoCine}}</h4>
 
   <div class="tabla-container">
     <table class="costos-table">
@@ -65,11 +72,11 @@
 </div>
 
 <app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
-    (cerrarEvent)="mostrarModal = false">
+  (cerrarEvent)="mostrarModal = false">
 </app-fullscreen-modal>
 
 <ng-container *ngIf="mostrarPopup">
-    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
-        (cerrarEvent)="mostrarPopup = false">
-    </app-shared-popup>
+  <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+    (cerrarEvent)="mostrarPopup = false">
+  </app-shared-popup>
 </ng-container>

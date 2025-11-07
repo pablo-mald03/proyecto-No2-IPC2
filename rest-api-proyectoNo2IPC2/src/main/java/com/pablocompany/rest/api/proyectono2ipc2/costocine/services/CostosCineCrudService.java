@@ -7,10 +7,12 @@ package com.pablocompany.rest.api.proyectono2ipc2.costocine.services;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.database.CostoCineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.dtos.CostoDTORequest;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
+import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoModificacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import java.time.LocalDate;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -65,5 +67,14 @@ public class CostosCineCrudService {
     }
 
     //Metodo que permite retornar el listado de costos que ha tenido el cine
-    //public 
+    public List<CostoModificacionDTO> obtenerListadoCostos(String codigoCine) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (StringUtils.isBlank(codigoCine)) {
+            throw new FormatoInvalidoException("El codigo del cine esta vacio");
+        }
+        
+        CostoCineDB costoDb = new CostoCineDB();
+        
+        return costoDb.obtenerListadoCinesAsociados(codigoCine);
+    }
 }
