@@ -4,13 +4,71 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.costocine.database;
 
+import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
+import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author pablo
  */
 //Clase delegada para poder gestionar la tascendencia de costos de cine
 public class CostoCineDB {
+
+    //Constante que permite crear el costo de cine actual al momento de crear el cine 
+    private final String CREAR_COSTO_CINE = "INSERT INTO costo_cine(costo, fecha_modificacion, codigo_cine) VALUES(?,?,?)";
+
+    //Constante que permite mostrar el listado de costos que ha tenido el cine
+    private final String CONSULTAR_COSTO_CINE = "SELECT costo, fecha_modificacion FROM costo_cine WHERE codigo_cine= ?";
     
-    //Constante que 
-    
+    //Constante que permite mostrar el listado de costos que ha tenido el cine
+    private final String CONSULTAR_COSTO_CINE_ACTUAL = "SELECT costo FROM costo_cine WHERE codigo_cine = ? ORDER BY codigo DESC LIMIT 1";
+
+    //Constante que permite consultar la cantidad de costos que ha tenido el cine 
+    private final String CANTIDAD_COSTO_CINE = "SELECT COUNT(*) AS `cantidad` FROM costo_cine WHERE codigo_cine= ?";
+
+    //Metodo que retorna la cantidad de costos que ha tenido el cine para poder 
+    public int cantidadCostosCine() throws ErrorInesperadoException, DatosNoEncontradosException {
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CANTIDAD_COSTO_CINE);) {
+
+            ResultSet result = query.executeQuery();
+            if (result.next()) {
+                return result.getInt("cantidad");
+            } else {
+
+                throw new DatosNoEncontradosException("No hay registros del historial de costos de cine");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener el historial de costos de cine");
+        }
+    }
+
+    //Metodo que permite crear el costo de modificacion de cine principal
+    public int registrarCostoCine(CostoCine costoCine, Connection conexion) throws ErrorInesperadoException {
+
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(CREAR_COSTO_CINE);) {
+
+            preparedStmt.setBigDecimal(1, new BigDecimal(costoCine.getCosto()));
+            preparedStmt.setDate(2, java.sql.Date.valueOf(costoCine.getFechaModificacion()));
+            preparedStmt.setString(3, costoCine.getCodigoCine());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            return filasAfectadas;
+
+        } catch (SQLException ex) {
+            throw new ErrorInesperadoException("No se ha podido crear la fecha de modificacion del cine.");
+        }
+    }
+
 }

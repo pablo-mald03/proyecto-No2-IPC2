@@ -7,11 +7,11 @@ import { UsuariosSistemaService } from '../../../services/admin-sistema-service/
 import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-crear-admin-sistema',
-  imports: [ReactiveFormsModule, FormsModule, RouterLink, RouterLinkActive, FullscreenModalComponent, SharedPopupComponent, NgIf],
+  imports: [ReactiveFormsModule, FormsModule, RouterLink, CommonModule, RouterLinkActive, FullscreenModalComponent, SharedPopupComponent, NgIf],
   templateUrl: './crear-admin-sistema.component.html',
   styleUrl: './crear-admin-sistema.component.scss',
   providers: [Popup]

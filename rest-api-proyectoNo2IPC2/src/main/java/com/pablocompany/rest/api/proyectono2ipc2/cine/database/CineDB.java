@@ -9,6 +9,8 @@ import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraC
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
+import com.pablocompany.rest.api.proyectono2ipc2.costocine.database.CostoCineDB;
+import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -17,6 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -52,8 +55,9 @@ public class CineDB {
         if (cineNuevo == null) {
             throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el cine a crear");
         }
-        
+
         BilleteraCineDB billeteraCineDb = new BilleteraCineDB();
+        CostoCineDB costoCineDb = new CostoCineDB();
 
         Connection conexion = DBConnectionSingleton.getInstance().getConnection();
 
@@ -62,11 +66,12 @@ public class CineDB {
             conexion.setAutoCommit(false);
 
             int filasAfectadas = insertarNuevoCine(conexion, cineNuevo);
-           
-            
+
+            int filasAfectadasCosto = costoCineDb.registrarCostoCine(new CostoCine(cineNuevo.getMontoOcultacion(), cineNuevo.getFechaCreacion(), cineNuevo.getCodigo()), conexion);
+
             int filasAfectadasBilletera = billeteraCineDb.crearBilleteraCine(new BilleteraCine(0, cineNuevo.getCodigo().trim()), conexion);
 
-            if (filasAfectadas > 0 && filasAfectadasBilletera > 0) {
+            if (filasAfectadas > 0 && filasAfectadasBilletera > 0 && filasAfectadasCosto > 0) {
 
                 conexion.commit();
                 return true;
@@ -214,4 +219,49 @@ public class CineDB {
         throw new ErrorInesperadoException("No se han podido obtener los datos del cine asociado al sistema");
     }
 
+    //Metodo que permite modificar el costo del cine PENDIENTE
+    /*public boolean modificarCostoCine(CostoCine costoCine) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        if (costoCine == null) {
+            throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el costo de cine a modificar");
+        }
+
+        Connection conexion = DBConnectionSingleton.getInstance().getConnection();
+
+        try {
+
+            conexion.setAutoCommit(false);
+
+            int filasAfectadas = registrarCostoCine(costoCine, conexion);
+
+            if (filasAfectadas > 0) {
+
+                conexion.commit();
+                return true;
+
+            } else {
+                conexion.rollback();
+                throw new ErrorInesperadoException("No se ha podido modificar el costo del cine.");
+            }
+
+        } catch (SQLException ex) {
+
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new ErrorInesperadoException("Error al hacer Rollback al modificar el costo del cine");
+            }
+
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al modificar el costo del cine");
+        } finally {
+
+            try {
+
+                conexion.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                System.out.println("Error al reactivar la autoconfirmacion al modificar el costo del cine");
+            }
+        }
+    }*/
 }

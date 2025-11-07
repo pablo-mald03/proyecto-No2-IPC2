@@ -6,11 +6,11 @@ import { CineService } from '../../../services/cine-service/cine.service';
 import { Popup } from '../../../shared/popup/popup';
 import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-cines-asociados',
-  imports: [CinesAsociadosCardsComponent, RouterLink, RouterLinkActive, SharedPopupComponent, NgIf],
+  imports: [CinesAsociadosCardsComponent, CommonModule, RouterLink, RouterLinkActive, SharedPopupComponent, NgIf],
   templateUrl: './cines-asociados.component.html',
   styleUrl: './cines-asociados.component.scss',
   providers: [Popup],
