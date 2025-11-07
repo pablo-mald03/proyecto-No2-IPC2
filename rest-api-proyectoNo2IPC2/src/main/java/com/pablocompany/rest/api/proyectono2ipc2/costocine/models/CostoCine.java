@@ -5,6 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.costocine.models;
 
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -12,7 +13,7 @@ import java.time.LocalDate;
  */
 //Clase delegada para representar al objeto que genera la trascendencia de precios de cine
 public class CostoCine {
-    
+
     private double costo;
     private LocalDate fechaModificacion;
     private String codigoCine;
@@ -22,7 +23,7 @@ public class CostoCine {
         this.fechaModificacion = fechaModificacion;
         this.codigoCine = codigoCine;
     }
-    
+
     public double getCosto() {
         return costo;
     }
@@ -46,7 +47,26 @@ public class CostoCine {
     public void setCodigoCine(String codigoCine) {
         this.codigoCine = codigoCine;
     }
-    
-    
-    
+
+    //Metodo que le permite al objeto validarse a si mismo
+    public boolean validarCosto() {
+
+        if (StringUtils.isBlank(codigoCine)) {
+            System.out.println("El código del cine no puede estar vacío.");
+            return false;
+        }
+
+        if (costo <= 0) {
+            System.out.println("El costo debe ser mayor a 0.");
+            return false;
+        }
+
+        if (fechaModificacion == null) {
+            System.out.println("La fecha de modificación no puede ser nula.");
+            return false;
+        }
+
+        return true;
+    }
+
 }
