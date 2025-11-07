@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 
@@ -20,23 +21,44 @@ import javax.imageio.ImageIO;
 public class ConvertirBase64Service {
 
     //Metodo delegado para poder retornar una imagen en formato base64
-    public String convertirImagenAPngBase64(byte[] imagenBytes) throws ErrorInesperadoException {
+    public String convertirImagenAPngBase64(byte[] imagenBytes, int codigo) throws ErrorInesperadoException {
+
+        if (codigo != 2) {
+            return "";
+        }
+
         try {
+
             BufferedImage imagenOriginal = ImageIO.read(new ByteArrayInputStream(imagenBytes));
 
             if (imagenOriginal == null) {
-                throw new ErrorInesperadoException("El formato de imagen no es soportado");
+                return obtenerImagenDefaultBase64();
             }
 
             ByteArrayOutputStream pngOutput = new ByteArrayOutputStream();
             ImageIO.write(imagenOriginal, "png", pngOutput);
 
-            byte[] imagenPngBytes = pngOutput.toByteArray();
-
-            return Base64.getEncoder().encodeToString(imagenPngBytes);
+            return Base64.getEncoder().encodeToString(pngOutput.toByteArray());
 
         } catch (IOException e) {
-            throw new ErrorInesperadoException("No se pudo procesar la imagen extraida de la base de datos");
+            return obtenerImagenDefaultBase64();
+        }
+    }
+
+    //Submetodo que retorna una imagen default para evitar errores
+    private String obtenerImagenDefaultBase64() throws ErrorInesperadoException {
+        try (InputStream reporte = getClass().getClassLoader()
+                .getResourceAsStream("com/pablocompany/rest/api/reports/imagesdefault/defaultImg.png")) {
+
+            if (reporte == null) {
+                throw new ErrorInesperadoException("No se pudo cargar la imagen default");
+            }
+
+            byte[] bytesDefault = reporte.readAllBytes();
+            return Base64.getEncoder().encodeToString(bytesDefault);
+
+        } catch (IOException e) {
+            throw new ErrorInesperadoException("No se pudo procesar la imagen default");
         }
     }
 

@@ -20,6 +20,7 @@ export class CardsReporteAnunciosComponent {
 
   //Metodo que permite obtener la imagen de tipo base64
   getImagenBase64(): SafeUrl | null {
+    if (!this.esImagen()) return null;
     if (!this.anuncio.foto) return null;
 
     const base64 = `data:image/png;base64,${this.anuncio.foto}`;
@@ -28,10 +29,20 @@ export class CardsReporteAnunciosComponent {
 
   //Metodo que sirve para colocar los videos si end dado caso existen y verificar que la url sea segura
   getVideoUrl(): SafeResourceUrl {
+    if (!this.esVideo()) return '';
     if (!this.anuncio.url) return '';
-    const autoplay = false;
-    const safeUrl = this.anuncio.url.replace('autoplay=1', `autoplay=${autoplay ? 1 : 0}`);
-    return this.sanitizer.bypassSecurityTrustResourceUrl(safeUrl);
+
+
+    let url = this.anuncio.url;
+
+    if (url.includes("watch?v=")) {
+      const videoId = url.split("watch?v=")[1].split("&")[0];
+      url = `https://www.youtube-nocookie.com/embed/${videoId}`;
+    } else {
+      url = url.replace("youtube.com", "youtube-nocookie.com");
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   //Metodo que ayuda a saber el tipo de anuncio que es 
@@ -45,5 +56,20 @@ export class CardsReporteAnunciosComponent {
     }
 
   }
+
+
+  //Metodos que ayudan a saber que tipo de anuncio es
+  esTexto(): boolean {
+    return this.anuncio.codigoTipo === 1;
+  }
+
+  esImagen(): boolean {
+    return this.anuncio.codigoTipo === 2;
+  }
+
+  esVideo(): boolean {
+    return this.anuncio.codigoTipo === 3;
+  }
+
 
 }

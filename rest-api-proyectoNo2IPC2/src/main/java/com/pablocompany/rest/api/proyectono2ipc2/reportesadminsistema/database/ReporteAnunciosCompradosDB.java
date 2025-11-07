@@ -9,7 +9,6 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosE
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteAnuncioRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ConvertirBase64Service;
 import java.sql.Connection;
@@ -129,7 +128,7 @@ public class ReporteAnunciosCompradosDB {
                         resultSet.getDate("fecha_compra").toLocalDate(),
                         resultSet.getString("url"),
                         resultSet.getString("texto"),
-                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto")),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
                         resultSet.getInt("codigoTipo"),
                         resultSet.getString("idUsuario"),
                         resultSet.getString("nombreUsuario")
@@ -177,7 +176,7 @@ public class ReporteAnunciosCompradosDB {
                         resultSet.getDate("fecha_compra").toLocalDate(),
                         resultSet.getString("url"),
                         resultSet.getString("texto"),
-                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto")),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
                         resultSet.getInt("codigoTipo"),
                         resultSet.getString("idUsuario"),
                         resultSet.getString("nombreUsuario")
@@ -266,7 +265,7 @@ public class ReporteAnunciosCompradosDB {
                         resultSet.getDate("fecha_compra").toLocalDate(),
                         resultSet.getString("url"),
                         resultSet.getString("texto"),
-                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto")),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
                         resultSet.getInt("codigoTipo"),
                         resultSet.getString("idUsuario"),
                         resultSet.getString("nombreUsuario")
@@ -312,7 +311,7 @@ public class ReporteAnunciosCompradosDB {
                         resultSet.getDate("fecha_compra").toLocalDate(),
                         resultSet.getString("url"),
                         resultSet.getString("texto"),
-                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto")),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
                         resultSet.getInt("codigoTipo"),
                         resultSet.getString("idUsuario"),
                         resultSet.getString("nombreUsuario")

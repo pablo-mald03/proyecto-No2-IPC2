@@ -8,7 +8,10 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoExce
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarAnunciosCompradosService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarGananciasAnuncianteService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteAnunciosCompradosService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasAnuncianteService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -27,24 +30,24 @@ import java.util.Map;
 @Path("reportes/sistema/anuncios/comprados/exportar")
 public class ExportarReporteAnunciosCompradosResource {
 
-    //Endpoint que sirve para exportar a pdf el listado de reporte de ganancias de anunciantes
+    //Endpoint que sirve para exportar a pdf el listado de reporte de anuncios comprados
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
     @Produces("application/pdf")
-    public Response reporteGananciasSinFiltro(
+    public Response reporteAnunciosSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("limite") String limite,
             @PathParam("inicio") String inicio) {
 
-        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
+        ReporteAnunciosCompradosService reporteAnunciosCompradosService = new ReporteAnunciosCompradosService();
 
         try {
-            List<ReporteAnuncianteDTO> reporteGananciasDto = reporteGananciasAnuncianteService.obtenerReporteSinFiltro(fechaInicio, fechaFin, limite, inicio);
+            List<ReporteAnuncioDTO> reporteAnunciosDto = reporteAnunciosCompradosService.obtenerReporteAnunciosCompradosSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-            ExportarGananciasAnuncianteService exportarReporteService = new ExportarGananciasAnuncianteService();
+            ExportarAnunciosCompradosService exportarAnunciosCompradosService = new ExportarAnunciosCompradosService();
 
-            byte[] pdfData = exportarReporteService.getReporteGananciaAnunciate(reporteGananciasDto);
+            byte[] pdfData = exportarAnunciosCompradosService.getReporteAnunciosComprados(reporteAnunciosDto);
 
             StreamingOutput stream = output -> {
 
@@ -69,25 +72,25 @@ public class ExportarReporteAnunciosCompradosResource {
 
     }
 
-    //Endpoint que sirve para exportar a pdf el listado de reporte de ganancias de anunciantes
+    //Endpoint que sirve para exportar a pdf el listado de reporte de anuncios comprados
     @GET
     @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idUsuario}/limit/{limite}/offset/{tope}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reporteGananciasConFiltro(
+    public Response reporteAnunciosConFiltro(
             @PathParam("fechaInicio") String fechaInicio,
             @PathParam("fechaFin") String fechaFin,
             @PathParam("tipo") String tipo,
             @PathParam("limite") String limite,
             @PathParam("tope") String inicio) {
 
-         ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
+        ReporteAnunciosCompradosService reporteAnunciosCompradosService = new ReporteAnunciosCompradosService();
 
         try {
-            List<ReporteAnuncianteDTO> reporteGananciasDto = reporteGananciasAnuncianteService.obtenerReporteConFiltro(tipo, fechaInicio, fechaFin, limite, inicio);
+            List<ReporteAnuncioDTO> reportePeliculaProyectadaDTO = reporteAnunciosCompradosService.obtenerReporteAnunciosCompradosConFiltro(fechaInicio, fechaFin, limite, inicio, tipo);
 
-            ExportarGananciasAnuncianteService exportarReporteService = new ExportarGananciasAnuncianteService();
+            ExportarAnunciosCompradosService exportarAnunciosCompradosService = new ExportarAnunciosCompradosService();
 
-            byte[] pdfData = exportarReporteService.getReporteGananciaAnunciate(reporteGananciasDto);
+            byte[] pdfData = exportarAnunciosCompradosService.getReporteAnunciosComprados(reportePeliculaProyectadaDTO);
 
             StreamingOutput stream = output -> {
 
@@ -97,7 +100,7 @@ public class ExportarReporteAnunciosCompradosResource {
 
             NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
 
-            String nombreReporte = nombreReporteRandomService.getNombre("ReporteGananciasAnunciante");
+            String nombreReporte = nombreReporteRandomService.getNombre("ReporteAnunciosComprados");
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
