@@ -54,7 +54,7 @@ public class ExportarReporteAnunciosCompradosResource {
 
             NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
 
-            String nombreReporte = nombreReporteRandomService.getNombre("ReporteGananciasAnunciante");
+            String nombreReporte = nombreReporteRandomService.getNombre("ReporteAnunciosComprados");
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
