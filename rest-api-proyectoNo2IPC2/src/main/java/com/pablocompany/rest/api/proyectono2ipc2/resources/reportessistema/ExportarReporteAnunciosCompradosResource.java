@@ -74,7 +74,7 @@ public class ExportarReporteAnunciosCompradosResource {
 
     //Endpoint que sirve para exportar a pdf el listado de reporte de anuncios comprados
     @GET
-    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{idUsuario}/limit/{limite}/offset/{tope}")
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/filtro/{tipo}/limit/{limite}/offset/{tope}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response reporteAnunciosConFiltro(
             @PathParam("fechaInicio") String fechaInicio,

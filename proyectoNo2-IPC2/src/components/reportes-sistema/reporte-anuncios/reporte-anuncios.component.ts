@@ -218,23 +218,6 @@ export class ReporteAnunciosComponent implements OnInit {
     }));
 
 
-  //Permite ir cargando mas anuncios
-  cargarMasAnuncios(): void {
-    const siguienteBloque = this.anuncios.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
-
-    this.anunciosMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
-
-    if (this.indiceActual >= this.anuncios.length) {
-      this.todosCargados = true;
-    }
-  }
-
-
-
 
   //Verifica si la fehca es valida 
   get fechaInvalida(): boolean {
