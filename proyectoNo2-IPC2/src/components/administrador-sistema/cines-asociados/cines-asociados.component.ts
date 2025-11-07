@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CinesAsociadosCardsComponent } from "../cines-asociados-cards/cines-asociados-cards.component";
 import { Cine } from '../../../models/cines/cine';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-cines-asociados',
-  imports: [CinesAsociadosCardsComponent],
+  imports: [CinesAsociadosCardsComponent,RouterLink,RouterLinkActive],
   templateUrl: './cines-asociados.component.html',
   styleUrl: './cines-asociados.component.scss'
 })

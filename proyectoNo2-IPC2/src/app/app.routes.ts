@@ -34,6 +34,7 @@ import { VerPerfilComponent } from '../components/usuario-general/ver-perfil/ver
 import { PrincipalCinesComponent } from '../components/usuario-paginas/principal-cines/principal-cines.component';
 import { BilleteraDigitalComponent } from '../components/billetera-digital/billetera-digital.component';
 import { CinesAsociadosComponent } from '../components/administrador-sistema/cines-asociados/cines-asociados.component';
+import { CrearCineComponent } from '../components/administrador-sistema/crear-cine/crear-cine.component';
 
 
 export const routes: Routes = [
@@ -151,6 +152,10 @@ export const routes: Routes = [
             {
                 path: 'cines',
                 component: CinesAsociadosComponent,
+            },
+            {
+                path: 'cines/crear',
+                component: CrearCineComponent,
             },
             {
                 path: 'crear-admin-sistema',
