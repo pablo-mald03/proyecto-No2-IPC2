@@ -73,6 +73,18 @@
             }
           </div>
 
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-cash-stack me-2"></i> Costo de cine
+            </label>
+            <input type="number" class="form-control custom-input" formControlName="costoCine" placeholder="Ej: 150.00">
+
+            @if (cineForm.get('costoCine')?.invalid && cineForm.get('costoCine')?.touched) {
+              <small class="text-danger">Costo de cine invalido.</small>
+            }
+          </div>
+
           <div class="text-center d-flex justify-content-center gap-3 mt-4">
             <button type="button" class="btn btn-outline-light px-4 py-2 rounded-pill mx-3"
                     (click)="limpiarDatos()">Limpiar</button>

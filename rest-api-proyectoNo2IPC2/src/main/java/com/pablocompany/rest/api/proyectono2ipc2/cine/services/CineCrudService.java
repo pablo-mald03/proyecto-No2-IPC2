@@ -9,6 +9,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.database.CineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CineRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -25,7 +26,7 @@ public class CineCrudService {
     //Metodo utilizado para crear cines
     public boolean crearCine(CineRequest request) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
-        Cine nuevoCine = extraerDatos(request);
+        CineDTO nuevoCine = extraerDatos(request);
 
         CineDB cineDb = new CineDB();
 
@@ -45,16 +46,17 @@ public class CineCrudService {
     }
 
     //Metodo delegado para poder extraer los datos del cine request 
-    private Cine extraerDatos(CineRequest request) {
+    private CineDTO extraerDatos(CineRequest request) {
 
-        return new Cine(
+        return new CineDTO(
                 request.getCodigo(),
                 request.getNombre(),
                 request.isEstadoAnuncio(),
                 request.getMontoOcultacion(),
                 request.getFechaCreacion(),
                 request.getDescripcion(),
-                request.getUbicacion());
+                request.getUbicacion(),
+                request.getCostoCine());
 
     }
 
@@ -66,7 +68,7 @@ public class CineCrudService {
     }
 
     //Metodo delegado para retornar todo el listado de cines asociados en el sistema
-    public List<Cine> obtenerCinesAsociados(String limite, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<CineDTO> obtenerCinesAsociados(String limite, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
 
         CantidadCargaRequest cantidadCargaRequest = extraerLimites(limite, offset);
 

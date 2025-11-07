@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Cine } from "../../models/cines/cine";
 import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
+import { CineDTO } from "../../models/cines/cine-dto";
 
 
 
@@ -18,13 +19,13 @@ export class CineService {
     constructor(private httpClient: HttpClient) { }
 
     //Metodo que permite crear un nuevo cine asociado
-    public crearNuevoCine(cine: Cine): Observable<void> {
+    public crearNuevoCine(cine: CineDTO): Observable<void> {
         return this.httpClient.post<void>(`${this.restConstants.getApiURL()}cines`, cine);
     }
 
     //Endpoint que retorna dinamicamente la cantidad de cines asociados
-    public listadoRegistros(limite: number, inicio: number): Observable<Cine[]> {
-        return this.httpClient.get<Cine[]>(`${this.restConstants.getApiURL()}cines/limit/${limite}/offset/${inicio}`);
+    public listadoRegistros(limite: number, inicio: number): Observable<CineDTO[]> {
+        return this.httpClient.get<CineDTO[]>(`${this.restConstants.getApiURL()}cines/limit/${limite}/offset/${inicio}`);
     }
 
     //Endpoint que ayuda a obtener la cantidad total de registros de cines asociados en el sistema

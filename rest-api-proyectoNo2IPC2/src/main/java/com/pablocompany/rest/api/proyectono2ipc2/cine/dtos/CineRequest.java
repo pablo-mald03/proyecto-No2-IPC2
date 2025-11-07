@@ -25,6 +25,7 @@ public class CineRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate fechaCreacion;
+    private double costoCine; 
 
     public CineRequest() {
     }
@@ -83,6 +84,14 @@ public class CineRequest {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public double getCostoCine() {
+        return costoCine;
+    }
+
+    public void setCostoCine(double costoCine) {
+        this.costoCine = costoCine;
     }
 
 }

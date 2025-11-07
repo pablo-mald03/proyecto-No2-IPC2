@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author pablo
  */
-//Clase delegada para poder interactuar con el objeto para poder manejar el objeto propio de cines
-public class Cine {
+//Clase delegada para poder interactuar con el objeto para poder crear los cines 
+public class CineDTO {
 
     private String codigo;
     private String nombre;
@@ -22,8 +22,10 @@ public class Cine {
     private LocalDate fechaCreacion;
     private String descripcion;
     private String ubicacion;
+    private double costoCine;
 
-    public Cine(String codigo, String nombre, boolean estadoAnuncio, double montoOcultacion, LocalDate fechaCreacion, String descripcion, String ubicacion) {
+    //Constructor utilizado para crear los cines
+    public CineDTO(String codigo, String nombre, boolean estadoAnuncio, double montoOcultacion, LocalDate fechaCreacion, String descripcion, String ubicacion, double costoCine) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.estadoAnuncio = estadoAnuncio;
@@ -31,6 +33,27 @@ public class Cine {
         this.fechaCreacion = fechaCreacion;
         this.descripcion = descripcion;
         this.ubicacion = ubicacion;
+        this.costoCine = costoCine;
+    }
+    
+    //Constructor utilizado para consultas
+    public CineDTO(String codigo, String nombre, boolean estadoAnuncio, double montoOcultacion, LocalDate fechaCreacion, String descripcion, String ubicacion) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.estadoAnuncio = estadoAnuncio;
+        this.montoOcultacion = montoOcultacion;
+        this.fechaCreacion = fechaCreacion;
+        this.descripcion = descripcion;
+        this.ubicacion = ubicacion;
+        this.costoCine = 0;
+    }
+
+    public double getCostoCine() {
+        return costoCine;
+    }
+
+    public void setCostoCine(double costoCine) {
+        this.costoCine = costoCine;
     }
 
     public String getCodigo() {
@@ -109,6 +132,10 @@ public class Cine {
 
         if (montoOcultacion < 0) {
             throw new FormatoInvalidoException("El monto de ocultación no puede ser negativo");
+        }
+        
+        if (costoCine < 0) {
+            throw new FormatoInvalidoException("El costo del cine no puede ser negativo");
         }
 
         if (fechaCreacion == null) {

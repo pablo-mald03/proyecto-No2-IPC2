@@ -6,7 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.cines;
 
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CineRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CineCrudService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
@@ -64,7 +64,7 @@ public class CineResource {
         CineCrudService cineCrudService = new CineCrudService();
 
         try {
-            List<Cine> reporteSalasGustadasDto = cineCrudService.obtenerCinesAsociados(limite, inicio);
+            List<CineDTO> reporteSalasGustadasDto = cineCrudService.obtenerCinesAsociados(limite, inicio);
 
             return Response.ok(reporteSalasGustadasDto).build();
 

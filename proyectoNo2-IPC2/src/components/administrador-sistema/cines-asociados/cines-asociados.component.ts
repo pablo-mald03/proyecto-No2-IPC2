@@ -7,6 +7,7 @@ import { Popup } from '../../../shared/popup/popup';
 import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 import { CommonModule, NgIf } from '@angular/common';
+import { CineDTO } from '../../../models/cines/cine-dto';
 
 @Component({
   selector: 'app-cines-asociados',
@@ -18,7 +19,7 @@ import { CommonModule, NgIf } from '@angular/common';
 export class CinesAsociadosComponent implements OnInit {
 
 
-  cinesMostrados: Cine[] = [];
+  cinesMostrados: CineDTO[] = [];
 
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
@@ -105,7 +106,7 @@ export class CinesAsociadosComponent implements OnInit {
     if (this.todosCargados) return;
 
     this.cineService.listadoRegistros(this.cantidadPorCarga, this.indiceActual).subscribe({
-      next: (response: Cine[]) => {
+      next: (response: CineDTO[]) => {
         this.ampliarResultados(response);
 
       },
@@ -120,7 +121,7 @@ export class CinesAsociadosComponent implements OnInit {
   }
 
   //Metodo encargado de ir ampliando dinamicamente los cines registrados o asociados en el sistema
-  ampliarResultados(response: Cine[]): void {
+  ampliarResultados(response: CineDTO[]): void {
 
     if (!response || response.length === 0) {
       this.todosCargados = true;

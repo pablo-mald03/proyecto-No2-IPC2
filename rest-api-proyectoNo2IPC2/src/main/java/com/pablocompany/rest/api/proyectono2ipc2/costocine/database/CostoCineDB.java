@@ -8,11 +8,13 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -26,7 +28,7 @@ public class CostoCineDB {
 
     //Constante que permite mostrar el listado de costos que ha tenido el cine
     private final String CONSULTAR_COSTO_CINE = "SELECT costo, fecha_modificacion FROM costo_cine WHERE codigo_cine= ?";
-    
+
     //Constante que permite mostrar el listado de costos que ha tenido el cine
     private final String CONSULTAR_COSTO_CINE_ACTUAL = "SELECT costo FROM costo_cine WHERE codigo_cine = ? ORDER BY codigo DESC LIMIT 1";
 
@@ -69,6 +71,34 @@ public class CostoCineDB {
         } catch (SQLException ex) {
             throw new ErrorInesperadoException("No se ha podido crear la fecha de modificacion del cine.");
         }
+    }
+
+    //Metodo que permite obtener el costo de cine actual
+    public double obtenerCostoActual(String idCine) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (StringUtils.isBlank(idCine)) {
+            throw new FormatoInvalidoException("El id del cine esta vacio");
+        }
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_COSTO_CINE_ACTUAL);) {
+            
+            query.setString(1, idCine);
+ 
+            ResultSet resultSet = query.executeQuery();
+
+            if (resultSet.next()) {
+
+                double costoActual = resultSet.getBigDecimal("costo").doubleValue();
+                return costoActual;
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener el costo actual del cine ");
+        }
+
+        throw new ErrorInesperadoException("No se han podido obtener el costo actual del cine");
     }
 
 }

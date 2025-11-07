@@ -7,6 +7,7 @@ import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/share
 import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
 import { Cine } from '../../../models/cines/cine';
 import { CineService } from '../../../services/cine-service/cine.service';
+import { CineDTO } from '../../../models/cines/cine-dto';
 
 @Component({
   selector: 'app-crear-cine',
@@ -61,6 +62,7 @@ export class CrearCineComponent implements OnInit {
       ubicacion: ['', [Validators.required]],
       montoOcultacion: [0, [Validators.required, Validators.min(0)]],
       fechaCreacion: [null, [Validators.required]],
+      costoCine: [0, [Validators.required, Validators.min(0)]],
     });
 
     this.popUp.popup$.subscribe(data => {
@@ -93,7 +95,7 @@ export class CrearCineComponent implements OnInit {
 
     const fecha = this.cineForm.value.fechaCreacion; 
 
-    const nuevoCine: Cine = {
+    const nuevoCine: CineDTO = {
       codigo: 'NULL',
       nombre: this.cineForm.value.nombre!,
       descripcion: this.cineForm.value.descripcion!,
@@ -101,6 +103,7 @@ export class CrearCineComponent implements OnInit {
       estadoAnuncio: true,
       montoOcultacion: Number(this.cineForm.value.montoOcultacion),
       fechaCreacion: fecha,
+      costoCine: Number(this.cineForm.value.costoCine),
    
     };
 
