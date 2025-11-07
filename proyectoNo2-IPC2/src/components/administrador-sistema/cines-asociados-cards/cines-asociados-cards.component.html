@@ -29,7 +29,7 @@
     <i class="bi bi-geo-alt-fill text-danger"></i> {{ cine.ubicacion }}
   </p>
 
-  <p class="mb-1">
+  <p class="mb-1 text-warning">
     <i class="bi bi-cash-stack text-success"></i> Costo de cine:
     Q{{ cine.costoCine | number:'1.2-2' }}
   </p>
@@ -41,13 +41,15 @@
 
 
   <div class="card-actions mt-4 d-flex justify-content-between">
-    <button class="btn btn-outline-warning btn-sm rounded-pill px-3 mx-4" (click)="editarCine(cine.codigo)">
+
+    <button class="btn btn-outline-warning btn-sm rounded-pill px-3 mx-4" routerLink="cines/editar/{{cine.codigo}}" routerLinkActive="active">
       <i class="bi bi-pencil-square me-1"></i> Editar
     </button>
 
-    <button class="btn btn-outline-info btn-sm rounded-pill px-3 mx-1" (click)="cambiarCosto(cine.codigo)">
+    <button class="btn btn-outline-info btn-sm rounded-pill px-3 mx-1" routerLink="/menu-admin-sistema/cines/costos/{{cine.codigo}}" routerLinkActive="active">
       <i class="bi bi-cash-coin me-1"></i> Cambiar Costo
     </button>
+    
   </div>
 
 </div>

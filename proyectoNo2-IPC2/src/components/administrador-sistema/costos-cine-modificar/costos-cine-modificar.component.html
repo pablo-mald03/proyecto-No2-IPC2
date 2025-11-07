@@ -1,0 +1,75 @@
+<div class="historial-card">
+
+  <h2 class="titulo">Modificar Costos del Cine</h2>
+
+  <div class="tabla-container">
+    <table class="costos-table">
+
+      <thead>
+        <tr>
+          <th>Costo (Q)</th>
+          <th>Fecha modificación</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (costos.length === 0) {
+        <tr>
+          <td colspan="2" class="empty">No hay costos registrados aún.</td>
+        </tr>
+        } @else {
+        @for (c of costos; track c) {
+        <tr>
+          <td>Q{{ c.costo | number:'1.2-2' }}</td>
+          <td>{{ c.fechaModificacion | date:'yyyy-MM-dd' }}</td>
+        </tr>
+        }
+        }
+      </tbody>
+
+    </table>
+  </div>
+
+  <hr class="separator">
+
+  <form [formGroup]="costoForm" (ngSubmit)="registrarCosto()" class="form-section">
+
+    <h3 class="subtitulo">Registrar nuevo costo</h3>
+
+    <div class="input-group">
+      <label>Costo:</label>
+      <input type="number" formControlName="costo" placeholder="Ingrese costo"
+        [class.error]="costoForm.get('costo')?.invalid && costoForm.get('costo')?.touched" />
+
+      @if (costoForm.get('costo')?.invalid && costoForm.get('costo')?.touched) {
+      <p class="error-msg">Ingrese un costo válido mayor a 0.</p>
+      }
+    </div>
+
+    <div class="input-group">
+      <label>Fecha de modificación:</label>
+      <input type="date" formControlName="fechaModificacion"
+        [class.error]="costoForm.get('fechaModificacion')?.invalid && costoForm.get('fechaModificacion')?.touched" />
+
+      @if (costoForm.get('fechaModificacion')?.invalid && costoForm.get('fechaModificacion')?.touched) {
+      <p class="error-msg">Seleccione una fecha válida.</p>
+      }
+    </div>
+
+    <button type="submit" [disabled]="costoForm.invalid" class="btn-guardar">
+      Guardar
+    </button>
+
+  </form>
+
+</div>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
