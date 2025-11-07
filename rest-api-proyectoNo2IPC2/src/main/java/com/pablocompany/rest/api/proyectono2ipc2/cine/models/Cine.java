@@ -4,7 +4,9 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.cine.models;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -85,6 +87,43 @@ public class Cine {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    //Metodo que se encarga de poder validar las entradas del cine 
+    public boolean validarCine() throws FormatoInvalidoException {
+        if (StringUtils.isBlank(codigo)) {
+            throw new FormatoInvalidoException("El código del cine no puede estar vacío");
+        }
+
+        if (!codigo.matches("^C-\\d{3}$")) {
+            throw new FormatoInvalidoException("El código del cine no cumple con el formato 'C-XXX' (ej. C-001)");
+        }
+
+        if (StringUtils.isBlank(nombre)) {
+            throw new FormatoInvalidoException("El nombre del cine no puede estar vacío");
+        }
+
+        if (nombre.length() < 3) {
+            throw new FormatoInvalidoException("El nombre del cine debe tener al menos 3 caracteres");
+        }
+
+        if (montoOcultacion < 0) {
+            throw new FormatoInvalidoException("El monto de ocultación no puede ser negativo");
+        }
+
+        if (fechaCreacion == null) {
+            throw new FormatoInvalidoException("La fecha de creación no puede ser nula");
+        }
+
+        if (StringUtils.isBlank(descripcion)) {
+            throw new FormatoInvalidoException("La descripción no puede estar vacía");
+        }
+
+        if (StringUtils.isBlank(ubicacion)) {
+            throw new FormatoInvalidoException("La ubicación no puede estar vacía");
+        }
+
+        return true;
     }
 
 }

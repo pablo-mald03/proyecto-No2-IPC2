@@ -117,7 +117,6 @@ export class CrearAdminSistemaComponent implements OnInit {
         formData.append('foto', this.selectedFile);
       }
 
-      //Pendiente conectar al backend
       this.usuarioService.crearAdministradorSistema(formData).subscribe({
         next: () => {
 

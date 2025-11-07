@@ -18,18 +18,17 @@ public class CineRequest {
 
     private String codigo;
     private String nombre;
+    private String descripcion;
+    private String ubicacion;
     private boolean estadoAnuncio;
     private double montoOcultacion;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate fechaCreacion;
-    private String descripcion;
-    private String ubicacion;
 
     public CineRequest() {
     }
-    
+
     public String getCodigo() {
         return codigo;
     }
@@ -85,8 +84,5 @@ public class CineRequest {
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
-    
-    
-    
 
 }

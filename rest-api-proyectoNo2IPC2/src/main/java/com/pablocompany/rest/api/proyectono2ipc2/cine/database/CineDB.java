@@ -4,14 +4,12 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.cine.database;
 
-import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CargaRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteAnuncianteRequest;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,13 +27,13 @@ import org.apache.commons.lang3.StringUtils;
 public class CineDB {
 
     //Constante que sirve para poder crear a los cines
-    private final String CREAR_CINE = "INSERT INTO cine (codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion) VALUES(?,?,?,?,?,?.?)";
+    private final String CREAR_CINE = "INSERT INTO cine (codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion) VALUES(?,?,?,?,?,?,?)";
 
     //Constante que permite obtener la cantidad de cines registrados en el sistema
     private final String CANTIDAD_CINES = "SELECT COUNT(*) AS `cantidad` FROM cine";
 
     //Constante que permite obtener los cines que estan creados en el sistema 
-    private final String CONSULTAR_CINES = "SELECT codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion FROM cine";
+    private final String CONSULTAR_CINES = "SELECT codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion FROM cine LIMIT ? OFFSET ?";
 
     //Constante que permite obtener los cines que estan creados en el sistema 
     private final String CONSULTAR_CINES_CODIGO = "SELECT codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion FROM cine WHERE codigo = ?";
@@ -121,7 +119,7 @@ public class CineDB {
     }
 
     //Metodo que permite obtener el listado completo de Cines para el administrador de sistema
-    public List<Cine> obtenerListadoCinesAdmin(CargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<Cine> obtenerListadoCinesAsociados(CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (cargaRequest == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");

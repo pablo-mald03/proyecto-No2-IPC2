@@ -6,6 +6,7 @@ import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
 import { Cine } from '../../../models/cines/cine';
+import { CineService } from '../../../services/cine-service/cine.service';
 
 @Component({
   selector: 'app-crear-cine',
@@ -39,6 +40,7 @@ export class CrearCineComponent implements OnInit {
 
     private fb: FormBuilder,
     private popUp: Popup,
+    private cineService: CineService,
   ) {
 
   }
@@ -58,6 +60,7 @@ export class CrearCineComponent implements OnInit {
       descripcion: ['', [Validators.required]],
       ubicacion: ['', [Validators.required]],
       montoOcultacion: [0, [Validators.required, Validators.min(0)]],
+      fechaCreacion: [null, [Validators.required]],
     });
 
     this.popUp.popup$.subscribe(data => {
@@ -88,6 +91,8 @@ export class CrearCineComponent implements OnInit {
   crearCine() {
     if (this.cineForm.invalid) return;
 
+    const fecha = this.cineForm.value.fechaCreacion; 
+
     const nuevoCine: Cine = {
       codigo: 'NULL',
       nombre: this.cineForm.value.nombre!,
@@ -95,8 +100,21 @@ export class CrearCineComponent implements OnInit {
       ubicacion: this.cineForm.value.ubicacion!,
       estadoAnuncio: true,
       montoOcultacion: Number(this.cineForm.value.montoOcultacion),
-      fechaCreacion: new Date().toISOString().split('T')[0],
+      fechaCreacion: fecha,
+   
     };
+
+     this.cineService.crearNuevoCine(nuevoCine).subscribe({
+        next: () => {
+
+          this.limpiarDatos();
+          this.abrirModal('Se ha creado correctamente el nuevo cine', 'exito');
+        },
+        error: (err) => {
+          this.mostrarError(err);
+        }
+      });
+
   }
 
 
