@@ -130,6 +130,9 @@ public class CineDB {
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
         try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINES);) {
+            
+            query.setInt(1, cargaRequest.getLimit());
+            query.setInt(2, cargaRequest.getOffset());
 
             ResultSet resultSet = query.executeQuery();
 

@@ -29,6 +29,7 @@ import java.util.Map;
 @Path("cines")
 public class CineResource {
 
+    //Endpoint que permite crear nuevos cines
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response crearCine(CineRequest request) {
@@ -52,7 +53,7 @@ public class CineResource {
 
     }
 
-    //Enpoint que permite obtener la cantidad de boletos vendidos sin filtro
+    //Enpoint que permite obtener el listado de cines asociados en el sistema
     @GET
     @Path("/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,7 +76,7 @@ public class CineResource {
 
     }
 
-    //Enpoint que permite obtener la cantidad de boletos vendidos sin filtro
+    //Enpoint que permite obtener la cantidad de cines asociados en el sistema
     @GET
     @Path("/cantidad")
     @Produces(MediaType.APPLICATION_JSON)

@@ -11,4 +11,14 @@ import { CommonModule, NgClass } from '@angular/common';
 export class CinesAsociadosCardsComponent {
 
   @Input() cine!: Cine;
+
+
+  cambiarCosto(codigo: string):void{
+    
+  }
+  editarCine(codigo: string
+
+):void{
+
+  }
 }

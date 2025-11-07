@@ -3,6 +3,7 @@ import { RestConstants } from "../../shared/rest-constants";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Cine } from "../../models/cines/cine";
+import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
 
 
 
@@ -21,16 +22,14 @@ export class CineService {
         return this.httpClient.post<void>(`${this.restConstants.getApiURL()}cines`, cine);
     }
 
-    /*
-    //Endpoint que ayuda a cambiar las credenciales del usuario PENDIENTE CAMBIAR ENDPOINT
-    public cambiarCredenciales(nuevasCredenciales: CambioCredenciales): Observable<void> {
-        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}reestablecer/credenciales`, nuevasCredenciales);
+    //Endpoint que retorna dinamicamente la cantidad de cines asociados
+    public listadoRegistros(limite: number, inicio: number): Observable<Cine[]> {
+        return this.httpClient.get<Cine[]>(`${this.restConstants.getApiURL()}cines/limit/${limite}/offset/${inicio}`);
     }
 
-    //Metodo get que permite consultar el perfil al usuario
-    public consultarPerfil(id: string): Observable<UsuarioDatosDTO> {
-        return this.httpClient.get<UsuarioDatosDTO>(`${this.restConstants.getApiURL()}usuarios/${id}`);
+    //Endpoint que ayuda a obtener la cantidad total de registros de cines asociados en el sistema
+    public cantidadRegistros(): Observable<CantidadRegistrosDTO> {
+        return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}cines/cantidad`);
     }
-    */
 
 }

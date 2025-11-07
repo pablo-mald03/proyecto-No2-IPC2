@@ -24,10 +24,16 @@
             }
         </div>
 
-        <button class="btn btn-outline-light btn-load-more px-4 py-2 rounded-pill" (click)="cargarMasCines()"
+        <button class="btn btn-outline-light btn-load-more px-4 py-2 rounded-pill mt-3" (click)="cargarMasCines()"
             [disabled]="todosCargados">
 
             {{ todosCargados ? 'No hay más Cines Asociados' : 'Cargar más' }}
         </button>
     </div>
 </main>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
