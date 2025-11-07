@@ -4,6 +4,7 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.database;
 
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.GananciasSistemaDTO;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class ReporteGananciasSistemaBD {
     
 
     //=====Apartado de las constantes que sirven para poder obtener todos los subreportes en un intervalo de tiempo======
+    
     //Constante que permite obtener el reporte de ganancias en todo intervalo de tiempo
     
     //=====Apartado de las constantes que sirven para poder obtener todos los subreportes en todo intervalo de tiempo======
@@ -29,13 +31,13 @@ public class ReporteGananciasSistemaBD {
 
 
     //Metodo que permite retornar el reporte de ganancias en un intervalo de tiempo
-    public List<ReporteGananciasSistemaBD> obtenerReporteGanancias() {
+    public List<GananciasSistemaDTO> obtenerReporteGanancias() {
 
         return null;
     }
 
     //Metodo que permite retornar el reporte de ganancias en todo intervalo de tiempo
-    public List<ReporteGananciasSistemaBD> obtenerReporteTodoGanancias() {
+    public List<GananciasSistemaDTO> obtenerReporteTodoGanancias() {
 
         return null;
     }
