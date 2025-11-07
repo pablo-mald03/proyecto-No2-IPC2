@@ -50,7 +50,7 @@ public class BilleteraDigitalResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response obtenerSaldo(BilleteraDigitalRequest request) {
+    public Response regargarSaldo(BilleteraDigitalRequest request) {
 
         BilleteraDigitalCrudService billeteraDigitalCrudService = new BilleteraDigitalCrudService();
         try {
