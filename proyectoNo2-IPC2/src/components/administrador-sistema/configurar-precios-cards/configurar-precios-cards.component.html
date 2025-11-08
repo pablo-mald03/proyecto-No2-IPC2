@@ -1,0 +1,19 @@
+<div class="config-card">
+  
+  <div class="config-content">
+    <h3 class="config-title">{{ config.tipo }}</h3>
+
+    <p class="config-price">
+      <i class="bi bi-cash-stack"></i> Q{{ config.precio | number:'1.2-2' }}
+    </p>
+
+    <p class="config-code">
+      <i class="bi bi-tag-fill"></i> Código: {{ config.codigo }}
+    </p>
+  </div>
+
+  <button class="btn-editar" (click)="editar()">
+    <i class="bi bi-pencil-fill"></i> Editar
+  </button>
+
+</div>
