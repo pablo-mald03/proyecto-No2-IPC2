@@ -27,62 +27,31 @@ export class ComprarAnuncioComponent implements OnInit {
   pagoForm!: FormGroup;
 
   configuracionesAnuncios: ConfiguracionAnuncioDTO[] = [];
-
   vigenciasAnuncios: VigenciaAnuncio[] = [];
-
-  tipoSeleccionado: number | null = null;
-  tiposAnuncio: { codigo: number, label: string }[] = [];
-
-  tiposTarifa: { codigo: number, label: string }[] = [];
 
   imagenFile: File | null = null;
 
-
-  //Atributos para mostrar el popup cuando haya un error o informacion
-  mostrarPopup: boolean = false;
-  mensajePopup: string = '';
+  mostrarPopup = false;
+  mensajePopup = '';
   tipoPopup: 'error' | 'exito' | 'info' = 'info';
   popupKey = 0;
 
-  // Indica si se debe mostrar el segundo formulario
   mostrarSegundoFormulario = false;
 
-
-  // Aquí guardaremos el FormData para completarlo después
   formDataAnuncio!: FormData;
 
   constructor(
     private fb: FormBuilder,
     private popUp: Popup,
-    private formBuilder: FormBuilder,
     private configuracionAnunciosService: ConfiguracionAnunciosService,
-    private vigenciaAnunciosService: VigenciaAnunciosService) { }
+    private vigenciaAnunciosService: VigenciaAnunciosService
+  ) { }
 
   ngOnInit(): void {
 
     this.cargarCostosAnuncios();
 
-    // Cargar los tipos de anuncio desde el enum
-    this.tiposAnuncio = [
-      { codigo: 1, label: TipoAnuncioEnum.ANUNCIO_TEXTO },
-      { codigo: 2, label: TipoAnuncioEnum.IMAGEN_TEXTO },
-      { codigo: 3, label: TipoAnuncioEnum.VIDEO_TEXTO },
-    ];
-
-    // Cargar los tipos de anuncio desde el enum
-    this.tiposTarifa = [
-      { codigo: 1, label: VigenciaAnuncioEnum.UN_DIA },
-      { codigo: 2, label: VigenciaAnuncioEnum.TRES_DIAS },
-      { codigo: 3, label: VigenciaAnuncioEnum.UNA_SEMANA },
-      { codigo: 4, label: VigenciaAnuncioEnum.DOS_SEMANAS },
-    ];
-
-    this.pagoForm = this.formBuilder.group({
-      metodo: ['', Validators.required],
-      monto: [{ value: 0, disabled: true }]
-    });
-
-    // Crear formulario reactivo
+    // Formulario del anuncio
     this.anuncioForm = this.fb.group({
       codigo: [''],
       estado: [true],
@@ -93,11 +62,26 @@ export class ComprarAnuncioComponent implements OnInit {
       url: [''],
       texto: ['', Validators.required],
       foto: [''],
-      codigoTipo: [1, Validators.required],
-      codigoTarifa: [1, Validators.required],
+      codigoTipo: [null, Validators.required],  // ahora vendrá de configuracionesAnuncios
+      codigoTarifa: [null, Validators.required], // vendrá del backend
       idUsuario: [''],
     });
 
+    // Formulario de pago
+    this.pagoForm = this.fb.group({
+      metodo: ['', Validators.required],
+      monto: [{ value: 0, disabled: true }]
+    });
+
+    // Si cambia cualquier dato del formulario principal, resetea el formulario de pago
+    this.anuncioForm.valueChanges.subscribe(() => {
+      if (this.mostrarSegundoFormulario) {
+        this.mostrarSegundoFormulario = false;
+        this.pagoForm.reset({ metodo: '', monto: 0 });
+      }
+    });
+
+    // Suscripción al popup
     this.popUp.popup$.subscribe(data => {
       this.mensajePopup = data.mensaje;
       this.tipoPopup = data.tipo;
@@ -115,59 +99,25 @@ export class ComprarAnuncioComponent implements OnInit {
         }, data.duracion);
       }
     });
-
-    this.anuncioForm.valueChanges.subscribe(() => {
-      if (this.mostrarSegundoFormulario) {
-        this.mostrarSegundoFormulario = false;
-        this.pagoForm.reset({ metodo: '', monto: 0 });
-      }
-    });
-
-    // Detectar cambio en tipo seleccionado
-    this.anuncioForm.get('codigoTipo')?.valueChanges.subscribe(valor => {
-      this.tipoSeleccionado = valor;
-    });
   }
 
-
-  //Metodo delegado para cargar los recursos para mostrar los costos de compra de anuncios
+  // Cargar configuraciones desde el backend
   cargarCostosAnuncios(): void {
 
-     console.log('se ejecuta');
+    console.log('Cargando configuraciones y tarifas...');
 
     this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
-      next: (response: ConfiguracionAnuncioDTO[]) => {
-
-
-        this.configuracionesAnuncios = response;
-
-      },
-      error: (error: any) => {
-
-        this.mostrarError(error);
-
-      }
+      next: (response) => this.configuracionesAnuncios = response,
+      error: (e) => this.mostrarError(e)
     });
-
-   
 
     this.vigenciaAnunciosService.listadoVigencias().subscribe({
-      next: (response: VigenciaAnuncio[]) => {
-
-        
-        this.vigenciasAnuncios = response;
-
-      },
-      error: (error: any) => {
-
-        this.mostrarError(error);
-
-      }
+      next: (response) => this.vigenciasAnuncios = response,
+      error: (e) => this.mostrarError(e)
     });
-
-
   }
 
+  // Selección de imagen
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -188,91 +138,67 @@ export class ComprarAnuncioComponent implements OnInit {
       return;
     }
 
-    // Guardamos el formData inicial
     this.formDataAnuncio = new FormData();
 
-    this.formDataAnuncio.append('nombre', this.anuncioForm.value.nombre);
-    this.formDataAnuncio.append('codigoTipo', this.anuncioForm.value.codigoTipo);
-    this.formDataAnuncio.append('texto', this.anuncioForm.value.texto);
-    this.formDataAnuncio.append('url', this.anuncioForm.value.url);
-    this.formDataAnuncio.append('fechaExpiracion', this.anuncioForm.value.fechaExpiracion);
-    this.formDataAnuncio.append('tipoTarifa', this.anuncioForm.value.codigoTarifa);
+    const formValue = this.anuncioForm.value;
+
+    this.formDataAnuncio.append('nombre', formValue.nombre);
+    this.formDataAnuncio.append('codigoTipo', formValue.codigoTipo);
+    this.formDataAnuncio.append('texto', formValue.texto);
+    this.formDataAnuncio.append('url', formValue.url);
+    this.formDataAnuncio.append('fechaExpiracion', formValue.fechaExpiracion);
+    this.formDataAnuncio.append('tipoTarifa', formValue.codigoTarifa);
 
     if (this.imagenFile) {
       this.formDataAnuncio.append('foto', this.imagenFile);
     }
 
-    this.calcularTotalListo(this.anuncioForm.value.codigoTipo, this.anuncioForm.value.codigoTarifa);
+    this.calcularTotalListo(formValue.codigoTipo, formValue.codigoTarifa);
 
-
-    // Ahora sí se muestra el segundo form
     this.mostrarSegundoFormulario = true;
   }
 
-
-  //Metodo que permite limpiar el formulario
   limpiar() {
     this.anuncioForm.reset({
       estado: true,
-      codigoTipo: 1,
       fechaCompra: new Date()
     });
     this.imagenFile = null;
     this.mostrarSegundoFormulario = false;
   }
 
-  //Metodo implementado para mostrar los mensajes de errores
-  mostrarError(errorEncontrado: any) {
-    let mensaje = 'Ocurrió un error';
-
-    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
-      mensaje = errorEncontrado.error.mensaje;
-    } else if (errorEncontrado.message) {
-      mensaje = errorEncontrado.message;
-    }
-
+  mostrarError(error: any) {
+    const mensaje = error?.error?.mensaje ?? error?.message ?? 'Ocurrió un error';
     this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
-
   }
 
-  //Metodo que permite confirmar el pago que se hara
+  // Confirmar pago
   confirmarPago() {
     if (this.pagoForm.invalid) {
       this.pagoForm.markAllAsTouched();
       return;
     }
 
-
-
-    this.formDataAnuncio.append('metodoPago', this.pagoForm.value.metodo);
     this.formDataAnuncio.append('monto', this.pagoForm.getRawValue().monto);
 
     console.log('FormData completo listo para enviar:', this.formDataAnuncio);
 
-    // Ahora sí mandas TODO con tu servicio
     // this.miServicio.enviarTodo(this.formDataAnuncio).subscribe(...)
   }
 
-
-  //Metodo que permite calcular el total
+  // Calcular total real desde backend
   calcularTotalListo(idConfig: number, idTarifa: number): void {
 
     forkJoin({
       config: this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig),
       tarifa: this.vigenciaAnunciosService.vigenciaAnuncioCodigo(idTarifa)
     })
-      .subscribe({
-        next: ({ config, tarifa }) => {
-
-          const total = config.precio * (tarifa.duracion* tarifa.precio);
-
-          this.pagoForm.patchValue({
-            monto: total
-          });
-        },
-        error: (e) => this.mostrarError(e)
-      });
-
-
+    .subscribe({
+      next: ({ config, tarifa }) => {
+        const total = config.precio * (tarifa.duracion * tarifa.precio);
+        this.pagoForm.patchValue({ monto: total });
+      },
+      error: (e) => this.mostrarError(e)
+    });
   }
 }

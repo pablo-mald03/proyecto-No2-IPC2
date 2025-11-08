@@ -26,10 +26,11 @@
             <div class="form-group">
                 <label>Tipo de Anuncio</label>
                 <select formControlName="codigoTipo">
-                    <option *ngFor="let tipo of tiposAnuncio" [value]="tipo.codigo">
-                        {{ tipo.label }}
+                    <option *ngFor="let config of configuracionesAnuncios" [value]="config.codigo">
+                        {{ config.tipo }} (Q{{ config.precio }})
                     </option>
                 </select>
+
 
                 @if (anuncioForm.get('codigoTipo')?.invalid && anuncioForm.get('codigoTipo')?.touched) {
                 <p class="error-msg">Debes seleccionar un tipo de anuncio.</p>
@@ -69,9 +70,9 @@
 
             <div class="form-group">
                 <label>Tipo de Tarifa</label>
-                <select formControlName="codigoTipo">
-                    <option *ngFor="let tipo of tiposTarifa" [value]="tipo.codigo">
-                        {{ tipo.label }}
+                <select formControlName="codigoTarifa">
+                    <option *ngFor="let tarifa of vigenciasAnuncios" [value]="tarifa.codigo">
+                        {{ tarifa.duracion }} días (Q{{ tarifa.precio }})
                     </option>
                 </select>
 
@@ -114,9 +115,7 @@
             <div class="form-group">
                 <label>Método de pago</label>
                 <select formControlName="metodo">
-                    <option value="TARJETA">Tarjeta</option>
-                    <option value="PAYPAL">PayPal</option>
-                    <option value="TRANSFERENCIA">Transferencia</option>
+                    <option value="TARJETA">Billetera Digital</option>
                 </select>
             </div>
 
