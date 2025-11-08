@@ -1,0 +1,24 @@
+.vigencia-card {
+  width: 100%;
+  max-width: 750px;
+  min-width: 400px;
+  background: linear-gradient(145deg, rgba(66, 9, 68, 0.95), rgba(33, 37, 41, 0.95));
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vigencia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.duration-pill,
+.price-pill {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.text-light-50 {
+  color: rgba(255, 255, 255, 0.6);
+}

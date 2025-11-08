@@ -41,6 +41,7 @@ import { AnunciosRegistradosSistemaComponent } from '../components/administrador
 import { ConfiguracionPreciosAnunciosComponent } from '../components/administrador-sistema/configuracion-precios-anuncios/configuracion-precios-anuncios.component';
 import { ConfigurarPreciosComponent } from '../components/administrador-sistema/configurar-precios/configurar-precios.component';
 import { EditarConfiguracionPrecioComponent } from '../components/administrador-sistema/editar-configuracion-precio/editar-configuracion-precio.component';
+import { ConfigurarTarifasComponent } from '../components/administrador-sistema/configurar-tarifas/configurar-tarifas.component';
 
 
 export const routes: Routes = [
@@ -178,6 +179,10 @@ export const routes: Routes = [
             {
                 path: 'costos',
                 component: ConfiguracionPreciosAnunciosComponent,
+            },
+            {
+                path: 'costos/tarifas',
+                component: ConfigurarTarifasComponent,
             },
             {
                 path: 'costos/precios',

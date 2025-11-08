@@ -1,0 +1,28 @@
+<div class="vigencia-card bg-gradient text-light p-4 rounded-4 shadow-lg mt-3 ">
+
+  <div class="card-header mb-3 text-center ">
+    <h3 class="fw-bold fw-bold text-warning">{{ vigencia.contexto }}</h3>
+    <p class="text-info fs-5 fw-bold">Código: {{ vigencia.codigo }}</p>
+  </div>
+
+  <div class="card-body">
+
+    <div class="d-flex justify-content-between mb-3">
+      <span class="fw-bold">Duración</span>
+      <span class="badge duration-pill">{{ vigencia.duracion }} días</span>
+    </div>
+
+    <div class="d-flex justify-content-between mb-4">
+      <span class="fw-bold">Precio</span>
+      <span class="badge price-pill">Q {{ vigencia.precio }}</span>
+    </div>
+
+  </div>
+
+  <div class="text-center">
+    <button class="btn btn-warning rounded-pill px-4 fw-bold" (click)="editar()">
+      Editar
+    </button>
+  </div>
+
+</div>
