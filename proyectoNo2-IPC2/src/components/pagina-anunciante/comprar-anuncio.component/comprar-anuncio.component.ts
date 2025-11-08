@@ -240,7 +240,7 @@ export class ComprarAnuncioComponent implements OnInit {
     })
       .subscribe({
         next: ({ config, tarifa }) => {
-          const total = config.precio * (tarifa.duracion * tarifa.precio);
+          const total = config.precio + tarifa.precio;
           this.pagoForm.patchValue({ monto: total });
         },
         error: (e) => this.mostrarError(e)

@@ -12,10 +12,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.Anuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioDTORequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.ConfiguracionAnuncioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.billetera.database.BilleteraDigitalDB;
-import com.pablocompany.rest.api.proyectono2ipc2.billetera.models.BilleteraDigital;
 import com.pablocompany.rest.api.proyectono2ipc2.billetera.models.SaldoBilleteraDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.database.BilleteraCineDB;
-import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCine;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -76,7 +73,7 @@ public class AnunciosCrudService {
             nuevoAnuncio.setUrl("null");
         }
 
-        double total = vigencia.getDuracion() * vigencia.getPrecio() * configuracion.getPrecio();
+        double total = vigencia.getPrecio() + configuracion.getPrecio();
 
         if (montoPago != total) {
             throw new FormatoInvalidoException("El monto a debitar ha sido manipulado");
