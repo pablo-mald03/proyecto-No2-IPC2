@@ -1,6 +1,6 @@
 .vigencia-card {
   width: 100%;
-  background: linear-gradient(135deg, #41035a, #05c0a1);
+  background: linear-gradient(135deg, #490350, #05c0b0);
   padding: 1rem 1.2rem;
   border-radius: 12px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
@@ -9,7 +9,7 @@
   gap: 0.4rem;
   cursor: pointer;
   margin-bottom: 0.8rem;
-  border-left: 5px solid #6366f1;
+  border-left: 5px solid #d1920a;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -20,7 +20,7 @@
 
 .vigencia-header {
   font-weight: 600;
-  color: #caa70a;
+  color: #dceb13;
 }
 
 .vigencia-body {
@@ -32,11 +32,11 @@
 .vigencia-precio {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #1e1b4b;
+  color: #ffffff;
 }
 
 .vigencia-duracion {
   font-size: 0.95rem;
-  color: #4338ca;
+  color: #e5ff00;
   opacity: 0.9;
 }

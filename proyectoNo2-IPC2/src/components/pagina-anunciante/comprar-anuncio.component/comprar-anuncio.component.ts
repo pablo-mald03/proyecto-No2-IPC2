@@ -133,6 +133,8 @@ export class ComprarAnuncioComponent implements OnInit {
   //Metodo delegado para cargar los recursos para mostrar los costos de compra de anuncios
   cargarCostosAnuncios(): void {
 
+     console.log('se ejecuta');
+
     this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
       next: (response: ConfiguracionAnuncioDTO[]) => {
 
@@ -147,10 +149,12 @@ export class ComprarAnuncioComponent implements OnInit {
       }
     });
 
+   
+
     this.vigenciaAnunciosService.listadoVigencias().subscribe({
       next: (response: VigenciaAnuncio[]) => {
 
-
+        
         this.vigenciasAnuncios = response;
 
       },
@@ -198,7 +202,7 @@ export class ComprarAnuncioComponent implements OnInit {
       this.formDataAnuncio.append('foto', this.imagenFile);
     }
 
-    this.calcularTotalListo(this.anuncioForm.value.codigoTipo, 0);
+    this.calcularTotalListo(this.anuncioForm.value.codigoTipo, this.anuncioForm.value.codigoTarifa);
 
 
     // Ahora sí se muestra el segundo form
@@ -249,20 +253,18 @@ export class ComprarAnuncioComponent implements OnInit {
     // this.miServicio.enviarTodo(this.formDataAnuncio).subscribe(...)
   }
 
-  precioConfig!: number;
-  precioOtro!: number;
 
   //Metodo que permite calcular el total
   calcularTotalListo(idConfig: number, idTarifa: number): void {
 
     forkJoin({
       config: this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig),
-      //tarifa: this.tarifaService.obtenerTarifa(idTarifa)
+      tarifa: this.vigenciaAnunciosService.vigenciaAnuncioCodigo(idTarifa)
     })
       .subscribe({
-        next: ({ config }) => {
+        next: ({ config, tarifa }) => {
 
-          const total = config.precio;
+          const total = config.precio * (tarifa.duracion* tarifa.precio);
 
           this.pagoForm.patchValue({
             monto: total
@@ -273,27 +275,4 @@ export class ComprarAnuncioComponent implements OnInit {
 
 
   }
-
-  //Metodo que permite calcular el precio por configuracion
-  obtenerPrecioConfig(idConfig: number): void {
-    this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig)
-      .subscribe({
-        next: (config: ConfiguracionAnuncioDTO) => {
-          console.log(config.precio);
-          this.precioConfig = config.precio;
-        }
-      });
-  }
-
-  obtenerPrecioTarifa(idTarifa: string): void {
-    /* this.otroService.obtenerAlgo(id)
-       .subscribe({
-         next: (otro) => {
-           this.precioOtro = otro.precioBase;
-           this.calcularTotalSiListo(this.pagoForm.value.dias);
-         }
-       });*/
-  }
-
-
 }
