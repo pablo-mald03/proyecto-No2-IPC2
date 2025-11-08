@@ -44,7 +44,7 @@ public class AnunciosDB {
     //Constante que permite retornar los datos obtenidos de la base de datos para poder operar y gestionar a los anuncios
     private final String ANUNCIOS_COMPRADOS_SISTEMA = "SELECT a.codigo, a.estado, a.nombre, a.caducacion, a.fecha_expiracion, a.fecha_compra, a.url, a.texto, a.foto,  ca.codigo AS `codigoTipo`, us.id AS `idUsuario`, us.nombre AS `nombreUsuario` "
             + "FROM anuncio AS a JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo JOIN usuario AS `us` ON us.id = a.id_usuario "
-            + "ORDER BY a.fecha_compra ASC LIMIT ? OFFSET ?";
+            + "ORDER BY a.fecha_compra DESC LIMIT ? OFFSET ?";
 
     //Constante que permite retornar la cantidad de anuncios que se han comprado en la web para cargar dinamicamente
     private final String CANTIDAD_ANUNCIOS_COMPRADOS = "SELECT COUNT(*) AS `cantidad` FROM anuncio";

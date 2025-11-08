@@ -1,58 +1,86 @@
 .anuncio-card {
     width: 450px;
-    min-height: 300px;
-    background: linear-gradient(135deg, #6B0899, #8e44ad, #f39c12);
+    min-height: 320px;
+    background: linear-gradient(135deg, #5c0899, #8a2be2, #f39c12);
+    background-size: 200% 200%;
+    animation: cardGlow 6s ease infinite alternate;
     color: #fff;
-    border-radius: 1rem;
+    border-radius: 1.3rem;
     overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-
-.badge {
-    font-size: 0.9rem;
-    padding: 0.4em 1em;
+@keyframes cardGlow {
+    0% { background-position: left top; }
+    100% { background-position: right bottom; }
 }
 
-.img-container {
-  width: 100%;
-  height: 180px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+.anuncio-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.55);
 }
-
-.anuncio-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  border-radius: 10px;
-}
-
 
 .anuncio-bg {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top right, rgba(129, 8, 177, 0.08), transparent 70%),
-                linear-gradient(135deg, rgba(163, 4, 4, 0.274), rgba(0,0,0,0.25));
+    background: radial-gradient(circle at top right, rgba(255,255,255,0.08), transparent 70%),
+                linear-gradient(135deg, rgba(0,0,0,0.25), transparent);
     z-index: 0;
-}
-
-
-.anuncio-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .contenido {
     position: relative;
     z-index: 1;
-    padding: 1rem;
+    padding: 1.4rem;
     text-align: center;
+}
+
+.img-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.anuncio-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-estado {
+    padding: 0.55rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    border: none;
+    transition: all 0.35s ease;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-desactivar {
+    background: linear-gradient(135deg, #b31010, #ff4949);
+    box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+}
+.btn-desactivar:hover {
+    transform: scale(1.07);
+    box-shadow: 0 8px 25px rgba(255, 77, 77, 0.55);
+}
+
+.btn-activar {
+    background: linear-gradient(135deg, #0b8f4d, #2ecc71);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+.btn-activar:hover {
+    transform: scale(1.07);
+    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.55);
 }

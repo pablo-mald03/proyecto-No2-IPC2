@@ -7,8 +7,7 @@
         <div class="reportes-grid d-flex flex-column gap-4">
             @for (anuncio of anunciosMostrados; track anuncio.codigo) {
 
-            <app-anuncios-registrados-sistema-cards
-                [anuncio]="anuncio"></app-anuncios-registrados-sistema-cards>
+            <app-anuncios-registrados-sistema-cards [anuncio]="anuncio"></app-anuncios-registrados-sistema-cards>
             }
             @empty {
             <div class="text-center text-light mt-5">
@@ -18,10 +17,16 @@
         </div>
 
         <div class="text-center mt-4">
-            <button class="btn btn-cargar-mas" (click)="cargarMasAnuncios()" [disabled]="todosCargados">
+            <button class="btn btn-cargar-mas" (click)="mostrarMasAnuncios()" [disabled]="todosCargados">
                 {{ todosCargados ? 'No hay más Anuncios' : 'Cargar más' }}
             </button>
         </div>
 
     </section>
 </main>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>

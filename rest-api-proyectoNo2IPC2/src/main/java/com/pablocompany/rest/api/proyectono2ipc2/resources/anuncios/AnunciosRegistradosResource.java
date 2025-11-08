@@ -28,6 +28,7 @@ import java.util.Map;
 @Path("anuncios")
 public class AnunciosRegistradosResource {
     
+    //Endpoint que ayuda a retornar los anuncios registrados en el sistema dinamicamente
     @GET
     @Path("/limit/{limite}/offset/{inicio}")
     @Produces(MediaType.APPLICATION_JSON)

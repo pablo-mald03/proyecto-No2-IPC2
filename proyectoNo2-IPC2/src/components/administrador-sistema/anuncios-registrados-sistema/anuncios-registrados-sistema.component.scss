@@ -31,6 +31,15 @@
 }
 
 
+.reportes-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;        /* Centra horizontalmente */
+    justify-content: flex-start;
+    gap: 2rem;
+    width: 100%;
+}
+
 .descripcion {
     font-size: 1rem;
     color: #ddd;

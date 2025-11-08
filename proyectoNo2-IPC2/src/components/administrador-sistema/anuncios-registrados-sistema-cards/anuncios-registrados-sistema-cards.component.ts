@@ -73,5 +73,10 @@ export class AnunciosRegistradosSistemaCardsComponent {
     return this.anuncio.codigoTipo === 3;
   }
 
+  //Metodo que sirve para cambiar el estado del anuncio 
+  cambiarEstado(){
+    
+  }
+
 
 }
