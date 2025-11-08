@@ -1,4 +1,4 @@
-<main class="crear-anuncio-page-3col">
+<main class="crear-anuncio-page-3col ">
 
     <section class="side-card">
         <h2 class="titulo">Tarifas disponibles</h2>
@@ -78,6 +78,7 @@
                 <button type="button" (click)="limpiar()" class="btn-limpiar mx-4">
                     Limpiar
                 </button>
+
                 <button type="submit" [disabled]="anuncioForm.invalid">Comprar Anuncio</button>
             </div>
 
@@ -95,4 +96,39 @@
         }
     </section>
 
+
+    @if (mostrarSegundoFormulario) {
+    <section class="crear-anuncio-card mt-4 anim-subform subform-centrado">
+        <h3 class="fw-bold">Detalles del Pago</h3>
+
+        <form [formGroup]="pagoForm" (ngSubmit)="confirmarPago()">
+
+            <div class="form-group">
+                <label>Método de pago</label>
+                <select formControlName="metodo">
+                    <option value="TARJETA">Tarjeta</option>
+                    <option value="PAYPAL">PayPal</option>
+                    <option value="TRANSFERENCIA">Transferencia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Monto total</label>
+                <input type="text" formControlName="monto" readonly />
+            </div>
+
+            <button type="submit" class="btn-pagar">Confirmar Pago</button>
+
+        </form>
+    </section>
+    }
+
+
+
 </main>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
