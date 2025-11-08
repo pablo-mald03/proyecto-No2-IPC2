@@ -112,14 +112,15 @@
 
         <form [formGroup]="pagoForm" (ngSubmit)="confirmarPago()">
 
-            <div class="form-group">
-                <label>Método de pago</label>
+            <div class="input-mask">
                 <select formControlName="metodo">
                     <option value="TARJETA">Billetera Digital</option>
                 </select>
+
+                <span class="mask-layer">Billetera Digital</span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-4">
                 <label>Monto total</label>
                 <input type="text" formControlName="monto" readonly />
             </div>
@@ -133,6 +134,10 @@
 
 
 </main>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
 
 <ng-container *ngIf="mostrarPopup">
     <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"

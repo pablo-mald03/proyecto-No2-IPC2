@@ -158,6 +158,26 @@ button[type="submit"]:disabled {
   box-shadow: 0 4px 12px rgba(255, 171, 64, 0.35);
 }
 
+.input-mask {
+  position: relative;
+}
+
+.input-mask select {
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+}
+
+.input-mask .mask-layer {
+  display: block;
+  padding: 8px 12px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: not-allowed;
+  color: #555;
+}
+
 .btn-limpiar:hover {
   background: #ffcc80;
   transform: translateY(-1px);
@@ -174,6 +194,7 @@ button[type="submit"]:disabled {
   box-shadow: 0 3px 14px rgba(0,0,0,0.1);
   animation: subform-focus 0.35s ease-out;
 }
+
 
 @keyframes subform-focus {
   from {

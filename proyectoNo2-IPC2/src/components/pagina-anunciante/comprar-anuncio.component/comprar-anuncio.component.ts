@@ -1,10 +1,8 @@
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
-import { VigenciaAnuncioEnum } from '../../../models/anuncios/vigencia-anuncio-enum';
 import { ConfiguracionAnuncioDTO } from '../../../models/anuncios/configuracion-anuncio-dto';
 import { ConfiguracionAnunciosService } from '../../../services/anuncios-service/configuracion-anuncios.service';
 import { ConfiguracionAnunciosCardsComponent } from "../configuracion-anuncios-cards/configuracion-anuncios-cards.component";
@@ -12,25 +10,31 @@ import { forkJoin } from 'rxjs';
 import { VigenciaAnuncio } from '../../../models/anuncios/vigencia-anuncio';
 import { VigenciaAnunciosCardsComponent } from "../vigencia-anuncios-cards/vigencia-anuncios-cards.component";
 import { VigenciaAnunciosService } from '../../../services/anuncios-service/vigencia-anuncios.service';
+import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
+import { UserLoggedDTO } from '../../../models/usuarios/user-logged-dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comprar-anuncio',
-  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf, ConfiguracionAnunciosCardsComponent, VigenciaAnunciosCardsComponent],
+  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf, ConfiguracionAnunciosCardsComponent, FullscreenModalComponent, VigenciaAnunciosCardsComponent],
   templateUrl: './comprar-anuncio.component.html',
   styleUrl: './comprar-anuncio.component.scss',
   providers: [Popup],
 })
 export class ComprarAnuncioComponent implements OnInit {
 
+  usuarioAnunciante!: UserLoggedDTO;
 
   anuncioForm!: FormGroup;
   pagoForm!: FormGroup;
 
+  //informacion de formularios
   configuracionesAnuncios: ConfiguracionAnuncioDTO[] = [];
   vigenciasAnuncios: VigenciaAnuncio[] = [];
 
   imagenFile: File | null = null;
 
+  //Atributos del popup
   mostrarPopup = false;
   mensajePopup = '';
   tipoPopup: 'error' | 'exito' | 'info' = 'info';
@@ -40,6 +44,15 @@ export class ComprarAnuncioComponent implements OnInit {
 
   formDataAnuncio!: FormData;
 
+  //Atributos del modal 
+  mostrarModal = false;
+  mensajeModal = '';
+  urlRedireccion = '';
+  tipoModal: 'exito' | 'error' | 'info' = 'info';
+
+  //Router para navegar
+  router = inject(Router);
+
   constructor(
     private fb: FormBuilder,
     private popUp: Popup,
@@ -48,6 +61,20 @@ export class ComprarAnuncioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    const usuarioStr = localStorage.getItem("angularUserCinema");
+
+    if (!usuarioStr) {
+
+      this.router.navigateByUrl('/login');
+      return;
+    }
+
+    const usuario = JSON.parse(usuarioStr) as UserLoggedDTO;
+
+    this.usuarioAnunciante = usuario;
+
+    this.urlRedireccion = `/menu-anunciante/anuncios/comprados/${this.usuarioAnunciante.id}`;
 
     this.cargarCostosAnuncios();
 
@@ -69,7 +96,7 @@ export class ComprarAnuncioComponent implements OnInit {
 
     // Formulario de pago
     this.pagoForm = this.fb.group({
-      metodo: ['', Validators.required],
+      metodo: [{ value: 'TARJETA', disabled: true }, Validators.required],
       monto: [{ value: 0, disabled: true }]
     });
 
@@ -99,6 +126,13 @@ export class ComprarAnuncioComponent implements OnInit {
         }, data.duracion);
       }
     });
+  }
+
+  //Metodo utilizado para abrir el modal
+  abrirModal(mensaje: string, tipo: 'exito' | 'error' | 'info' = 'info') {
+    this.mensajeModal = mensaje;
+    this.tipoModal = tipo;
+    this.mostrarModal = true;
   }
 
   // Cargar configuraciones desde el backend
@@ -183,6 +217,8 @@ export class ComprarAnuncioComponent implements OnInit {
 
     console.log('FormData completo listo para enviar:', this.formDataAnuncio);
 
+    this.abrirModal('Se ha registrado tu anuncio en el sistema', 'exito');
+
     // this.miServicio.enviarTodo(this.formDataAnuncio).subscribe(...)
   }
 
@@ -193,12 +229,12 @@ export class ComprarAnuncioComponent implements OnInit {
       config: this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig),
       tarifa: this.vigenciaAnunciosService.vigenciaAnuncioCodigo(idTarifa)
     })
-    .subscribe({
-      next: ({ config, tarifa }) => {
-        const total = config.precio * (tarifa.duracion * tarifa.precio);
-        this.pagoForm.patchValue({ monto: total });
-      },
-      error: (e) => this.mostrarError(e)
-    });
+      .subscribe({
+        next: ({ config, tarifa }) => {
+          const total = config.precio * (tarifa.duracion * tarifa.precio);
+          this.pagoForm.patchValue({ monto: total });
+        },
+        error: (e) => this.mostrarError(e)
+      });
   }
 }
