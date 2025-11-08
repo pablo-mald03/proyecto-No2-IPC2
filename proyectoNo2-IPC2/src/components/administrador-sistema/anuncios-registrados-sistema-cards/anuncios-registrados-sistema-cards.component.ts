@@ -1,20 +1,18 @@
 import { Component, Input } from '@angular/core';
-import { Anuncio } from '../../../models/anuncios/anuncio';
+import { AnuncioRegistradoDTO } from '../../../models/anuncios/anuncio-registrado-dto';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { ReporteAnuncioDTO } from '../../../models/reportes/reporte-anuncio-dto';
 
 @Component({
-  selector: 'app-cards-reporte-anuncios',
-  imports: [NgClass, DatePipe, NgIf, CommonModule],
-  templateUrl: './cards-reporte-anuncios.component.html',
-  styleUrl: './cards-reporte-anuncios.component.scss'
+  selector: 'app-anuncios-registrados-sistema-cards',
+  imports: [CommonModule, NgClass,NgIf,DatePipe],
+  templateUrl: './anuncios-registrados-sistema-cards.component.html',
+  styleUrl: './anuncios-registrados-sistema-cards.component.scss'
 })
-export class CardsReporteAnunciosComponent {
+export class AnunciosRegistradosSistemaCardsComponent {
 
-  @Input() anuncio!: ReporteAnuncioDTO;
-
+  @Input() anuncio!: AnuncioRegistradoDTO;
 
   constructor(private sanitizer: DomSanitizer) { }
 
@@ -59,14 +57,18 @@ export class CardsReporteAnunciosComponent {
 
 
   //Metodos que ayudan a saber que tipo de anuncio es
+
+  //Texto
   esTexto(): boolean {
     return this.anuncio.codigoTipo === 1;
   }
 
+  //Imagen
   esImagen(): boolean {
     return this.anuncio.codigoTipo === 2;
   }
 
+  //Video
   esVideo(): boolean {
     return this.anuncio.codigoTipo === 3;
   }

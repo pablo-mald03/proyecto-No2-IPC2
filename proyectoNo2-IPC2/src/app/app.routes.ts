@@ -37,6 +37,7 @@ import { CinesAsociadosComponent } from '../components/administrador-sistema/cin
 import { CrearCineComponent } from '../components/administrador-sistema/crear-cine/crear-cine.component';
 import { CostosCineModificarComponent } from '../components/administrador-sistema/costos-cine-modificar/costos-cine-modificar.component';
 import { EditarCineComponent } from '../components/administrador-sistema/editar-cine/editar-cine.component';
+import { AnunciosRegistradosSistemaComponent } from '../components/administrador-sistema/anuncios-registrados-sistema/anuncios-registrados-sistema.component';
 
 
 export const routes: Routes = [
@@ -166,6 +167,10 @@ export const routes: Routes = [
             {
                 path: 'cines/editar/:codigo',
                 component: EditarCineComponent,
+            },
+            {
+                path: 'anuncios',
+                component: AnunciosRegistradosSistemaComponent,
             },
             {
                 path: 'crear-admin-sistema',

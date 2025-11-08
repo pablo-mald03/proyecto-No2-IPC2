@@ -1,0 +1,27 @@
+<main class="mis-anuncios-page">
+
+    <section class="mis-anuncios-container">
+        <h1 class="titulo"> <i class="bi bi-badge-ad me-2"></i> Anuncios Comprados</h1>
+        <p class="descripcion mt-4 mb-3 ">Se pueden visualizar todos los anuncios que se han pagado en la web</p>
+
+        <div class="reportes-grid d-flex flex-column gap-4">
+            @for (anuncio of anunciosMostrados; track anuncio.codigo) {
+
+            <app-anuncios-registrados-sistema-cards
+                [anuncio]="anuncio"></app-anuncios-registrados-sistema-cards>
+            }
+            @empty {
+            <div class="text-center text-light mt-5">
+                <h5>No se han comprado anuncios en la web</h5>
+            </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-cargar-mas" (click)="cargarMasAnuncios()" [disabled]="todosCargados">
+                {{ todosCargados ? 'No hay más Anuncios' : 'Cargar más' }}
+            </button>
+        </div>
+
+    </section>
+</main>
