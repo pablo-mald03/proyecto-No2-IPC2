@@ -4,7 +4,7 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
 
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.ConfiguracionAnuncioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
@@ -39,9 +39,9 @@ public class VigenciaAnuncioDB {
     private final String CONSULTAR_PRECIO_CODIGO = "SELECT precio FROM vigencia_anuncio WHERE codigo = ?";
 
     //Metodo que permite obtener el listado completo de las vigencias de anuncios
-    public List<VigenciaAnuncioDTO> obtenerListadoVigencia() throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<VigenciaAnuncio> obtenerListadoVigencia() throws FormatoInvalidoException, ErrorInesperadoException {
 
-        List<VigenciaAnuncioDTO> listaVigencia = new ArrayList<>();
+        List<VigenciaAnuncio> listaVigencia = new ArrayList<>();
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -50,7 +50,7 @@ public class VigenciaAnuncioDB {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                VigenciaAnuncioDTO vigenciaEncontrado = new VigenciaAnuncioDTO(
+                VigenciaAnuncio vigenciaEncontrado = new VigenciaAnuncio(
                          resultSet.getInt("codigo"),
                         resultSet.getString("contexto"),
                         resultSet.getBigDecimal("precio").doubleValue(),
@@ -69,7 +69,7 @@ public class VigenciaAnuncioDB {
     }
 
     //Metodo que permite obtener una vigencia especifica
-    public VigenciaAnuncioDTO obtenerVigenciaCodigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public VigenciaAnuncio obtenerVigenciaCodigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -79,7 +79,7 @@ public class VigenciaAnuncioDB {
             ResultSet resultSet = query.executeQuery();
 
             if (resultSet.next()) {
-                VigenciaAnuncioDTO vigenciaEncontrado = new VigenciaAnuncioDTO(
+                VigenciaAnuncio vigenciaEncontrado = new VigenciaAnuncio(
                          resultSet.getInt("codigo"),
                         resultSet.getString("contexto"),
                         resultSet.getBigDecimal("precio").doubleValue(),

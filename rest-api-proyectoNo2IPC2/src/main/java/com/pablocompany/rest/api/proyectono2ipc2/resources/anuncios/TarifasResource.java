@@ -4,7 +4,7 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources.anuncios;
 
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTORequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.VigenciaAnunciosService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
@@ -36,7 +36,7 @@ public class TarifasResource {
         VigenciaAnunciosService vigenciaAnunciosService = new VigenciaAnunciosService();
 
         try {
-            List<VigenciaAnuncioDTO> vigencias = vigenciaAnunciosService.obtenerVigencias();
+            List<VigenciaAnuncio> vigencias = vigenciaAnunciosService.obtenerVigencias();
 
             return Response.ok(vigencias).build();
 
@@ -59,7 +59,7 @@ public class TarifasResource {
 
         try {
 
-            VigenciaAnuncioDTO vigencia = vigenciaAnunciosService.obtenerVigenciaCodigo(codigo);
+            VigenciaAnuncio vigencia = vigenciaAnunciosService.obtenerVigenciaCodigo(codigo);
             return Response.ok(vigencia).build();
 
         } catch (FormatoInvalidoException ex) {

@@ -2,9 +2,6 @@ import { Injectable } from "@angular/core";
 import { RestConstants } from "../../shared/rest-constants";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { AnuncioRegistradoDTO } from "../../models/anuncios/anuncio-registrado-dto";
-import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
-import { CambiarEstadoDTO } from "../../models/anuncios/cambiar-estado-dto";
 import { ConfiguracionAnuncioDTO } from "../../models/anuncios/configuracion-anuncio-dto";
 import { CambiarPrecioDTO } from "../../models/anuncios/cambiar-precio-dto";
 
@@ -30,7 +27,7 @@ export class ConfiguracionAnunciosService {
     }
 
     //Endpoint que permite cambiar el precio de la configuracion
-    public cambiarEstado(estado: CambiarPrecioDTO): Observable<void> {
+    public cambiarPrecio(estado: CambiarPrecioDTO): Observable<void> {
         return this.httpClient.put<void>(`${this.restConstants.getApiURL()}configuraciones/anuncios`, estado);
     }
 

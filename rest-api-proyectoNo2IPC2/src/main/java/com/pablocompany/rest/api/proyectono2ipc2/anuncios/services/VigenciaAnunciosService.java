@@ -5,7 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.anuncios.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.database.VigenciaAnuncioDB;
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTORequest;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 public class VigenciaAnunciosService {
 
     //Metodo utilizado para poder retornar el listado de vigencias de anuncios registrados en el sistema
-    public List<VigenciaAnuncioDTO> obtenerVigencias() throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<VigenciaAnuncio> obtenerVigencias() throws FormatoInvalidoException, ErrorInesperadoException {
 
         VigenciaAnuncioDB vigenciaAnuncioDb = new VigenciaAnuncioDB();
 
@@ -31,7 +31,7 @@ public class VigenciaAnunciosService {
     }
 
     //Metodo utilizado para poder retornar una vigencia de anuncio en especifico 
-    public VigenciaAnuncioDTO obtenerVigenciaCodigo(String codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public VigenciaAnuncio obtenerVigenciaCodigo(String codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
         if (StringUtils.isBlank(codigo)) {
             throw new FormatoInvalidoException("El codigo de vigencia esta vacio");

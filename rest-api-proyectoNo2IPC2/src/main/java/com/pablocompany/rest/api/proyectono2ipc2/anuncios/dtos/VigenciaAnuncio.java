@@ -9,14 +9,14 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos;
  * @author pablo
  */
 //Clase delegada para poder manejar el objeto que permite retornar la vigencia que tienen los anuncios
-public class VigenciaAnuncioDTO {
+public class VigenciaAnuncio {
     
     private int codigo;
     private String contexto;
     private double precio;
     private double duracion;
 
-    public VigenciaAnuncioDTO(int codigo, String contexto, double precio, double duracion) {
+    public VigenciaAnuncio(int codigo, String contexto, double precio, double duracion) {
         this.codigo = codigo;
         this.contexto = contexto;
         this.precio = precio;

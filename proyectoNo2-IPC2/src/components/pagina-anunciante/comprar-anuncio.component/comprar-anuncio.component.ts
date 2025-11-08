@@ -9,10 +9,13 @@ import { ConfiguracionAnuncioDTO } from '../../../models/anuncios/configuracion-
 import { ConfiguracionAnunciosService } from '../../../services/anuncios-service/configuracion-anuncios.service';
 import { ConfiguracionAnunciosCardsComponent } from "../configuracion-anuncios-cards/configuracion-anuncios-cards.component";
 import { forkJoin } from 'rxjs';
+import { VigenciaAnuncio } from '../../../models/anuncios/vigencia-anuncio';
+import { VigenciaAnunciosCardsComponent } from "../vigencia-anuncios-cards/vigencia-anuncios-cards.component";
+import { VigenciaAnunciosService } from '../../../services/anuncios-service/vigencia-anuncios.service';
 
 @Component({
   selector: 'app-comprar-anuncio',
-  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf, ConfiguracionAnunciosCardsComponent],
+  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf, ConfiguracionAnunciosCardsComponent, VigenciaAnunciosCardsComponent],
   templateUrl: './comprar-anuncio.component.html',
   styleUrl: './comprar-anuncio.component.scss',
   providers: [Popup],
@@ -24,6 +27,8 @@ export class ComprarAnuncioComponent implements OnInit {
   pagoForm!: FormGroup;
 
   configuracionesAnuncios: ConfiguracionAnuncioDTO[] = [];
+
+  vigenciasAnuncios: VigenciaAnuncio[] = [];
 
   tipoSeleccionado: number | null = null;
   tiposAnuncio: { codigo: number, label: string }[] = [];
@@ -50,24 +55,12 @@ export class ComprarAnuncioComponent implements OnInit {
     private fb: FormBuilder,
     private popUp: Popup,
     private formBuilder: FormBuilder,
-    private configuracionAnunciosService: ConfiguracionAnunciosService) { }
+    private configuracionAnunciosService: ConfiguracionAnunciosService,
+    private vigenciaAnunciosService: VigenciaAnunciosService) { }
 
   ngOnInit(): void {
 
-    this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
-      next: (response: ConfiguracionAnuncioDTO[]) => {
-
-
-        this.configuracionesAnuncios = response;
-
-      },
-      error: (error: any) => {
-
-        this.mostrarError(error);
-
-      }
-    });
-
+    this.cargarCostosAnuncios();
 
     // Cargar los tipos de anuncio desde el enum
     this.tiposAnuncio = [
@@ -134,6 +127,41 @@ export class ComprarAnuncioComponent implements OnInit {
     this.anuncioForm.get('codigoTipo')?.valueChanges.subscribe(valor => {
       this.tipoSeleccionado = valor;
     });
+  }
+
+
+  //Metodo delegado para cargar los recursos para mostrar los costos de compra de anuncios
+  cargarCostosAnuncios(): void {
+
+    this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
+      next: (response: ConfiguracionAnuncioDTO[]) => {
+
+
+        this.configuracionesAnuncios = response;
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
+    this.vigenciaAnunciosService.listadoVigencias().subscribe({
+      next: (response: VigenciaAnuncio[]) => {
+
+
+        this.vigenciasAnuncios = response;
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
+
   }
 
   onFileSelected(event: any): void {

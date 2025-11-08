@@ -3,14 +3,9 @@
     <section class="side-card">
         <h2 class="titulo">Tarifas disponibles</h2>
 
-        <!--@for (tarifa of tarifas; track $index) {
-      <div class="mini-card">
-     
-        <p>{{ tarifa.nombre }}</p>
-      </div>
-    }
--->
-
+        @for (vig of vigenciasAnuncios; track $index) {
+        <app-vigencia-anuncios-cards [vigencia]="vig"></app-vigencia-anuncios-cards>
+        }
     </section>
 
     <section class="crear-anuncio-card">
