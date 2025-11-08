@@ -13,6 +13,7 @@ import { VigenciaAnunciosService } from '../../../services/anuncios-service/vige
 import { FullscreenModalComponent } from '../../../shared/fullscreen-modal/fullscreen-modal.component';
 import { UserLoggedDTO } from '../../../models/usuarios/user-logged-dto';
 import { Router } from '@angular/router';
+import { ComprarAnuncioUsuarioService } from '../../../services/anuncios-service/comprar-anuncio-usuario.service';
 
 @Component({
   selector: 'app-comprar-anuncio',
@@ -57,7 +58,8 @@ export class ComprarAnuncioComponent implements OnInit {
     private fb: FormBuilder,
     private popUp: Popup,
     private configuracionAnunciosService: ConfiguracionAnunciosService,
-    private vigenciaAnunciosService: VigenciaAnunciosService
+    private vigenciaAnunciosService: VigenciaAnunciosService,
+    private comprarAnuncioService: ComprarAnuncioUsuarioService,
   ) { }
 
   ngOnInit(): void {
@@ -138,8 +140,6 @@ export class ComprarAnuncioComponent implements OnInit {
   // Cargar configuraciones desde el backend
   cargarCostosAnuncios(): void {
 
-    console.log('Cargando configuraciones y tarifas...');
-
     this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
       next: (response) => this.configuracionesAnuncios = response,
       error: (e) => this.mostrarError(e)
@@ -215,11 +215,20 @@ export class ComprarAnuncioComponent implements OnInit {
 
     this.formDataAnuncio.append('monto', this.pagoForm.getRawValue().monto);
 
-    console.log('FormData completo listo para enviar:', this.formDataAnuncio);
+    this.formDataAnuncio.append('idUsuario', this.usuarioAnunciante.id);
 
-    this.abrirModal('Se ha registrado tu anuncio en el sistema', 'exito');
 
-    // this.miServicio.enviarTodo(this.formDataAnuncio).subscribe(...)
+
+    this.comprarAnuncioService.comprarAnuncio(this.formDataAnuncio).subscribe({
+      next: () => {
+
+        this.limpiar();
+        this.abrirModal('Se ha registrado tu anuncio en el sistema', 'exito');
+      },
+      error: (err) => {
+        this.mostrarError(err);
+      }
+    });
   }
 
   // Calcular total real desde backend
