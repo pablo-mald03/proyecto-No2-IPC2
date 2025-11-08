@@ -10,6 +10,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingle
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.pagoanuncio.models.PagoAnuncio;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -33,6 +34,9 @@ public class BilleteraDigitalDB {
 
     //Constante que sirve para poder regargar la billetera digital del usuario 
     private final String RECARGAR_BILLETERA = "UPDATE billetera_digital SET  saldo = ? WHERE id_usuario = ?";
+
+    //Constante que permite cobrarle al usuario los pagos que hace
+    private final String COBRAR_MONTO = "UPDATE billetera_digital SET  saldo = ? WHERE id_usuario = ?";
 
     //Metodo delegado para poder reestablecer/cambiar la password del usuario
     public boolean recargarBilletera(BilleteraDigital billeteraDigital, double saldoActual) throws ErrorInesperadoException, FormatoInvalidoException {
@@ -128,6 +132,28 @@ public class BilleteraDigitalDB {
 
         } catch (SQLException e) {
             throw new ErrorInesperadoException("No se han podido obtener los datos de la billetera digital del usuario.");
+        }
+
+    }
+
+    //Metodo que sirve para poder desacreditar saldo de la billetera del usuario
+    public int cobrarSaldo(PagoAnuncio pago, Connection conexion) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        if (pago == null) {
+            throw new FormatoInvalidoException("La referencia del pago esta vacia");
+        }
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(COBRAR_MONTO);) {
+
+            preparedStmt.setBigDecimal(1, new BigDecimal(pago.getMonto()));
+            preparedStmt.setString(2, pago.getIdUsuario());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            return filasAfectadas;
+
+        } catch (SQLException ex) {
+
+            throw new ErrorInesperadoException("No se ha podido descontar el saldo de la billetera del cliente. ");
         }
 
     }

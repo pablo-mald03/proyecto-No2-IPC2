@@ -9,6 +9,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosC
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.Anuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioRegistradoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.billetera.database.BilleteraDigitalDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
@@ -270,16 +271,20 @@ public class AnunciosDB {
         }
 
         PagoAnuncioDB pagoAnuncioDb = new PagoAnuncioDB();
+        BilleteraDigitalDB billeteraDigitalDb = new BilleteraDigitalDB();
         Connection conexion = DBConnectionSingleton.getInstance().getConnection();
 
-        try{
+        try {
 
             conexion.setAutoCommit(false);
 
-            int filasAfectadas =insertarAnuncio(anuncioNuevo, conexion);
-            int filasAfectadasPago =pagoAnuncioDb.generarPagoAnuncio(new PagoAnuncio(cantidadPago, anuncioNuevo.getFechaCompra(), anuncioNuevo.getIdUsuario()), conexion);
+            PagoAnuncio pagoAnuncio = new PagoAnuncio(cantidadPago, anuncioNuevo.getFechaCompra(), anuncioNuevo.getIdUsuario());
 
-            if (filasAfectadas > 0 && filasAfectadasPago > 0) {
+            int filasAfectadas = insertarAnuncio(anuncioNuevo, conexion);
+            int filasAfectadasPago = pagoAnuncioDb.generarPagoAnuncio(pagoAnuncio, conexion);
+            int filasAfectadasCobro = billeteraDigitalDb.cobrarSaldo(pagoAnuncio, conexion);
+
+            if (filasAfectadas > 0 && filasAfectadasPago > 0 && filasAfectadasCobro > 0) {
                 conexion.commit();
                 return true;
 
@@ -313,20 +318,17 @@ public class AnunciosDB {
 
         try (PreparedStatement preparedStmt = conexion.prepareStatement(COMPRAR_ANUNCIO);) {
 
-
-            
-            preparedStmt.setString(1,anuncioNuevo.getCodigo().trim());
+            preparedStmt.setString(1, anuncioNuevo.getCodigo().trim());
             preparedStmt.setBoolean(2, anuncioNuevo.isEstado());
-            preparedStmt.setString(3,anuncioNuevo.getNombre().trim());
-            preparedStmt.setBoolean(4,anuncioNuevo.isCaducacion());
+            preparedStmt.setString(3, anuncioNuevo.getNombre().trim());
+            preparedStmt.setBoolean(4, anuncioNuevo.isCaducacion());
             preparedStmt.setDate(5, java.sql.Date.valueOf(anuncioNuevo.getFechaExpiracion()));
             preparedStmt.setDate(6, java.sql.Date.valueOf(anuncioNuevo.getFechaCompra()));
-            preparedStmt.setString(7,anuncioNuevo.getUrl().trim());
-            preparedStmt.setString(8,anuncioNuevo.getTexto().trim());
-            preparedStmt.setBytes(9,anuncioNuevo.getFoto());
+            preparedStmt.setString(7, anuncioNuevo.getUrl().trim());
+            preparedStmt.setString(8, anuncioNuevo.getTexto().trim());
+            preparedStmt.setBytes(9, anuncioNuevo.getFoto());
             preparedStmt.setInt(10, anuncioNuevo.getCodigoTipo());
             preparedStmt.setString(11, anuncioNuevo.getIdUsuario().trim());
-            
 
             int filasAfectadas = preparedStmt.executeUpdate();
 
