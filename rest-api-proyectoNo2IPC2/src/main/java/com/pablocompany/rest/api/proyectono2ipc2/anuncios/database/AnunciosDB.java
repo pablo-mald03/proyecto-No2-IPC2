@@ -4,7 +4,6 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
 
-import com.ctc.wstx.util.StringUtil;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioRegistradoDTO;

@@ -7,7 +7,6 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.services;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.database.AnunciosDB;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoClienteRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;

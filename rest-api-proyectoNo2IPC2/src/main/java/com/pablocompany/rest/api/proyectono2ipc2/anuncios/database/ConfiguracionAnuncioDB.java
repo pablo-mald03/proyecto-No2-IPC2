@@ -1,0 +1,170 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
+
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.ConfiguracionAnuncioDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ *
+ * @author pablo
+ */
+//Clase que permite mostrar la configuracion de los anuncios desde la BD
+public class ConfiguracionAnuncioDB {
+
+    //Constante que permite obtener los valores actuales de configuracion del anuncio 
+    private String CONSULTAR_CONFIGURACION = "SELECT codigo, tipo, precio FROM configuracion_anuncio";
+
+    //Constante que permite obtener los valores actuales de configuracion del anuncio 
+    private String CONSULTAR_CONFIGURACION_CODIGO = "SELECT codigo, tipo, precio FROM configuracion_anuncio WHERE codigo = ?";
+
+    //Constante que permite editar los precios de las configuraciones de anuncios 
+    private String MODIFICAR_PRECIOS = "UPDATE configuracion_anuncio SET precio = ? WHERE codigo = ?";
+
+    //Constante que permite editar obtener los precios de las configuraciones de 
+    private String CONSULTAR_PRECIO_CODIGO = "SELECT precio FROM configuracion_anuncio WHERE codigo = ?";
+
+    //Metodo que permite obtener el listado completo de las configuraciones de anuncios
+    public List<ConfiguracionAnuncioDTO> obtenerListadoConfiguracion() throws FormatoInvalidoException, ErrorInesperadoException {
+
+        List<ConfiguracionAnuncioDTO> listaConfiguracion = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CONFIGURACION);) {
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                ConfiguracionAnuncioDTO costoEncontrado = new ConfiguracionAnuncioDTO(
+                        resultSet.getString("tipo"),
+                        resultSet.getBigDecimal("precio").doubleValue(),
+                        resultSet.getInt("codigo")
+                );
+
+                listaConfiguracion.add(costoEncontrado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de las configuraciones de los anuncios");
+        }
+
+        return listaConfiguracion;
+    }
+
+    //Metodo que permite obtener una configuracion especifica
+    public ConfiguracionAnuncioDTO obtenerConfiguracionCodigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CONFIGURACION_CODIGO);) {
+
+            ResultSet resultSet = query.executeQuery();
+
+            query.setInt(1, codigo);
+
+            if (resultSet.next()) {
+                ConfiguracionAnuncioDTO costoEncontrado = new ConfiguracionAnuncioDTO(
+                        resultSet.getString("tipo"),
+                        resultSet.getBigDecimal("precio").doubleValue(),
+                        resultSet.getInt("codigo")
+                );
+
+                return costoEncontrado;
+            }else{
+                throw new DatosNoEncontradosException("No se ha encontrado informacion de configuracion con el codigo enviado");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de una configuracion especifica");
+        }
+    }
+
+    //Metodo que permite obtener el precio actual de las configuraciones de anucios
+    public double obtenerPrecioCOdigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_PRECIO_CODIGO);) {
+
+            query.setInt(1, codigo);
+
+            ResultSet resultSet = query.executeQuery();
+
+            if (resultSet.next()) {
+
+                double costoActual = resultSet.getBigDecimal("precio").doubleValue();
+                return costoActual;
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener precio actual de la configuracion de los anuncios");
+        }
+
+        throw new ErrorInesperadoException("No se han podido obtener el precio actual de la configuracion de los anuncios");
+    }
+
+    //Metodo que sirve para poder cambiar el precio de la configuracion
+    public boolean cambiarEstado(CambiarPrecioDTO cambioPrecio) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
+
+        if (cambioPrecio == null) {
+            throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre la configuracion a editar");
+        }
+
+        Connection conexion = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(MODIFICAR_PRECIOS);) {
+
+            conexion.setAutoCommit(false);
+
+            preparedStmt.setBigDecimal(1, new BigDecimal(cambioPrecio.getPrecio()));
+            preparedStmt.setInt(2, cambioPrecio.getCodigo());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+
+                conexion.commit();
+                return true;
+
+            } else {
+                conexion.rollback();
+                throw new DatosNoEncontradosException("No se ha podido cambiar el precio de la configuracion");
+            }
+
+        } catch (SQLException ex) {
+
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new ErrorInesperadoException("Error al hacer Rollback al cambiar el precio de la configuracion");
+            }
+
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o patrones diferentes a los que se piden en el cambio de precio de la configuracion");
+        } finally {
+
+            try {
+
+                conexion.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                System.out.println("Error al reactivar la autoconfirmacion al cambiar el precio de la configuracion");
+            }
+        }
+    }
+
+}

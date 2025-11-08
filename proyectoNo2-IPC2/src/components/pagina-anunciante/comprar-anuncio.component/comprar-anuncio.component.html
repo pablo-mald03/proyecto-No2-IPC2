@@ -72,6 +72,20 @@
             </div>
 
 
+            <div class="form-group">
+                <label>Tipo de Tarifa</label>
+                <select formControlName="codigoTipo">
+                    <option *ngFor="let tipo of tiposTarifa" [value]="tipo.codigo">
+                        {{ tipo.label }}
+                    </option>
+                </select>
+
+                @if (anuncioForm.get('codigoTipo')?.invalid && anuncioForm.get('codigoTipo')?.touched) {
+                <p class="error-msg">Debes seleccionar un tipo de tarifa obligatorio.</p>
+                }
+            </div>
+
+
 
             <div class="form-actions">
 

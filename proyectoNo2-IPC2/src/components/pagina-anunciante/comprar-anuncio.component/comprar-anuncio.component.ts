@@ -5,6 +5,7 @@ import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { Anuncio } from '../../../models/anuncios/anuncio';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
+import { VigenciaAnuncioEnum } from '../../../models/anuncios/vigencia-anuncio-enum';
 
 @Component({
   selector: 'app-comprar-anuncio',
@@ -22,6 +23,8 @@ export class ComprarAnuncioComponent implements OnInit {
 
   tipoSeleccionado: number | null = null;
   tiposAnuncio: { codigo: number, label: string }[] = [];
+
+  tiposTarifa: { codigo: number, label: string }[] = [];
 
   imagenFile: File | null = null;
 
@@ -52,6 +55,14 @@ export class ComprarAnuncioComponent implements OnInit {
       { codigo: 3, label: TipoAnuncioEnum.VIDEO_TEXTO },
     ];
 
+    // Cargar los tipos de anuncio desde el enum
+    this.tiposTarifa = [
+      { codigo: 1, label: VigenciaAnuncioEnum.UN_DIA },
+      { codigo: 2, label: VigenciaAnuncioEnum.TRES_DIAS },
+      { codigo: 3, label: VigenciaAnuncioEnum.UNA_SEMANA },
+      { codigo: 4, label: VigenciaAnuncioEnum.DOS_SEMANAS },
+    ];
+
     this.pagoForm = this.formBuilder.group({
       metodo: ['', Validators.required],
       monto: [{ value: 0, disabled: true }]
@@ -69,6 +80,7 @@ export class ComprarAnuncioComponent implements OnInit {
       texto: ['', Validators.required],
       foto: [''],
       codigoTipo: [1, Validators.required],
+      codigoTarifa: [1, Validators.required],
       idUsuario: [''],
     });
 
@@ -131,6 +143,7 @@ export class ComprarAnuncioComponent implements OnInit {
     this.formDataAnuncio.append('texto', this.anuncioForm.value.texto);
     this.formDataAnuncio.append('url', this.anuncioForm.value.url);
     this.formDataAnuncio.append('fechaExpiracion', this.anuncioForm.value.fechaExpiracion);
+    this.formDataAnuncio.append('tipoTarifa', this.anuncioForm.value.codigoTarifa);
 
     if (this.imagenFile) {
       this.formDataAnuncio.append('foto', this.imagenFile);
