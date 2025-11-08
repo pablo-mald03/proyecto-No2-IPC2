@@ -23,12 +23,21 @@ public class Cine {
     private String descripcion;
     private String ubicacion;
 
+    //Constructor utilizado para la creacion
     public Cine(String codigo, String nombre, boolean estadoAnuncio, double montoOcultacion, LocalDate fechaCreacion, String descripcion, String ubicacion) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.estadoAnuncio = estadoAnuncio;
         this.montoOcultacion = montoOcultacion;
         this.fechaCreacion = fechaCreacion;
+        this.descripcion = descripcion;
+        this.ubicacion = ubicacion;
+    }
+    //Constructor utilizado para la edicion
+    public Cine(String codigo, String nombre, double montoOcultacion, String descripcion, String ubicacion) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.montoOcultacion = montoOcultacion;
         this.descripcion = descripcion;
         this.ubicacion = ubicacion;
     }
@@ -113,6 +122,37 @@ public class Cine {
 
         if (fechaCreacion == null) {
             throw new FormatoInvalidoException("La fecha de creación no puede ser nula");
+        }
+
+        if (StringUtils.isBlank(descripcion)) {
+            throw new FormatoInvalidoException("La descripción no puede estar vacía");
+        }
+
+        if (StringUtils.isBlank(ubicacion)) {
+            throw new FormatoInvalidoException("La ubicación no puede estar vacía");
+        }
+
+        return true;
+    }
+    
+    //Metodo que se encarga de poder validar las entradas para editar el cine 
+    public boolean validarCineEdicion() throws FormatoInvalidoException {
+        
+        if (StringUtils.isBlank(codigo)) {
+            throw new FormatoInvalidoException("El código del cine no puede estar vacío");
+        }
+
+
+        if (StringUtils.isBlank(nombre)) {
+            throw new FormatoInvalidoException("El nombre del cine no puede estar vacío");
+        }
+
+        if (nombre.length() < 3) {
+            throw new FormatoInvalidoException("El nombre del cine debe tener al menos 3 caracteres");
+        }
+
+        if (montoOcultacion < 0) {
+            throw new FormatoInvalidoException("El monto de ocultación no puede ser negativo");
         }
 
         if (StringUtils.isBlank(descripcion)) {

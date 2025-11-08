@@ -40,62 +40,70 @@ public class CineDB {
     //Constante que permite obtener los cines que estan creados en el sistema 
     private final String CONSULTAR_CINES = "SELECT codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion FROM cine LIMIT ? OFFSET ?";
 
+    //-------------APARTADO DE EDICION----------------------
     //Constante que permite obtener los cines que estan creados en el sistema 
     private final String CONSULTAR_CINES_CODIGO = "SELECT codigo, nombre, estado_anuncios, monto_ocultacion, fecha_creacion, descripcion, ubicacion FROM cine WHERE codigo = ?";
 
+    //Constante que permite obtener los nombres de los cines para poderlos ediar
+    private final String EDITAR_CINE = "UPDATE cine SET nombre = ?, monto_ocultacion = ?, descripcion = ?, ubicacion = ? WHERE codigo = ?";
+
+    //Constante que permite obtener el nombre de un cine en base a codigo
+    private final String CONSULTAR_NOMBRE_CINE = "SELECT nombre FROM cine WHERE nombre = ? LIMIT 1";
+
+    //-------------FIN DEL APARTADO DE EDICION----------------------
     //Constante que permite obtener los cines registrados en la aplicacion para el dashboard del usuario 
-    private final String CONSULTAR_CINE_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine";
+    private final String CONSULTAR_CINE_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine ORDER BY fecha_creacion DESC";
 
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
     private final String CONSULTAR_CINE_CODIGO_DASHBOARD = "SELECT nombre, descripcion, ubicacion FROM cine WHERE codigo = ?";
 
     //Metodo que sirve para poder registrar un nuevo cine en el sistema
     public boolean crearNuevoCine(CineDTO cineNuevo) throws ErrorInesperadoException, FormatoInvalidoException {
-        
+
         if (cineNuevo == null) {
             throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el cine a crear");
         }
-        
+
         BilleteraCineDB billeteraCineDb = new BilleteraCineDB();
         CostoCineDB costoCineDb = new CostoCineDB();
-        
+
         Connection conexion = DBConnectionSingleton.getInstance().getConnection();
-        
+
         try {
-            
+
             conexion.setAutoCommit(false);
-            
+
             int filasAfectadas = insertarNuevoCine(conexion, cineNuevo);
-            
+
             int filasAfectadasCosto = costoCineDb.registrarCostoCine(new CostoCine(cineNuevo.getCostoCine(), cineNuevo.getFechaCreacion(), cineNuevo.getCodigo()), conexion);
-            
+
             int filasAfectadasBilletera = billeteraCineDb.crearBilleteraCine(new BilleteraCine(0, cineNuevo.getCodigo().trim()), conexion);
-            
+
             if (filasAfectadas > 0 && filasAfectadasBilletera > 0 && filasAfectadasCosto > 0) {
-                
+
                 conexion.commit();
                 return true;
-                
+
             } else {
                 conexion.rollback();
                 throw new ErrorInesperadoException("No se ha podido crear el cine.");
             }
-            
+
         } catch (SQLException ex) {
-            
+
             try {
                 conexion.rollback();
             } catch (SQLException ex1) {
                 throw new ErrorInesperadoException("Error al hacer Rollback al crear un nuevo cine");
             }
-            
+
             throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al crear un nuevo cine");
         } finally {
-            
+
             try {
-                
+
                 conexion.setAutoCommit(true);
-                
+
             } catch (SQLException ex) {
                 System.out.println("Error al reactivar la autoconfirmacion al crear un nuevo cine");
             }
@@ -104,9 +112,9 @@ public class CineDB {
 
     //Metodo que sirve para poder generar la transaccion para insertar cine
     public int insertarNuevoCine(Connection conexion, CineDTO cineNuevo) throws ErrorInesperadoException {
-        
+
         try (PreparedStatement preparedStmt = conexion.prepareStatement(CREAR_CINE);) {
-            
+
             preparedStmt.setString(1, cineNuevo.getCodigo());
             preparedStmt.setString(2, cineNuevo.getNombre());
             preparedStmt.setBoolean(3, cineNuevo.isEstadoAnuncio());
@@ -114,57 +122,78 @@ public class CineDB {
             preparedStmt.setDate(5, java.sql.Date.valueOf(cineNuevo.getFechaCreacion()));
             preparedStmt.setString(6, cineNuevo.getDescripcion());
             preparedStmt.setString(7, cineNuevo.getUbicacion());
-            
+
             int filasAfectadas = preparedStmt.executeUpdate();
-            
+
             return filasAfectadas;
-            
+
         } catch (SQLException ex) {
             throw new ErrorInesperadoException("No se ha podido crear el nuevo registro de cine.");
         }
-        
+
     }
 
     //Metodo delegado para obtener la cantidad de cines registrados en el sistema
     public int cantidadCinesRegistrados() throws ErrorInesperadoException, DatosNoEncontradosException {
-        
+
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
-        
+
         try (PreparedStatement query = connection.prepareStatement(CANTIDAD_CINES);) {
-            
+
             ResultSet result = query.executeQuery();
             if (result.next()) {
                 return result.getInt("cantidad");
             } else {
-                
+
                 throw new DatosNoEncontradosException("No hay registros de cines registrados en el sistema");
             }
-            
+
         } catch (SQLException e) {
             throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de cines");
         }
     }
 
+    //Metodo delegado para obtener el nombre del cine en base a un nombre
+    public String verificarNombreDuplicado(String nombre) throws ErrorInesperadoException, DatosNoEncontradosException {
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_NOMBRE_CINE);) {
+
+            query.setString(1, nombre.trim());
+
+            ResultSet result = query.executeQuery();
+            if (result.next()) {
+                return result.getString("nombre");
+            } else {
+                return "";
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener el nombre del cine");
+        }
+    }
+
     //Metodo que permite obtener el listado completo de Cines para el administrador de sistema
     public List<CineDTO> obtenerListadoCinesAsociados(CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
-        
+
         if (cargaRequest == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
         }
-        
+
         CostoCineDB costoCineDb = new CostoCineDB();
-        
+
         List<CineDTO> listadoCines = new ArrayList<>();
-        
+
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
-        
+
         try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINES);) {
-            
+
             query.setInt(1, cargaRequest.getLimit());
             query.setInt(2, cargaRequest.getOffset());
-            
+
             ResultSet resultSet = query.executeQuery();
-            
+
             while (resultSet.next()) {
                 CineDTO cineEncontrado = new CineDTO(
                         resultSet.getString("codigo"),
@@ -175,39 +204,39 @@ public class CineDB {
                         resultSet.getString("descripcion"),
                         resultSet.getString("ubicacion")
                 );
-                
+
                 listadoCines.add(cineEncontrado);
             }
-            
+
             for (CineDTO cine : listadoCines) {
                 double costoActual = costoCineDb.obtenerCostoActual(cine.getCodigo());
                 cine.setCostoCine(costoActual);
             }
-            
+
         } catch (SQLException e) {
             throw new ErrorInesperadoException("No se han podido obtener los datos de los cines asociados al sistema");
         }
-        
+
         return listadoCines;
     }
 
     //Metodo que permite obtener un cine en especifico para el administrador de sistema
-    public CineDTO obtenerCine(String idCine) throws FormatoInvalidoException, ErrorInesperadoException {
-        
+    public Cine obtenerCine(String idCine) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
         if (StringUtils.isBlank(idCine)) {
             throw new FormatoInvalidoException("El id del cine esta vacio");
         }
-        
+
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
-        
+
         try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINES_CODIGO);) {
-            
+
             query.setString(1, idCine);
-            
+
             ResultSet resultSet = query.executeQuery();
-            
-            while (resultSet.next()) {
-                CineDTO cineEncontrado = new CineDTO(
+
+            if (resultSet.next()) {
+                Cine cineEncontrado = new Cine(
                         resultSet.getString("codigo"),
                         resultSet.getString("nombre"),
                         resultSet.getBoolean("estado_anuncios"),
@@ -216,32 +245,39 @@ public class CineDB {
                         resultSet.getString("descripcion"),
                         resultSet.getString("ubicacion")
                 );
-                
+
                 return cineEncontrado;
-                
+
+            } else {
+                throw new DatosNoEncontradosException("No se ha encontrado un registro con el codigo de cine enviado");
             }
-            
+
         } catch (SQLException e) {
             throw new ErrorInesperadoException("No se han podido obtener los datos del cine asociado al sistema");
         }
-        
-        throw new ErrorInesperadoException("No se han podido obtener los datos del cine asociado al sistema");
+
     }
 
-    //Metodo que permite modificar el costo del cine PENDIENTE
-    /*public boolean modificarCostoCine(CostoCine costoCine) throws ErrorInesperadoException, FormatoInvalidoException {
+    //Metodo que sirve para poder editar los datos de un cine
+    public boolean editarCine(Cine cineEditar) throws ErrorInesperadoException, FormatoInvalidoException {
 
-        if (costoCine == null) {
-            throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el costo de cine a modificar");
+        if (cineEditar == null) {
+            throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el cine a editar");
         }
 
         Connection conexion = DBConnectionSingleton.getInstance().getConnection();
 
-        try {
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(EDITAR_CINE);) {
 
             conexion.setAutoCommit(false);
 
-            int filasAfectadas = registrarCostoCine(costoCine, conexion);
+            preparedStmt.setString(1, cineEditar.getNombre());
+            preparedStmt.setBigDecimal(2, new BigDecimal(cineEditar.getMontoOcultacion()));
+            preparedStmt.setString(3, cineEditar.getDescripcion());
+            preparedStmt.setString(4, cineEditar.getUbicacion());
+            preparedStmt.setString(5, cineEditar.getCodigo());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
 
             if (filasAfectadas > 0) {
 
@@ -250,7 +286,7 @@ public class CineDB {
 
             } else {
                 conexion.rollback();
-                throw new ErrorInesperadoException("No se ha podido modificar el costo del cine.");
+                throw new ErrorInesperadoException("No se ha podido editar el cine.");
             }
 
         } catch (SQLException ex) {
@@ -258,10 +294,10 @@ public class CineDB {
             try {
                 conexion.rollback();
             } catch (SQLException ex1) {
-                throw new ErrorInesperadoException("Error al hacer Rollback al modificar el costo del cine");
+                throw new ErrorInesperadoException("Error al hacer Rollback al editar el cine");
             }
 
-            throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al modificar el costo del cine");
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o partones diferentes a los que se piden al editar el cine");
         } finally {
 
             try {
@@ -269,8 +305,8 @@ public class CineDB {
                 conexion.setAutoCommit(true);
 
             } catch (SQLException ex) {
-                System.out.println("Error al reactivar la autoconfirmacion al modificar el costo del cine");
+                System.out.println("Error al reactivar la autoconfirmacion al editar el cine");
             }
         }
-    }*/
+    }
 }
