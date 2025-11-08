@@ -90,6 +90,13 @@ export class ComprarAnuncioComponent implements OnInit {
       }
     });
 
+    this.anuncioForm.valueChanges.subscribe(() => {
+      if (this.mostrarSegundoFormulario) {
+        this.mostrarSegundoFormulario = false;
+        this.pagoForm.reset({ metodo: '', monto: 0 });
+      }
+    });
+
     // Detectar cambio en tipo seleccionado
     this.anuncioForm.get('codigoTipo')?.valueChanges.subscribe(valor => {
       this.tipoSeleccionado = valor;
@@ -137,13 +144,14 @@ export class ComprarAnuncioComponent implements OnInit {
 
 
   //Metodo que permite limpiar el formulario
-   limpiar() {
+  limpiar() {
     this.anuncioForm.reset({
       estado: true,
       codigoTipo: 1,
       fechaCompra: new Date()
     });
     this.imagenFile = null;
+    this.mostrarSegundoFormulario = false;
   }
 
   //Metodo implementado para mostrar los mensajes de errores

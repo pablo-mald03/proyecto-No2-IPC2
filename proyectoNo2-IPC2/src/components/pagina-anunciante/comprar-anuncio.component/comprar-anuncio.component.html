@@ -21,7 +21,7 @@
 
             <div class="form-group">
                 <label>Nombre del Anuncio</label>
-                <input type="text" formControlName="nombre" placeholder="Ingrese nombre..." />
+                <input type="text" formControlName="nombre" placeholder="Ingrese el nombre de su anuncio" />
 
                 @if (anuncioForm.get('nombre')?.invalid && anuncioForm.get('nombre')?.touched) {
                 <p class="error-msg">El nombre es obligatorio.</p>
