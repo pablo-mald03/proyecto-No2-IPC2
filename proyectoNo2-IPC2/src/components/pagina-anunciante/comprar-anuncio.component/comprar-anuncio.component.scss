@@ -1,86 +1,148 @@
-.crear-anuncio-page {
-    min-height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 4rem;
-    background: linear-gradient(135deg, #1c1c1c, #2a2a72);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
-    padding-bottom: 4rem;
+
+.crear-anuncio-page-3col {
+  min-height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 2rem;
+  padding: 4rem 3rem;
+  background: linear-gradient(145deg, #161616, #26264d);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
 }
 
-.form-actions button {
-  background: #f9d423;
-  color: #1f1f2e;
-  font-weight: bold;
-  padding: 0.6rem 1.8rem;
-  border: none;
-  border-radius: 50px;
+.error-msg {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+
+.side-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.6s ease;
+}
+
+.side-card .titulo {
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+  color: #ffd85e;
+}
+
+.mini-card {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.25s ease, background 0.25s ease;
   cursor: pointer;
-  transition: 0.3s;
+}
+
+.mini-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(6px);
+}
+
+
+.crear-anuncio-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  padding: 2.5rem 3rem;
+  width: 100%;
+  text-align: left;
+  animation: fadeIn 0.5s ease;
 }
 
 .titulo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    color: #f9d423;
-    text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #f9d423;
+  text-align: center;
 }
 
-.form-actions {
-  text-align: right;
-  margin-top: 1.5rem;
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
   border: none;
   outline: none;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
   font-size: 1rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.25);
 }
 
 textarea {
   resize: vertical;
-  min-height: 80px;
-  max-height: 200px;
+  min-height: 90px;
+  max-height: 250px;
 }
 
-.crear-anuncio-card {
 
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    padding: 2rem 3rem;
-    width: 90%;
-    max-width: 600px;
-    text-align: left;
-    animation: fadeIn 0.5s ease;
+.form-actions {
+  text-align: right;
+  margin-top: 1.5rem;
+}
+
+.form-actions button {
+  background: #f9d423;
+  color: #1a1a1a;
+  font-weight: bold;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-limpiar{
+  background: #025e6e94;
+  color: #1a1a1a;
+  font-weight: bold;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
 .form-actions button:hover {
-  background: #f39c12;
+  background: #ffb140;
   color: white;
+  transform: translateY(-2px);
 }
 
 
-.form-group label {
-
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-    color: #fff;
-
-}
-
-.form-group {
-
-    margin-bottom: 1.2rem;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

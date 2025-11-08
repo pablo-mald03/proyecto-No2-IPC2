@@ -1,93 +1,82 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
+import { Anuncio } from '../../../models/anuncios/anuncio';
 
 @Component({
   selector: 'app-comprar-anuncio',
-  imports: [ReactiveFormsModule, NgClass, NgIf, NgFor],
+  imports: [ReactiveFormsModule, CommonModule, NgFor],
   templateUrl: './comprar-anuncio.component.html',
   styleUrl: './comprar-anuncio.component.scss'
 })
 export class ComprarAnuncioComponent implements OnInit {
 
-  anuncioForm!: FormGroup;
+   anuncioForm!: FormGroup;
+  tipoSeleccionado: number | null = null;
+  tiposAnuncio: { codigo: number, label: string }[] = [];
 
-  //PENDIENTE TERMINAR ESTA BASURA
-
-  //Tipos de anuncio que existen
-  tiposAnuncio = [
-
-    { codigo: 1, label: 'ANUNCIO DE TEXTO' },
-    { codigo: 2, label: 'ANUNCIO DE TEXTO E IMAGEN' },
-    { codigo: 3, label: 'ANUNCIO DE VIDEO Y TEXTO' }
-
-  ]
-
-
-  constructor(
-    private formBuilder: FormBuilder
-
-  ) {
-
-  }
-
-  tipoSeleccionado!: number;
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.anuncioForm = this.formBuilder.group({
-      nombre: ['', [Validators.required]],
-      codigoTipo: [1, [Validators.required]],
-      texto: [''],
+    // Cargar los tipos de anuncio desde el enum
+    this.tiposAnuncio = [
+      { codigo: 1, label: TipoAnuncioEnum.ANUNCIO_TEXTO },
+      { codigo: 2, label: TipoAnuncioEnum.IMAGEN_TEXTO },
+      { codigo: 3, label: TipoAnuncioEnum.VIDEO_TEXTO },
+    ];
+
+    // Crear formulario reactivo
+    this.anuncioForm = this.fb.group({
+      codigo: [''],
+      estado: [true],
+      nombre: ['', Validators.required],
+      caducacion: [false],
+      fechaExpiracion: ['', Validators.required],
+      fechaCompra: [new Date()],
       url: [''],
-      foto: [null],
-      fechaExpiracion: ['', [Validators.required]]
+      texto: ['', Validators.required],
+      foto: [''],
+      codigoTipo: [1, Validators.required],
+      idUsuario: [''], 
     });
 
-    this.tipoSeleccionado = this.anuncioForm.get('codigoTipo')?.value;
-
-    this.anuncioForm.get('codigoTipo')?.valueChanges.subscribe(tipoSeleccionado => {
-      this.tipoSeleccionado = tipoSeleccionado;
-      this.resetCamposPorTipo(tipoSeleccionado);
+    // Detectar cambio en tipo seleccionado
+    this.anuncioForm.get('codigoTipo')?.valueChanges.subscribe((valor) => {
+      this.tipoSeleccionado = valor;
+      console.log(this.tipoSeleccionado);
     });
   }
-  //Metodo que ayuda a darle dinamismo al formulario para irlo acoplando a lo que elija el usuario
-  resetCamposPorTipo(tipo: number) {
-    if (tipo === 1) {
-      this.anuncioForm.patchValue({ texto: '', url: '', foto: null }, { emitEvent: false });
-    } else if (tipo === 2) {
-      this.anuncioForm.patchValue({ texto: '', url: '', foto: null }, { emitEvent: false });
-    } else if (tipo === 3) {
-      this.anuncioForm.patchValue({ texto: '', url: '', foto: null }, { emitEvent: false });
-    }
 
-  }
-
-  //Metodo que sirve para detectar si el usuario subio una imagen
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     const file = event.target.files[0];
-    this.anuncioForm.patchValue({ foto: file });
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.anuncioForm.patchValue({ foto: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
-  //Metodo para enviar el formulario
-  submit() {
-
+  submit(): void {
     if (this.anuncioForm.valid) {
 
-      console.log('Formulario enviado:', this.anuncioForm.value);
+      const nuevoAnuncio: Anuncio = this.anuncioForm.value;
+      console.log('📢 Anuncio creado:', nuevoAnuncio);
+      // Aquí puedes llamar a tu servicio para enviar al backend
 
-
+    } else {
+      this.anuncioForm.markAllAsTouched();
     }
-
   }
 
-  //Metodo que sirve para saber el tipo de anuncio que se va a seleccionar
-  getTipoAnuncio(codigo: number): string {
-    switch (codigo) {
-      case 1: return 'ANUNCIO DE TEXTO';
-      case 2: return 'ANUNCIO DE TEXTO E IMAGEN';
-      case 3: return 'ANUNCIO DE VIDEO Y TEXTO';
-      default: return 'DESCONOCIDO';
-    }
+
+  limpiar(){
+    this.anuncioForm.reset({
+
+
+    })
   }
 
 }
