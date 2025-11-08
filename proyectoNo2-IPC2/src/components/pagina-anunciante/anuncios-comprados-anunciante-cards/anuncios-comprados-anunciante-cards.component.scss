@@ -72,7 +72,6 @@
 }
 
 .btn-estado {
-  background: #f9d423;
   color: #1f1f2e;
   border: none;
   padding: 0.5rem 1rem;
@@ -81,6 +80,35 @@
   cursor: pointer;
   transition: 0.3s;
 }
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-success {
+  background: #2ecc71;
+  color: #1f1f2e;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-success:hover {
+  background: #27ae60;
+}
+
 
 .img-container {
   width: 100%;

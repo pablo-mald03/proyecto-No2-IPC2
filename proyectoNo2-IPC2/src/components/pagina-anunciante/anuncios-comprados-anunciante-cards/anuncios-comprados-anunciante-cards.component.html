@@ -1,4 +1,5 @@
-<div class="anuncio-card text-light mt-4 rounded-4 shadow-lg p-3 bg-gradient overflow-hidden justify-content-center align-items-center">
+<div
+    class="anuncio-card text-light mt-4 rounded-4 shadow-lg p-3 bg-gradient overflow-hidden justify-content-center align-items-center">
 
     <div class="anuncio-bg"></div>
 
@@ -16,13 +17,21 @@
                 class="rounded mb-2" frameborder="0" allowfullscreen></iframe>
         </ng-template>
 
-        <p class="text-warning fw-bold mt-2 fs-3" >
+        <p class="text-warning fw-bold mt-2 fs-3">
             <i class="bi bi-play fs-3"></i> {{ anuncio.codigo }}
         </p>
+
+        <span *ngIf="!anuncio.caducacion" class="badge rounded-pill px-3 py-2 fs-6 mb-3"
+            [ngClass]="anuncio.estado ? 'bg-success' : 'bg-danger'">
+            {{ anuncio.estado ? 'Activo' : 'Inactivo' }}
+        </span>
 
         <p class="text-info mb-4 fs-5 fw-bold">
             {{ anuncio.texto }}
         </p>
+
+
+
 
         <p class="text-light-50 mb-3 fs-5">
             <i class="bi bi-calendar-check me-2"></i> Compra: {{ anuncio.fechaCompra | date:'mediumDate' }}
@@ -42,21 +51,27 @@
             {{ getTipoAnuncio(anuncio.codigoTipo) }}
         </p>
 
-        <div class="estado mt-2 fs-5">
-            <span class="badge rounded-pill" [ngClass]="anuncio.estado ? 'bg-success' : 'bg-danger'">
-                {{ anuncio.estado ? 'Activo' : 'Inactivo' }}
-            </span>
+
+        <hr class="bg-dark border-4 border-top border-dark my-3">
+
+        <div class="estado mt-3">
+
+
+            <button *ngIf="!anuncio.caducacion" class="btn btn-warning fw-bold mx-3 btn-estado" (click)="editarAnuncio()">
+                Editar
+            </button>
+            <button *ngIf="!anuncio.caducacion" class="btn-estado"
+                [ngClass]="anuncio.estado ? 'btn-danger' : 'btn-success'" (click)="cambiarEstado()">
+                {{ anuncio.estado ? 'Desactivar' : 'Activar' }}
+            </button>
+
+
+
+            <div *ngIf="anuncio.caducacion" class="badge bg-secondary w-100 py-2 fs-5 mt-2">
+                Expirado
+            </div>
+
         </div>
-
-        <hr class="bg-dark border-4 border-top border-dark my-3" >
-
-        <button class="btn-estado mt-3"
-                [class.btn-desactivar]="anuncio.estado"
-                [class.btn-activar]="!anuncio.estado"
-                (click)="cambiarEstado()">
-            <i class="bi" [ngClass]="anuncio.estado ? 'bi-x-circle' : 'bi-check-circle'"></i>
-            {{ anuncio.estado ? 'Desactivar' : 'Activar' }}
-        </button>
 
     </div>
 </div>

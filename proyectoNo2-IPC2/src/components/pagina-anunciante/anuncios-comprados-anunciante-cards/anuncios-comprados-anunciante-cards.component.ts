@@ -2,14 +2,14 @@ import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { Anuncio } from '../../../models/anuncios/anuncio';
-import { DatePipe, NgClass, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
 import { AnuncioRegistradoDTO } from '../../../models/anuncios/anuncio-registrado-dto';
 import { ModalService } from '../../../shared/modal.service';
 import { AnunciosRegistradosClienteService } from '../../../services/anuncios-service/anuncios-registrados-cliente.service';
 
 @Component({
   selector: 'app-anuncios-comprados-anunciante-cards',
-  imports: [NgClass, DatePipe, NgIf],
+  imports: [NgClass, DatePipe, NgIf, CommonModule],
   templateUrl: './anuncios-comprados-anunciante-cards.component.html',
   styleUrl: './anuncios-comprados-anunciante-cards.component.scss'
 })
@@ -121,5 +121,9 @@ constructor(
   }
 
 
+  //Metodo que permite editar el anuncio
+  editarAnuncio(): void{
+
+  }
 
 }
