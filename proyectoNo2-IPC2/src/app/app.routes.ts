@@ -36,6 +36,7 @@ import { BilleteraDigitalComponent } from '../components/billetera-digital/bille
 import { CinesAsociadosComponent } from '../components/administrador-sistema/cines-asociados/cines-asociados.component';
 import { CrearCineComponent } from '../components/administrador-sistema/crear-cine/crear-cine.component';
 import { CostosCineModificarComponent } from '../components/administrador-sistema/costos-cine-modificar/costos-cine-modificar.component';
+import { EditarCineComponent } from '../components/administrador-sistema/editar-cine/editar-cine.component';
 
 
 export const routes: Routes = [
@@ -161,6 +162,10 @@ export const routes: Routes = [
             {
                 path: 'cines/costos/:codigo',
                 component: CostosCineModificarComponent,
+            },
+            {
+                path: 'cines/editar/:codigo',
+                component: EditarCineComponent,
             },
             {
                 path: 'crear-admin-sistema',

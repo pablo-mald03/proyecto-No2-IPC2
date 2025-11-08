@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { Cine } from "../../models/cines/cine";
 import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
 import { CineDTO } from "../../models/cines/cine-dto";
+import { EditarCineDTO } from "../../models/cines/editar-cine-dto";
 
 
 
@@ -32,5 +33,12 @@ export class CineService {
     public cantidadRegistros(): Observable<CantidadRegistrosDTO> {
         return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}cines/cantidad`);
     }
+
+    //Endpoint que retorna la referencia del cine
+    public cinePorCodigo(codigoCine: string): Observable<EditarCineDTO> {
+        return this.httpClient.get<EditarCineDTO>(`${this.restConstants.getApiURL()}cines/editar/${codigoCine}`);
+    }
+
+    //Endpoit que permite editar los datos del cine
 
 }
