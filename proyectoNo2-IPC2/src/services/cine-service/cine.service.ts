@@ -40,5 +40,8 @@ export class CineService {
     }
 
     //Endpoit que permite editar los datos del cine
+    public editarCine(cine: EditarCineDTO): Observable<void> {
+        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}cines`, cine);
+    }
 
 }

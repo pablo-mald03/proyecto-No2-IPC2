@@ -1,61 +1,76 @@
-<div class="editar-card">
+<main class="mx-auto admin-sistema-container">
 
-    <div class="codigo-box">
-        <label>Código del cine</label>
-        <p class="codigo">{{ cine.codigo }}</p>
+
+
+    <div *ngIf="cine" class="editar-card">
+
+        <div class="button-wrapper">
+            <button class="btn-regresar" (click)="regresar()">
+                <i class="bi bi-arrow-left-circle me-2"></i>
+                Regresar
+            </button>
+        </div>
+
+
+        <div class="codigo-box">
+            <label>Código del cine</label>
+            <p class="codigo">{{ cine.codigo }}</p>
+        </div>
+
+        <form [formGroup]="cineForm" (ngSubmit)="guardarCambios()">
+
+            <div class="input-group">
+                <label>Nombre</label>
+                <input type="text" formControlName="nombre"
+                    [class.error]="cineForm.get('nombre')?.invalid && cineForm.get('nombre')?.touched" />
+
+                @if (cineForm.get('nombre')?.invalid && cineForm.get('nombre')?.touched) {
+                <p class="error-msg">El nombre es obligatorio y debe tener al menos 3 caracteres.</p>
+                }
+            </div>
+
+            <div class="input-group">
+                <label>Monto de Ocultación (Q)</label>
+                <input type="number" formControlName="montoOcultacion"
+                    [class.error]="cineForm.get('montoOcultacion')?.invalid && cineForm.get('montoOcultacion')?.touched" />
+
+                @if (cineForm.get('montoOcultacion')?.invalid && cineForm.get('montoOcultacion')?.touched) {
+                <p class="error-msg">Debe ser un número mayor o igual a 0.</p>
+                }
+            </div>
+
+            <div class="input-group">
+                <label>Descripción</label>
+                <textarea formControlName="descripcion"
+                    [class.error]="cineForm.get('descripcion')?.invalid && cineForm.get('descripcion')?.touched"></textarea>
+
+                @if (cineForm.get('descripcion')?.invalid && cineForm.get('descripcion')?.touched) {
+                <p class="error-msg">La descripción debe tener al menos 5 caracteres.</p>
+                }
+            </div>
+
+            <div class="input-group">
+                <label>Ubicación</label>
+                <input type="text" formControlName="ubicacion"
+                    [class.error]="cineForm.get('ubicacion')?.invalid && cineForm.get('ubicacion')?.touched" />
+
+                @if (cineForm.get('ubicacion')?.invalid && cineForm.get('ubicacion')?.touched) {
+                <p class="error-msg">Ingrese una ubicación válida.</p>
+                }
+            </div>
+
+            <button class="btn-guardar" [disabled]="cineForm.invalid">
+                Guardar Cambios
+            </button>
+
+        </form>
+
     </div>
 
-    <form [formGroup]="cineForm" (ngSubmit)="guardarCambios()">
+</main>
 
-        <div class="input-group">
-            <label>Nombre</label>
-            <input type="text" formControlName="nombre"
-                [class.error]="cineForm.get('nombre')?.invalid && cineForm.get('nombre')?.touched" />
-
-            @if (cineForm.get('nombre')?.invalid && cineForm.get('nombre')?.touched) {
-            <p class="error-msg">El nombre es obligatorio y debe tener al menos 3 caracteres.</p>
-            }
-        </div>
-
-        <div class="input-group">
-            <label>Monto de Ocultación (Q)</label>
-            <input type="number" formControlName="montoOcultacion"
-                [class.error]="cineForm.get('montoOcultacion')?.invalid && cineForm.get('montoOcultacion')?.touched" />
-
-            @if (cineForm.get('montoOcultacion')?.invalid && cineForm.get('montoOcultacion')?.touched) {
-            <p class="error-msg">Debe ser un número mayor o igual a 0.</p>
-            }
-        </div>
-
-        <div class="input-group">
-            <label>Descripción</label>
-            <textarea formControlName="descripcion"
-                [class.error]="cineForm.get('descripcion')?.invalid && cineForm.get('descripcion')?.touched"></textarea>
-
-            @if (cineForm.get('descripcion')?.invalid && cineForm.get('descripcion')?.touched) {
-            <p class="error-msg">La descripción debe tener al menos 5 caracteres.</p>
-            }
-        </div>
-
-        <div class="input-group">
-            <label>Ubicación</label>
-            <input type="text" formControlName="ubicacion"
-                [class.error]="cineForm.get('ubicacion')?.invalid && cineForm.get('ubicacion')?.touched" />
-
-            @if (cineForm.get('ubicacion')?.invalid && cineForm.get('ubicacion')?.touched) {
-            <p class="error-msg">Ingrese una ubicación válida.</p>
-            }
-        </div>
-
-        <button class="btn-guardar" [disabled]="cineForm.invalid">
-            Guardar Cambios
-        </button>
-
-    </form>
-</div>
-
-<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal" [redireccionarA]="urlRedireccion"
-    (cerrarEvent)="mostrarModal = false">
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
 </app-fullscreen-modal>
 
 <ng-container *ngIf="mostrarPopup">

@@ -55,19 +55,19 @@ export class EditarCineComponent implements OnInit {
 
         this.cine = response;
 
+        this.cineForm = this.formBuilder.group({
+          nombre: [this.cine.nombre, [Validators.required, Validators.minLength(3)]],
+          montoOcultacion: [this.cine.montoOcultacion, [Validators.required, Validators.min(0)]],
+          descripcion: [this.cine.descripcion, [Validators.required, Validators.minLength(5)]],
+          ubicacion: [this.cine.ubicacion, [Validators.required, Validators.minLength(3)]],
+        });
+
       },
       error: (error: any) => {
 
         this.mostrarError(error);
 
       }
-    });
-
-    this.cineForm = this.formBuilder.group({
-      nombre: [this.cine.nombre, [Validators.required, Validators.minLength(3)]],
-      montoOcultacion: [this.cine.montoOcultacion, [Validators.required, Validators.min(0)]],
-      descripcion: [this.cine.descripcion, [Validators.required, Validators.minLength(5)]],
-      ubicacion: [this.cine.ubicacion, [Validators.required, Validators.minLength(3)]],
     });
 
     this.popUp.popup$.subscribe(data => {
@@ -88,18 +88,22 @@ export class EditarCineComponent implements OnInit {
       }
     });
 
-
-
-
-
   }
 
+  //Metodo utilizado para abrir el modal
+  abrirModal(mensaje: string, tipo: 'exito' | 'error' | 'info' = 'info') {
+    this.mensajeModal = mensaje;
+    this.tipoModal = tipo;
+    this.mostrarModal = true;
+  }
+
+  //Metodo que sirve para poder generar la edicion del cine
   guardarCambios() {
     if (this.cineForm.invalid) return;
 
     const form = this.cineForm.value;
 
-    const dto: EditarCineDTO = {
+    const cineDto: EditarCineDTO = {
       codigo: this.cine.codigo,
       nombre: form.nombre,
       montoOcultacion: form.montoOcultacion,
@@ -107,7 +111,17 @@ export class EditarCineComponent implements OnInit {
       ubicacion: form.ubicacion
     };
 
-    console.log('DTO listo para enviar:', dto);
+
+    this.cineService.editarCine(cineDto).subscribe({
+      next: () => {
+
+        this.limpiarDatos();
+        this.abrirModal('Se ha creado correctamente el nuevo cine', 'exito');
+      },
+      error: (err) => {
+        this.mostrarError(err);
+      }
+    });
 
   }
 
@@ -130,6 +144,13 @@ export class EditarCineComponent implements OnInit {
   regresar() {
 
     this.routerBack.navigateByUrl('/menu-admin-sistema/cines');
+  }
+
+  //Permite limpiar los datos al modificar
+  limpiarDatos() {
+    this.cineForm.reset({
+
+    });
   }
 
 }

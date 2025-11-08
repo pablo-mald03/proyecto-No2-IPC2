@@ -49,6 +49,9 @@ public class CineDB {
 
     //Constante que permite obtener el nombre de un cine en base a codigo
     private final String CONSULTAR_NOMBRE_CINE = "SELECT nombre FROM cine WHERE nombre = ? LIMIT 1";
+    
+    //Constante que permite obtener el nombre en base al codigo y el nombre
+    private final String CONSULTAR_NOMBRE_CINE_END = "SELECT nombre FROM cine WHERE nombre = ? AND codigo = ? LIMIT 1";
 
     //-------------FIN DEL APARTADO DE EDICION----------------------
     //Constante que permite obtener los cines registrados en la aplicacion para el dashboard del usuario 
@@ -167,6 +170,28 @@ public class CineDB {
                 return result.getString("nombre");
             } else {
                 return "";
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener el nombre del cine");
+        }
+    }
+    
+    //Metodo delegado para obtener el nombre del cine en base a un nombre
+    public boolean nombrePerteneciente(String nombre, String codigoCine) throws ErrorInesperadoException, DatosNoEncontradosException {
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_NOMBRE_CINE_END);) {
+
+            query.setString(1, nombre.trim());
+            query.setString(2, codigoCine.trim());
+
+            ResultSet result = query.executeQuery();
+            if (result.next()) {
+                return true;
+            } else {
+                return false; 
             }
 
         } catch (SQLException e) {

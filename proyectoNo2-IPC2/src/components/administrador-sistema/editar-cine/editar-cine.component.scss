@@ -3,16 +3,16 @@
   margin: 20px auto;
   padding: 25px;
   border-radius: 20px;
-  background: linear-gradient(145deg, #1b1c1f, #242629);
+  background: linear-gradient(145deg, #2d1c3f, #412b66);
   box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-  color: #e2e2e2;
+  color: #f3f3f3;
   backdrop-filter: blur(6px);
 }
 
 .codigo-box {
   margin-bottom: 25px;
   padding: 15px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
 }
 
@@ -48,6 +48,38 @@
   transition: border 0.2s, box-shadow 0.2s;
 }
 
+.button-wrapper {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-regresar {
+  background: #222222;
+  color: #fff;
+  border: 2px solid #085c51;
+  padding: 0.6rem 2.2rem;
+  border-radius: 50px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 180ms ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-regresar:hover {
+  background: #333;
+  border-color: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-regresar:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .input-group textarea {
   min-height: 90px;
   resize: vertical;
@@ -56,7 +88,7 @@
 .input-group input:focus,
 .input-group textarea:focus {
   border-color: #60a5fa;
-  box-shadow: 0 0 6px rgba(96,165,250,0.5);
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.5);
 }
 
 .error {

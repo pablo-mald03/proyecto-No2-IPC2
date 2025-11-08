@@ -129,7 +129,7 @@ public class CineCrudService {
     //Metodo utilizado para obtener la informacion del cine seleccionado
     public Cine obtenerCinePorCodigo(String codigoCine) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
-        if (!StringUtils.isNumeric(codigoCine)) {
+        if (StringUtils.isBlank(codigoCine)) {
             throw new FormatoInvalidoException("El codigo del cine esta vacio");
         }
 
@@ -150,7 +150,8 @@ public class CineCrudService {
 
             String nombreBuscado = cineDb.verificarNombreDuplicado(cineEditado.getNombre());
 
-            if (StringUtils.isNotBlank(nombreBuscado) && nombreBuscado.equals(cineEditado.getNombre())) {
+            if (StringUtils.isNotBlank(nombreBuscado) && nombreBuscado.equals(cineEditado.getNombre()) && !cineDb.nombrePerteneciente(nombreBuscado, cineEditado.getCodigo())) {
+                
                 throw new FormatoInvalidoException("Este nombre de cine ya existe");
             }
 

@@ -18,12 +18,7 @@ public class EditarCineRequest {
     private String descripcion;
     private String ubicacion;
 
-    public EditarCineRequest(String codigo, String nombre, String montoOcultacion, String descripcion, String ubicacion) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.montoOcultacion = montoOcultacion;
-        this.descripcion = descripcion;
-        this.ubicacion = ubicacion;
+    public EditarCineRequest() {
     }
 
     public String getCodigo() {
