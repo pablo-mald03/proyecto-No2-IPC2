@@ -4,7 +4,9 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.anuncios.models;
 
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -126,8 +128,46 @@ public class Anuncio {
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
-    
-    
+
+    public boolean validarDatos() throws FormatoInvalidoException {
+
+        if (StringUtils.isBlank(codigo)) {
+            throw new FormatoInvalidoException("El código está vacío.");
+        }
+
+        if (!estado) {
+            throw new FormatoInvalidoException("El estado debe ser true.");
+        }
+
+        if (StringUtils.isBlank(nombre)) {
+            throw new FormatoInvalidoException("El nombre está vacío.");
+        }
+
+        if (fechaCompra == null) {
+            throw new FormatoInvalidoException("La fecha de compra es nula.");
+        }
+
+        if (fechaExpiracion == null) {
+            throw new FormatoInvalidoException("La fecha de expiración es nula.");
+        }
+
+        if (StringUtils.isBlank(texto)) {
+            throw new FormatoInvalidoException("El texto del anuncio está vacío.");
+        }
+
+        if (foto == null || foto.length == 0) {
+            throw new FormatoInvalidoException("La foto del anuncio está vacía.");
+        }
+
+        if (codigoTipo < 0) {
+            throw new FormatoInvalidoException("El código de tipo debe ser mayor que cero.");
+        }
+
+        if (StringUtils.isBlank(idUsuario)) {
+            throw new FormatoInvalidoException("El ID de usuario está vacío.");
+        }
+
+        return true;
+    }
 
 }

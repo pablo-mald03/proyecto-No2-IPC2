@@ -6,7 +6,6 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.VigenciaAnuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarPrecioDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.ConfiguracionAnuncioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
@@ -37,7 +36,7 @@ public class VigenciaAnuncioDB {
 
     //Constante que permite editar obtener los precios de las configuraciones de 
     private final String CONSULTAR_PRECIO_CODIGO = "SELECT precio FROM vigencia_anuncio WHERE codigo = ?";
-
+   
     //Metodo que permite obtener el listado completo de las vigencias de anuncios
     public List<VigenciaAnuncio> obtenerListadoVigencia() throws FormatoInvalidoException, ErrorInesperadoException {
 
@@ -98,7 +97,7 @@ public class VigenciaAnuncioDB {
     }
 
     //Metodo que permite obtener el precio actual de las vigencias de anucios
-    public double obtenerPrecioCodigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException {
+    public double obtenerPrecioCodigo(int codigo) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -118,7 +117,7 @@ public class VigenciaAnuncioDB {
             throw new ErrorInesperadoException("No se han podido obtener precio actual del la vigencia solicitada");
         }
 
-        throw new ErrorInesperadoException("No se han podido obtener el percio actual de la vigencia solicitada");
+        throw new DatosNoEncontradosException("No se han podido obtener el percio actual de la vigencia solicitada");
     }
 
     //Metodo que sirve para poder cambiar el precio de la vigencia

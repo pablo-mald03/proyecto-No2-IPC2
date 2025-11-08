@@ -93,7 +93,7 @@ public class ConfiguracionAnuncioDB {
     }
 
     //Metodo que permite obtener el precio actual de las configuraciones de anucios
-    public double obtenerPrecioCOdigo(int codigo) throws FormatoInvalidoException, ErrorInesperadoException {
+    public double obtenerPrecioCOdigo(int codigo) throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();
 
@@ -113,7 +113,7 @@ public class ConfiguracionAnuncioDB {
             throw new ErrorInesperadoException("No se han podido obtener precio actual de la configuracion de los anuncios");
         }
 
-        throw new ErrorInesperadoException("No se han podido obtener el precio actual de la configuracion de los anuncios");
+        throw new DatosNoEncontradosException("No se han podido obtener el precio actual de la configuracion de los anuncios");
     }
 
     //Metodo que sirve para poder cambiar el precio de la configuracion

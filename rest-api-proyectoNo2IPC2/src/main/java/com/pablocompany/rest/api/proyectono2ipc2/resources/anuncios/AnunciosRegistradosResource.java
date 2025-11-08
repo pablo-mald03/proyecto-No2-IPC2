@@ -12,6 +12,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegis
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.TransaccionInvalidaException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -70,6 +71,8 @@ public class AnunciosRegistradosResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (DatosNoEncontradosException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (TransaccionInvalidaException ex) {
+            return Response.status(Response.Status.PAYMENT_REQUIRED).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }
