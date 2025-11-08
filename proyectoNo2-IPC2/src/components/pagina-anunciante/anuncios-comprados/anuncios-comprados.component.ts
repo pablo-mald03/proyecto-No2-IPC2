@@ -2,29 +2,45 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AnunciosCompradosAnuncianteCardsComponent } from "../anuncios-comprados-anunciante-cards/anuncios-comprados-anunciante-cards.component";
 import { Anuncio } from '../../../models/anuncios/anuncio';
+import { Popup } from '../../../shared/popup/popup';
+import { AnunciosRegistradosClienteService } from '../../../services/anuncios-service/anuncios-registrados-cliente.service';
+import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
+import { AnuncioRegistradoDTO } from '../../../models/anuncios/anuncio-registrado-dto';
+import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
+import { ConfirmModalComponent } from "../../../shared/confirm-modal/confirm-modal.component";
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-anuncios-comprados',
-  imports: [AnunciosCompradosAnuncianteCardsComponent],
+  imports: [AnunciosCompradosAnuncianteCardsComponent, SharedPopupComponent, ConfirmModalComponent, NgIf],
   templateUrl: './anuncios-comprados.component.html',
-  styleUrl: './anuncios-comprados.component.scss'
+  styleUrl: './anuncios-comprados.component.scss',
+  providers: [Popup],
 })
 export class AnunciosCompradosComponent implements OnInit {
 
   idUsuario!: string;
 
   //Arreglos que se van a llenar en base a los anuncios que posea el usuario
-  anuncios: Anuncio[] = [];
-  anunciosMostrados: Anuncio[] = [];
+  anunciosMostrados: AnuncioRegistradoDTO[] = [];
 
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
   cantidadPorCarga = 2;
+  totalReportes = 0;
   todosCargados = false;
+
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
 
 
   constructor(
-    private router: ActivatedRoute
-    //Pendiente instanciar al service
+    private router: ActivatedRoute,
+    private popUp: Popup,
+    private anunciosRegistradosService: AnunciosRegistradosClienteService,
 
   ) {
 
@@ -36,81 +52,104 @@ export class AnunciosCompradosComponent implements OnInit {
     this.idUsuario = this.router.snapshot.params['id'];
 
 
-    this.anuncios = [
+    this.indiceActual = 0;
+    this.anunciosMostrados = [];
+    this.todosCargados = true;
 
-      {
-        codigo: 'ANU-003',
-        estado: true,
-        nombre: 'Cine Clásico',
-        caducacion: true,
-        fechaExpiracion: new Date('2025-12-10'),
-        fechaCompra: new Date('2025-10-18'),
-        url: 'https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&mute=1&loop=1&playlist=tgbNymZ7vqY',
-        texto: 'Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine.  Revive los mejores clásicos del cine. ',
-        foto: '',
-        codigoTipo: 3,
-        idUsuario: 'USR-003',
-      },
-      {
-        codigo: 'ANU-002',
-        estado: false,
-        nombre: 'Nuevo Estreno: El Viaje del Tiempo',
-        caducacion: true,
-        fechaExpiracion: new Date('2025-12-01'),
-        fechaCompra: new Date('2025-09-28'),
-        url: 'imgs-app/bussiness-cinemaimg.png',
-        texto: 'Descubre la nueva película de ciencia ficción que todos están esperando.',
-        foto: '',
-        codigoTipo: 2,
-        idUsuario: 'USR-002',
-      },
-      {
-        codigo: 'ANU-002',
-        estado: false,
-        nombre: 'Nuevo Estreno: El Viaje del Tiempo',
-        caducacion: true,
-        fechaExpiracion: new Date('2025-12-01'),
-        fechaCompra: new Date('2025-09-28'),
-        url: 'imgs-app/bussiness-cinemaimg.png',
-        texto: 'Descubre la nueva película de ciencia ficción que todos están esperando.',
-        foto: '',
-        codigoTipo: 2,
-        idUsuario: 'USR-002',
-      }
-    ];
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
 
+      this.mostrarPopup = false;
 
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
 
-    //PENDIENTE LLAMAR AL SERVICE
-    /* this.eventsService.getEventByCode(this.eventCode).subscribe({
-      next: (eventToUpdate) => {
-        this.eventToUpdate = eventToUpdate;
-        this.exists = true;
-      },
-      error: (error: any) => {
-        console.log(error);
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
       }
     });
-*/
-    this.cargarMasAnuncios();
 
-    console.log(this.idUsuario);
+    this.cargarAnunciosRegistrados();
+
+  }
+
+  //Metodo que permite llamar al metodo que carga dinamicamente los registros
+  mostrarMasAnuncios(): void {
+
+    if (this.todosCargados || this.anunciosMostrados.length === 0) {
+      return;
+    }
+
+    this.cargarMasRegistros();
+  }
+
+
+  //Metodo que permite cargar los anuncios registrados
+  cargarAnunciosRegistrados() {
+
+    this.anunciosRegistradosService.cantidadRegistros(this.idUsuario).subscribe({
+      next: (cantidadDTO: CantidadRegistrosDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.anunciosMostrados = [];
+        this.todosCargados = false;
+
+        this.cargarMasRegistros();
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
+  }
+
+  //Metodo implementado para mostrar los mensajes de errores
+  mostrarError(errorEncontrado: any) {
+    let mensaje = 'Ocurrió un error';
+
+    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
+      mensaje = errorEncontrado.error.mensaje;
+    } else if (errorEncontrado.message) {
+      mensaje = errorEncontrado.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
 
   }
 
   //Carga dinamicamente la cantidad establecida de anuncios para no saturar la web
-  cargarMasAnuncios(): void {
-    const siguienteBloque = this.anuncios.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
+  cargarMasRegistros(): void {
 
-    this.anunciosMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
+    this.anunciosRegistradosService.listadoRegistros(this.cantidadPorCarga, this.indiceActual, this.idUsuario).subscribe({
+      next: (response: AnuncioRegistradoDTO[]) => {
 
-    if (this.indiceActual >= this.anuncios.length) {
-      this.todosCargados = true;
-    }
+        if (!response || response.length === 0) {
+          this.todosCargados = true;
+          return;
+        }
+
+        this.anunciosMostrados.push(...response);
+        this.indiceActual += response.length;
+
+        if (this.indiceActual >= this.totalReportes) {
+          this.todosCargados = true;
+        }
+
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
   }
 
 

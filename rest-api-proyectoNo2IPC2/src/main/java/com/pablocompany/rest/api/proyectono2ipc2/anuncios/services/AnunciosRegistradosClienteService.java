@@ -6,6 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.database.AnunciosDB;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
@@ -85,7 +86,7 @@ public class AnunciosRegistradosClienteService {
     }
 
     //Metodo que permite indicar si el cambio de estado fue exitoso para el cliente
-    public boolean cambiarEstadoAnuncio(CambiarEstadoRequest estadoRequest) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public boolean cambiarEstadoAnuncio(CambiarEstadoClienteRequest estadoRequest) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
         
         if (StringUtils.isBlank(estadoRequest.getEstado())) {
             throw new FormatoInvalidoException("El valor de cambio del anuncio esta vacio");
@@ -93,6 +94,10 @@ public class AnunciosRegistradosClienteService {
         
         if (StringUtils.isBlank(estadoRequest.getIdAnuncio())) {
             throw new FormatoInvalidoException("El valor de id del anuncio esta vacio");
+        }
+        
+        if (StringUtils.isBlank(estadoRequest.getIdCliente())) {
+            throw new FormatoInvalidoException("El valor de id del cliente esta vacio");
         }
         
         String estadoStr = estadoRequest.getEstado().trim().toLowerCase();

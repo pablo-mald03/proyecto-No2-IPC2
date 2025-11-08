@@ -1,55 +1,62 @@
-<div class="anuncio-card mt-3">
+<div class="anuncio-card text-light mt-4 rounded-4 shadow-lg p-3 bg-gradient overflow-hidden justify-content-center align-items-center">
 
     <div class="anuncio-bg"></div>
 
-    <div class="contenido text-center">
-        <h5 class="fw-bold mb-3 fs-4">{{ anuncioComprado.nombre }}</h5>
+    <div class="contenido text-center align-items-center">
+        <h5 class="fw-bold mb-3 fs-4">{{ anuncio.nombre }}</h5>
 
-
-        <ng-container *ngIf="anuncioComprado.foto; else videoBlock">
-            <div class="img-container mb-3">
-                <img [src]="anuncioComprado.foto" alt="{{ anuncioComprado.nombre }}" class="anuncio-img rounded" />
+        <ng-container *ngIf="esImagen(); else videoBlock">
+            <div *ngIf="getImagenBase64()" class="img-container mb-3">
+                <img [src]="getImagenBase64()" alt="{{ anuncio.nombre }}" class="anuncio-img rounded" />
             </div>
         </ng-container>
 
         <ng-template #videoBlock>
-            <iframe *ngIf="anuncioComprado.url" [src]="getVideoUrl()" width="100%" height="180" class="rounded mb-2"
-                frameborder="0" allowfullscreen>
-            </iframe>
+            <iframe *ngIf="esVideo() && anuncio.url" [src]="getVideoUrl()" width="100%" height="180"
+                class="rounded mb-2" frameborder="0" allowfullscreen></iframe>
         </ng-template>
 
-        <div class="texto-anuncio">
-            <p>{{ anuncioComprado.texto }}</p>
-        </div>
-
-        <div class="info-fechas mb-3">
-            <p class="text-light-50 mb-3 mt-3 fs-5">
-                <i class="bi bi-calendar-check me-2"></i>Fecha de Compra: {{ anuncioComprado.fechaCompra |
-                date:'shortDate' }}
-            </p>
-            <p class="text-light-50 mb-3 fs-5">
-                <i class="bi bi-calendar-x me-2"></i>Expiración: {{ anuncioComprado.fechaExpiracion | date:'shortDate'
-                }}
-            </p>
-        </div>
-
-        <p class="fw-semibold text-warning mb-4 fs-5">
-            {{ getTipoAnuncio(anuncioComprado.codigoTipo) }}
+        <p class="text-warning fw-bold mt-2 fs-3" >
+            <i class="bi bi-play fs-3"></i> {{ anuncio.codigo }}
         </p>
 
-        <div class="estado mb-4">
-            <p class="badge rounded-pill fs-6" [ngClass]="anuncioComprado.estado ? 'bg-success' : 'bg-danger'">
-                {{ anuncioComprado.estado ? 'Activo' : 'Inactivo' }}
-            </p>
+        <p class="text-info mb-4 fs-5 fw-bold">
+            {{ anuncio.texto }}
+        </p>
+
+        <p class="text-light-50 mb-3 fs-5">
+            <i class="bi bi-calendar-check me-2"></i> Compra: {{ anuncio.fechaCompra | date:'mediumDate' }}
+        </p>
+        <p class="text-light-50 mb-3 fs-5">
+            <i class="bi bi-calendar-x me-2"></i> Expiración: {{ anuncio.fechaExpiracion | date:'mediumDate' }}
+        </p>
+        <p class="text-success mb-1 fs-5 fw-bold">
+            <i class="bi bi-person-fill me-2"></i> Usuario: {{ anuncio.idUsuario }}
+        </p>
+
+        <p class="text-info mb-3 fs-5 fw-bold">
+            <i class="bi bi-person-fill me-2"></i> Nombre: {{ anuncio.nombreUsuario }}
+        </p>
+
+        <p class="fw-semibold text-warning mb-2 fs-4">
+            {{ getTipoAnuncio(anuncio.codigoTipo) }}
+        </p>
+
+        <div class="estado mt-2 fs-5">
+            <span class="badge rounded-pill" [ngClass]="anuncio.estado ? 'bg-success' : 'bg-danger'">
+                {{ anuncio.estado ? 'Activo' : 'Inactivo' }}
+            </span>
         </div>
 
-        <div class="accion text-end">
-            <button class="btn-estado" (click)="cambiarEstado()"
-                [ngClass]="anuncioComprado.estado ? 'bg-danger' : 'bg-success'">
-                {{ anuncioComprado.estado ? 'Desactivar' : 'Activar' }}
-            </button>
-        </div>
+        <hr class="bg-dark border-4 border-top border-dark my-3" >
 
+        <button class="btn-estado mt-3"
+                [class.btn-desactivar]="anuncio.estado"
+                [class.btn-activar]="!anuncio.estado"
+                (click)="cambiarEstado()">
+            <i class="bi" [ngClass]="anuncio.estado ? 'bi-x-circle' : 'bi-check-circle'"></i>
+            {{ anuncio.estado ? 'Desactivar' : 'Activar' }}
+        </button>
 
     </div>
 </div>

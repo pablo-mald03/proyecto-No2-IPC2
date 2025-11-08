@@ -5,6 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.resources.anunciante;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegistradosClienteService;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegistradosService;
@@ -79,7 +80,7 @@ public class AnuncianteResource {
     //Endpoint que permite poder cambiar el estado de los anuncios
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response cambiarEstado(CambiarEstadoRequest request) {
+    public Response cambiarEstado(CambiarEstadoClienteRequest request) {
 
         AnunciosRegistradosClienteService anunciosRegistradosClienteService = new AnunciosRegistradosClienteService();
 
