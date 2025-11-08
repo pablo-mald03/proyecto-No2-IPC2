@@ -180,7 +180,7 @@ export class ComprarAnuncioComponent implements OnInit {
     this.formDataAnuncio.append('codigoTipo', formValue.codigoTipo);
     this.formDataAnuncio.append('texto', formValue.texto);
     this.formDataAnuncio.append('url', formValue.url);
-    this.formDataAnuncio.append('fechaExpiracion', formValue.fechaExpiracion);
+    this.formDataAnuncio.append('fechaCompra', formValue.fechaExpiracion);
     this.formDataAnuncio.append('tipoTarifa', formValue.codigoTarifa);
 
     if (this.imagenFile) {
