@@ -6,6 +6,8 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.database.AnunciosDB;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
@@ -74,5 +76,31 @@ public class AnunciosRegistradosService {
         int cantidadRegistros = anuncioDb.cantidadAnunciosSistema();
 
         return new CantidadReportesDTO(cantidadRegistros);
+    }
+
+    //Metodo que permite indicar si el cambio de estado fue exitoso
+    public boolean cambiarEstadoAnuncio(CambiarEstadoRequest estadoRequest) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(estadoRequest.getEstado())) {
+            throw new FormatoInvalidoException("El valor de cambio del anuncio esta vacio");
+        }
+
+        if (StringUtils.isBlank(estadoRequest.getIdAnuncio())) {
+            throw new FormatoInvalidoException("El valor de id del anuncio esta vacio");
+        }
+
+        String estadoStr = estadoRequest.getEstado().trim().toLowerCase();
+        if (!estadoStr.equals("true") && !estadoStr.equals("false")) {
+            throw new FormatoInvalidoException("El estado solo puede ser 'true' o 'false'");
+        }
+
+        CambiarEstadoDTO cambiarEstadoDto = new CambiarEstadoDTO(
+                Boolean.parseBoolean(estadoRequest.getEstado().trim()),
+                estadoRequest.getIdAnuncio());
+
+        AnunciosDB anuncioDb = new AnunciosDB();
+
+        return anuncioDb.cambiarEstado(cambiarEstadoDto);
+
     }
 }

@@ -5,14 +5,15 @@
 package com.pablocompany.rest.api.proyectono2ipc2.resources.anuncios;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegistradosService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncioDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteAnunciosCompradosService;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -27,7 +28,7 @@ import java.util.Map;
  */
 @Path("anuncios")
 public class AnunciosRegistradosResource {
-    
+
     //Endpoint que ayuda a retornar los anuncios registrados en el sistema dinamicamente
     @GET
     @Path("/limit/{limite}/offset/{inicio}")
@@ -50,14 +51,14 @@ public class AnunciosRegistradosResource {
         }
 
     }
-    
+
     //Endpoint que permite obtener la cantidad total de anuncios comprados en el sistema
     @GET
     @Path("/cantidad")
     @Produces(MediaType.APPLICATION_JSON)
     public Response cantidadAnunciosComprados() {
 
-         AnunciosRegistradosService anunciosRegistradosService = new AnunciosRegistradosService();
+        AnunciosRegistradosService anunciosRegistradosService = new AnunciosRegistradosService();
 
         try {
 
@@ -72,6 +73,30 @@ public class AnunciosRegistradosResource {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
     }
-    
-    
+
+    //Endpoint que permite poder cambiar el estado de los anuncios
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response cambiarEstado(CambiarEstadoRequest request) {
+
+        AnunciosRegistradosService anunciosRegistradosService = new AnunciosRegistradosService();
+
+        try {
+
+           if (anunciosRegistradosService.cambiarEstadoAnuncio(request)) {
+                return Response.ok().build();
+            } else {
+                throw new ErrorInesperadoException("No se ha podido cambiar el estado del anuncio");
+            }
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+
 }

@@ -6,13 +6,12 @@ package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioRegistradoDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteAnuncioRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncioDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ConvertirBase64Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,6 +48,60 @@ public class AnunciosDB {
     //Constante que permite retornar la cantidad de anuncios que se han comprado en la web para cargar dinamicamente
     private final String CANTIDAD_ANUNCIOS_COMPRADOS = "SELECT COUNT(*) AS `cantidad` FROM anuncio";
 
+    //Constante que permite cambiar el estado de los anuncios independientemente quien lo ejecute 
+    private final String CAMBIAR_ESTADO_ANUNCIOS= "UPDATE anuncio SET estado = ? WHERE codigo = ?";
+    
+    
+     //Metodo que sirve para poder cambiar el estado de un anuncio
+    public boolean cambiarEstado(CambiarEstadoDTO cambioEstado) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
+
+        if (cambioEstado == null) {
+            throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre el anuncio a editar");
+        }
+
+        Connection conexion = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(CAMBIAR_ESTADO_ANUNCIOS);) {
+
+            conexion.setAutoCommit(false);
+
+            preparedStmt.setBoolean(1, cambioEstado.isEstado());
+            preparedStmt.setString(2, cambioEstado.getIdAnuncio());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+
+                conexion.commit();
+                return true;
+
+            } else {
+                conexion.rollback();
+                throw new DatosNoEncontradosException("No se ha podido cambiar el estado del anuncio.");
+            }
+
+        } catch (SQLException ex) {
+
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new ErrorInesperadoException("Error al hacer Rollback al cambiar el estado del anuncio");
+            }
+
+            throw new ErrorInesperadoException("No se permiten inyecciones sql o patrones diferentes a los que se piden en el cambio de estado de anuncio");
+        } finally {
+
+            try {
+
+                conexion.setAutoCommit(true);
+
+            } catch (SQLException ex) {
+                System.out.println("Error al reactivar la autoconfirmacion al cambiar el estado del anuncio");
+            }
+        }
+    }
+    
+    
     //Metodo delegado para obtener la cantidad de reportes que se tienen en el intervalo de fechas con filtro
     public int cantidadAnunciosSistema() throws ErrorInesperadoException, DatosNoEncontradosException {
 

@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AnuncioRegistradoDTO } from "../../models/anuncios/anuncio-registrado-dto";
 import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
+import { CambiarEstadoDTO } from "../../models/anuncios/cambiar-estado-dto";
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +26,12 @@ export class AnunciosRegistradosService {
     public cantidadRegistros(): Observable<CantidadRegistrosDTO> {
         return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}anuncios/cantidad`);
     }
+
+    //Endpoint que permite cambiar el estado de los anuncios
+    public cambiarEstado(estado: CambiarEstadoDTO): Observable<void> {
+        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}anuncios`, estado);
+    }
+
 
 
 }

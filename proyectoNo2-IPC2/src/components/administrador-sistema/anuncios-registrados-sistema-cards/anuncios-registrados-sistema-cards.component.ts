@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
 import { ModalService } from '../../../shared/modal.service';
+import { AnunciosRegistradosService } from '../../../services/anuncios-service/anuncios-registrados.service';
 
 @Component({
   selector: 'app-anuncios-registrados-sistema-cards',
@@ -18,6 +19,7 @@ export class AnunciosRegistradosSistemaCardsComponent {
   constructor(
     private sanitizer: DomSanitizer,
     private modalService: ModalService,
+    private anunciosRegistradosService: AnunciosRegistradosService,
   ) { }
 
   //Metodo que permite obtener la imagen de tipo base64
@@ -29,8 +31,8 @@ export class AnunciosRegistradosSistemaCardsComponent {
     return this.sanitizer.bypassSecurityTrustUrl(base64);
   }
 
+  //Metodo que permite despliegar el modal para ejecutar el cambio de estado
   async cambiarEstado() {
-
     const estaActivo = this.anuncio.estado === true;
 
     const mensaje = estaActivo
@@ -42,22 +44,32 @@ export class AnunciosRegistradosSistemaCardsComponent {
     const confirmado = await this.modalService.confirmar(mensaje, tipoModal);
 
     if (confirmado) {
-      if (estaActivo) {
-        console.log('Anuncio desactivado correctamente');
-
-        // Aquí puedes llamar a tu servicio para desactivar el anuncio
-        
-      } else {
-        console.log('Anuncio activado correctamente');
-        // Aquí puedes llamar a tu servicio para activar el anuncio
-      }
-    } else {
-      console.log('Acción cancelada por el usuario');
+      const nuevoEstado = !estaActivo;
+      this.ejecutarCambio(nuevoEstado);
     }
-
   }
 
+  //Metodo que permite ejecutar el cambio de estado 
+  ejecutarCambio(nuevoEstado: boolean) {
+    const cambioDto = {
+      estado: nuevoEstado,
+      idAnuncio: this.anuncio.codigo,
 
+    };
+
+    this.anunciosRegistradosService.cambiarEstado(cambioDto).subscribe({
+      next: () => {
+
+        this.anuncio.estado = nuevoEstado;
+
+
+      },
+      error: (error: any) => {
+
+        console.log(error);
+      }
+    });
+  }
 
   //Metodo que sirve para colocar los videos si end dado caso existen y verificar que la url sea segura
   getVideoUrl(): SafeResourceUrl {

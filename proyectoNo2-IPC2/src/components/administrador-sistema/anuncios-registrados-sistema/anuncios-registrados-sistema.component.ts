@@ -116,9 +116,7 @@ export class AnunciosRegistradosSistemaComponent implements OnInit {
 
   //Carga dinamicamente la cantidad establecida de anuncios para no saturar la web
   cargarMasRegistros(): void {
-
-
-
+    
     this.anunciosRegistradosService.listadoRegistros(this.cantidadPorCarga, this.indiceActual).subscribe({
       next: (response: AnuncioRegistradoDTO[]) => {
 
