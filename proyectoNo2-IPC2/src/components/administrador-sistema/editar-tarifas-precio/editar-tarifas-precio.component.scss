@@ -1,0 +1,26 @@
+.gestion-usuarios-container {
+  max-width: 900px;
+  margin-top: 40px;
+}
+
+.vigencia-card {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(145deg, rgba(66, 9, 68, 0.95), rgba(33, 37, 41, 0.95));
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vigencia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.18);
+}
+
+.readonly-label {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.text-light-50 {
+  color: rgba(255, 255, 255, 0.6);
+}

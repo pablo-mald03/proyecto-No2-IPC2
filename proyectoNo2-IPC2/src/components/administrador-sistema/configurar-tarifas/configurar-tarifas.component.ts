@@ -4,7 +4,6 @@ import { Popup } from '../../../shared/popup/popup';
 import { VigenciaAnunciosService } from '../../../services/anuncios-service/vigencia-anuncios.service';
 import { Router } from '@angular/router';
 import { VigenciaAnuncio } from '../../../models/anuncios/vigencia-anuncio';
-import { VigenciaAnunciosCardsComponent } from "../../pagina-anunciante/vigencia-anuncios-cards/vigencia-anuncios-cards.component";
 import { CommonModule, NgIf } from '@angular/common';
 import { ConfigurarVigenciasCardsComponent } from "../configurar-vigencias-cards/configurar-vigencias-cards.component";
 

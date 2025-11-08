@@ -42,6 +42,7 @@ import { ConfiguracionPreciosAnunciosComponent } from '../components/administrad
 import { ConfigurarPreciosComponent } from '../components/administrador-sistema/configurar-precios/configurar-precios.component';
 import { EditarConfiguracionPrecioComponent } from '../components/administrador-sistema/editar-configuracion-precio/editar-configuracion-precio.component';
 import { ConfigurarTarifasComponent } from '../components/administrador-sistema/configurar-tarifas/configurar-tarifas.component';
+import { EditarTarifasPrecioComponent } from '../components/administrador-sistema/editar-tarifas-precio/editar-tarifas-precio.component';
 
 
 export const routes: Routes = [
@@ -183,6 +184,10 @@ export const routes: Routes = [
             {
                 path: 'costos/tarifas',
                 component: ConfigurarTarifasComponent,
+            },
+            {
+                path: 'costos/tarifas/editar/:id',
+                component: EditarTarifasPrecioComponent,
             },
             {
                 path: 'costos/precios',
