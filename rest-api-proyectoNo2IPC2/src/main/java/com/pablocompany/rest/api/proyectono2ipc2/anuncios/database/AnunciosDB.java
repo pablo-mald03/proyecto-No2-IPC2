@@ -4,7 +4,9 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.anuncios.database;
 
+import com.ctc.wstx.util.StringUtil;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioRegistradoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
@@ -19,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -36,7 +39,7 @@ public class AnunciosDB {
     //Constante que permite retornar la cantidad de anuncios que se han comprado POR ANUNCIANTE en la web para cargar dinamicamente
     private final String CANTIDAD_ANUNCIOS_COMPRADOS_ANUNCIANTE = "SELECT COUNT(*) AS `cantidad` "
             + "FROM anuncio AS a JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo JOIN usuario AS `us` ON us.id = a.id_usuario "
-            + "WHERE us.id= ? ORDER BY a.fecha_compra ASC LIMIT ? OFFSET ?";
+            + "WHERE us.id= ?";
 
     //--------------------FIN DEL APARTADO DE ANUNCIOS POR ANUNCIANTE-----------------------------
     //=====================APARTADO DE ANUNCIOS VISTOS POR LOS ADMINISTRADORES===============
@@ -139,6 +142,87 @@ public class AnunciosDB {
 
             query.setInt(1, cantidadCarga.getLimit());
             query.setInt(2, cantidadCarga.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                AnuncioRegistradoDTO anuncioEncontrado = new AnuncioRegistradoDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getBoolean("estado"),
+                        resultSet.getString("nombre"),
+                        resultSet.getBoolean("caducacion"),
+                        resultSet.getDate("fecha_expiracion").toLocalDate(),
+                        resultSet.getDate("fecha_compra").toLocalDate(),
+                        resultSet.getString("url"),
+                        resultSet.getString("texto"),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
+                        resultSet.getInt("codigoTipo"),
+                        resultSet.getString("idUsuario"),
+                        resultSet.getString("nombreUsuario")
+                );
+
+                listadoAnuncios.add(anuncioEncontrado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los anuncios comprados en el sistema");
+        }
+
+        List<AnuncioRegistradoDTOResponse> listadoResponse = new ArrayList<>();
+
+        for (AnuncioRegistradoDTO anuncioRegistradoDTO : listadoAnuncios) {
+
+            listadoResponse.add(new AnuncioRegistradoDTOResponse(anuncioRegistradoDTO));
+        }
+
+        return listadoResponse;
+    }
+    
+    
+    //========APARATADO DE METODOS QUE SIRVEN PARA QUE EL USUARIO ANUNCIANTE PUEDA CONSULTAR SUS ANUNCIOS COMPRADOS=======
+    //Metodo delegado para poder obtener la cantidad de anuncios comprados como usuario
+    public int cantidadAnunciosCliente(String idUsuario) throws ErrorInesperadoException, DatosNoEncontradosException, FormatoInvalidoException {
+
+        if(StringUtils.isBlank(idUsuario)){
+            throw new FormatoInvalidoException("El id del usuario esta vacio");
+        }
+        
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CANTIDAD_ANUNCIOS_COMPRADOS_ANUNCIANTE);) {
+
+            query.setString(1, idUsuario.trim());
+            ResultSet result = query.executeQuery();
+            if (result.next()) {
+                return result.getInt("cantidad");
+            } else {
+
+                throw new DatosNoEncontradosException("No hay registros de anuncios comprados por el usuario en la web");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de anuncios comprados por el usuario");
+        }
+    }
+
+    //Metodo que sirve para poder consultar el reporte de ganancias por anunciante SIN FLITRO
+    public List<AnuncioRegistradoDTOResponse> anunciosRegistradosAnunciante(CantidadAnunciosClienteRequest cantidadCarga) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        if (cantidadCarga == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        ConvertirBase64Service convertirBase64Service = new ConvertirBase64Service();
+
+        List<AnuncioRegistradoDTO> listadoAnuncios = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(ANUNCIOS_COMPRADOS_ANUNCIANTE);) {
+
+            query.setString(1, cantidadCarga.getIdUsuario().trim());
+            query.setInt(2, cantidadCarga.getLimit());
+            query.setInt(3, cantidadCarga.getOffset());
 
             ResultSet resultSet = query.executeQuery();
 
