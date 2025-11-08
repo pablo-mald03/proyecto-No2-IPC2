@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -27,16 +26,16 @@ import org.apache.commons.lang3.StringUtils;
 public class ConfiguracionAnuncioDB {
 
     //Constante que permite obtener los valores actuales de configuracion del anuncio 
-    private String CONSULTAR_CONFIGURACION = "SELECT codigo, tipo, precio FROM configuracion_anuncio";
+    private final String CONSULTAR_CONFIGURACION = "SELECT codigo, tipo, precio FROM configuracion_anuncio";
 
     //Constante que permite obtener los valores actuales de configuracion del anuncio 
-    private String CONSULTAR_CONFIGURACION_CODIGO = "SELECT codigo, tipo, precio FROM configuracion_anuncio WHERE codigo = ?";
+    private final String CONSULTAR_CONFIGURACION_CODIGO = "SELECT codigo, tipo, precio FROM configuracion_anuncio WHERE codigo = ?";
 
     //Constante que permite editar los precios de las configuraciones de anuncios 
-    private String MODIFICAR_PRECIOS = "UPDATE configuracion_anuncio SET precio = ? WHERE codigo = ?";
+    private final String MODIFICAR_PRECIOS = "UPDATE configuracion_anuncio SET precio = ? WHERE codigo = ?";
 
     //Constante que permite editar obtener los precios de las configuraciones de 
-    private String CONSULTAR_PRECIO_CODIGO = "SELECT precio FROM configuracion_anuncio WHERE codigo = ?";
+    private final String CONSULTAR_PRECIO_CODIGO = "SELECT precio FROM configuracion_anuncio WHERE codigo = ?";
 
     //Metodo que permite obtener el listado completo de las configuraciones de anuncios
     public List<ConfiguracionAnuncioDTO> obtenerListadoConfiguracion() throws FormatoInvalidoException, ErrorInesperadoException {
@@ -119,7 +118,7 @@ public class ConfiguracionAnuncioDB {
     }
 
     //Metodo que sirve para poder cambiar el precio de la configuracion
-    public boolean cambiarEstado(CambiarPrecioDTO cambioPrecio) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
+    public boolean cambiarPrecio(CambiarPrecioDTO cambioPrecio) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
 
         if (cambioPrecio == null) {
             throw new FormatoInvalidoException("No se ha enviado ninguna informacion sobre la configuracion a editar");
