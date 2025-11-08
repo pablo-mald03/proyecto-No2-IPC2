@@ -8,6 +8,7 @@ import { VigenciaAnuncioEnum } from '../../../models/anuncios/vigencia-anuncio-e
 import { ConfiguracionAnuncioDTO } from '../../../models/anuncios/configuracion-anuncio-dto';
 import { ConfiguracionAnunciosService } from '../../../services/anuncios-service/configuracion-anuncios.service';
 import { ConfiguracionAnunciosCardsComponent } from "../configuracion-anuncios-cards/configuracion-anuncios-cards.component";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-comprar-anuncio',
@@ -169,7 +170,8 @@ export class ComprarAnuncioComponent implements OnInit {
       this.formDataAnuncio.append('foto', this.imagenFile);
     }
 
-    console.log('FormData anuncio armado!');
+    this.calcularTotalListo(this.anuncioForm.value.codigoTipo, 0);
+
 
     // Ahora sí se muestra el segundo form
     this.mostrarSegundoFormulario = true;
@@ -208,7 +210,8 @@ export class ComprarAnuncioComponent implements OnInit {
       return;
     }
 
-    // Complementamos el FormData existente
+
+
     this.formDataAnuncio.append('metodoPago', this.pagoForm.value.metodo);
     this.formDataAnuncio.append('monto', this.pagoForm.getRawValue().monto);
 
@@ -217,5 +220,52 @@ export class ComprarAnuncioComponent implements OnInit {
     // Ahora sí mandas TODO con tu servicio
     // this.miServicio.enviarTodo(this.formDataAnuncio).subscribe(...)
   }
+
+  precioConfig!: number;
+  precioOtro!: number;
+
+  //Metodo que permite calcular el total
+  calcularTotalListo(idConfig: number, idTarifa: number): void {
+
+    forkJoin({
+      config: this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig),
+      //tarifa: this.tarifaService.obtenerTarifa(idTarifa)
+    })
+      .subscribe({
+        next: ({ config }) => {
+
+          const total = config.precio;
+
+          this.pagoForm.patchValue({
+            monto: total
+          });
+        },
+        error: (e) => this.mostrarError(e)
+      });
+
+
+  }
+
+  //Metodo que permite calcular el precio por configuracion
+  obtenerPrecioConfig(idConfig: number): void {
+    this.configuracionAnunciosService.configuracionAnuncioCodigo(idConfig)
+      .subscribe({
+        next: (config: ConfiguracionAnuncioDTO) => {
+          console.log(config.precio);
+          this.precioConfig = config.precio;
+        }
+      });
+  }
+
+  obtenerPrecioTarifa(idTarifa: string): void {
+    /* this.otroService.obtenerAlgo(id)
+       .subscribe({
+         next: (otro) => {
+           this.precioOtro = otro.precioBase;
+           this.calcularTotalSiListo(this.pagoForm.value.dias);
+         }
+       });*/
+  }
+
 
 }

@@ -25,7 +25,7 @@ export class ConfiguracionAnunciosService {
     }
 
     //Endpoint que ayuda a obtener una configuracion en especifico
-    public cantidadRegistros(codigo: string): Observable<ConfiguracionAnuncioDTO> {
+    public configuracionAnuncioCodigo(codigo: number): Observable<ConfiguracionAnuncioDTO> {
         return this.httpClient.get<ConfiguracionAnuncioDTO>(`${this.restConstants.getApiURL()}configuraciones/anuncios/${codigo}`);
     }
 

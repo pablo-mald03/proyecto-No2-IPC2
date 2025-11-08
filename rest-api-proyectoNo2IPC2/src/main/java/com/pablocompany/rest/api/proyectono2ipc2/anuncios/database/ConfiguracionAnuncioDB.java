@@ -72,9 +72,8 @@ public class ConfiguracionAnuncioDB {
 
         try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CONFIGURACION_CODIGO);) {
 
-            ResultSet resultSet = query.executeQuery();
-
             query.setInt(1, codigo);
+            ResultSet resultSet = query.executeQuery();
 
             if (resultSet.next()) {
                 ConfiguracionAnuncioDTO costoEncontrado = new ConfiguracionAnuncioDTO(
@@ -84,7 +83,7 @@ public class ConfiguracionAnuncioDB {
                 );
 
                 return costoEncontrado;
-            }else{
+            } else {
                 throw new DatosNoEncontradosException("No se ha encontrado informacion de configuracion con el codigo enviado");
             }
 
