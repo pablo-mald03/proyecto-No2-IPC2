@@ -28,10 +28,10 @@ import java.util.Map;
 @Path("configuraciones/anuncios")
 public class ConfiguracionResource {
 
-    //Endpoint que ayuda a retornar las configuraciones registrados en el sistema 
+    //Endpoint que ayuda a retornar las vigencias de anuncios registrados en el sistema 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response anunciosRegistrados() {
+    public Response obtenerListadoConfiguracion() {
         
         ConfiguracionAnunciosService configuracionAnunciosService = new ConfiguracionAnunciosService();
         
@@ -52,7 +52,7 @@ public class ConfiguracionResource {
     @GET
     @Path("{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cantidadAnunciosComprados(
+    public Response cofiguracionPorCodigo(
             @PathParam("codigo") String codigo) {
         
         ConfiguracionAnunciosService configuracionAnunciosService = new ConfiguracionAnunciosService();

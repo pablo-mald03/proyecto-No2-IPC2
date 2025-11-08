@@ -30,7 +30,7 @@ public class ConfiguracionAnunciosService {
    
     }
     
-    //Metodo utilizado para poder retornar el listado de anuncios comprados en el sistema
+    //Metodo utilizado para poder retornar una configuracion de anuncio en especifico 
     public ConfiguracionAnuncioDTO obtenerConfiguracionCodigo(String codigo) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
         
         if(StringUtils.isBlank(codigo)){
