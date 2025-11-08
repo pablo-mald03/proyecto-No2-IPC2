@@ -1,0 +1,43 @@
+.gestion-usuarios-container {
+  max-width: 1000px;
+  margin-top: 40px;
+}
+
+.config-card {
+  width: 420px;
+  background: linear-gradient(145deg, rgba(33, 37, 41, 0.92), rgba(55, 0, 65, 0.92));
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.config-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.15);
+}
+
+.form-label {
+  color: #ffc107;
+}
+
+
+.text-light-50 {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-control {
+  background-color: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 0.8rem 1rem;
+}
+
+.form-control:focus {
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.15);
+}
+
+button.btn-warning {
+  color: #212529;
+  font-size: 1.1rem;
+}

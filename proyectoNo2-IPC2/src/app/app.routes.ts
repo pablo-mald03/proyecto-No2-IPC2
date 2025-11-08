@@ -40,6 +40,7 @@ import { EditarCineComponent } from '../components/administrador-sistema/editar-
 import { AnunciosRegistradosSistemaComponent } from '../components/administrador-sistema/anuncios-registrados-sistema/anuncios-registrados-sistema.component';
 import { ConfiguracionPreciosAnunciosComponent } from '../components/administrador-sistema/configuracion-precios-anuncios/configuracion-precios-anuncios.component';
 import { ConfigurarPreciosComponent } from '../components/administrador-sistema/configurar-precios/configurar-precios.component';
+import { EditarConfiguracionPrecioComponent } from '../components/administrador-sistema/editar-configuracion-precio/editar-configuracion-precio.component';
 
 
 export const routes: Routes = [
@@ -181,6 +182,10 @@ export const routes: Routes = [
             {
                 path: 'costos/precios',
                 component: ConfigurarPreciosComponent,
+            },
+            {
+                path: 'costos/precios/editar/:id',
+                component: EditarConfiguracionPrecioComponent,
             },
             {
                 path: 'crear-admin-sistema',

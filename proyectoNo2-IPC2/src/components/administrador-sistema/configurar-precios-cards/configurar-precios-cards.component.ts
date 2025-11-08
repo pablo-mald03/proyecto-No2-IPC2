@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ConfiguracionAnuncioDTO } from '../../../models/anuncios/configuracion-anuncio-dto';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-configurar-precios-cards',
@@ -11,12 +12,15 @@ import { CommonModule } from '@angular/common';
 export class ConfigurarPreciosCardsComponent {
 
 
-   @Input() config!: ConfiguracionAnuncioDTO;
+  @Input() config!: ConfiguracionAnuncioDTO;
 
-   //Metodo que sirve para editar la configuracion
+  router = inject(Router);
+
+  //Metodo que sirve para editar la configuracion
   editar() {
 
     console.log('Editar config:', this.config);
+    this.router.navigateByUrl(`/menu-admin-sistema/costos/precios/editar/${this.config.codigo}`);
 
   }
 }

@@ -5,6 +5,7 @@ import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/shared-popup.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { ConfigurarPreciosCardsComponent } from "../configurar-precios-cards/configurar-precios-cards.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-configurar-precios',
@@ -27,6 +28,7 @@ export class ConfigurarPreciosComponent implements OnInit {
 
     private configuracionAnunciosService: ConfiguracionAnunciosService,
     private popUp: Popup,
+    private router: Router,
 
   ) { }
   ngOnInit(): void {
@@ -65,6 +67,12 @@ export class ConfigurarPreciosComponent implements OnInit {
     });
 
 
+  }
+
+  //Metodo que permite regresar
+  regresar(): void{
+    this.router.navigateByUrl('/menu-admin-sistema/costos');
+    
   }
 
   //Metodo util para mostrar errors

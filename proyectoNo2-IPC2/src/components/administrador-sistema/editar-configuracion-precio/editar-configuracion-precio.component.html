@@ -1,0 +1,67 @@
+<main class="mx-auto gestion-usuarios-container">
+  <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center w-100 align-items-center">
+
+    <div class="text-start mb-3">
+      <button class="btn btn-outline-light rounded-pill px-4 py-1 fw-bold"
+              (click)="regresar()">
+        <i class="bi bi-arrow-left"></i> Regresar
+      </button>
+    </div>
+
+    <h2 class="fw-bold mb-3 fs-2">Editar Configuración</h2>
+    <p class="text-light-50 mb-4">Modifica el precio de esta configuración</p>
+
+    <div class="d-flex justify-content-center mt-3">
+
+      <div *ngIf="formConfig" class="config-card bg-gradient text-light p-4 rounded-4 shadow-lg">
+
+        <form [formGroup]="formConfig" class="text-start">
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Tipo de anuncio</label>
+            <label type="text"
+                   class="form-control rounded-pill "
+                   readonly>{{configuracion.tipo}}</label>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Código interno</label>
+            <label type="number"
+                   class="form-control rounded-pill"
+                
+                   readonly>{{configuracion.codigo}}</label>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Precio</label>
+            <input type="number"
+                   class="form-control rounded-pill"
+                   formControlName="precio">
+          </div>
+
+          <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold"
+                    (click)="guardarCambios()">
+              Guardar cambios
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
+
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
