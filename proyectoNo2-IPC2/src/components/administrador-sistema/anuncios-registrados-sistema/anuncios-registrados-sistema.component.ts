@@ -6,10 +6,11 @@ import { SharedPopupComponent } from '../../pop-ups/shared-popup.component/share
 import { CommonModule, NgIf } from '@angular/common';
 import { AnunciosRegistradosService } from '../../../services/anuncios-service/anuncios-registrados.service';
 import { CantidadReportesDTO } from '../../../models/reportes/cantidad-reportes-dto';
+import { ConfirmModalComponent } from "../../../shared/confirm-modal/confirm-modal.component";
 
 @Component({
   selector: 'app-anuncios-registrados-sistema',
-  imports: [AnunciosRegistradosSistemaCardsComponent, SharedPopupComponent, NgIf, CommonModule],
+  imports: [AnunciosRegistradosSistemaCardsComponent, SharedPopupComponent, NgIf, CommonModule, ConfirmModalComponent],
   templateUrl: './anuncios-registrados-sistema.component.html',
   styleUrl: './anuncios-registrados-sistema.component.scss',
   providers: [Popup],

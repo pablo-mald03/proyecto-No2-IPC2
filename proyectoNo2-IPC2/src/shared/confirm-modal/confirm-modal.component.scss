@@ -1,0 +1,138 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease forwards;
+  z-index: 3000;
+}
+
+.modal-contenido {
+  background: linear-gradient(160deg, #1e1e2f 0%, #23263a 100%);
+  color: #f1f1f1;
+  padding: 2rem 2.5rem;
+  border-radius: 18px;
+  width: 92%;
+  max-width: 420px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: scaleUp 0.3s ease forwards;
+  text-align: center;
+  transform-origin: center;
+
+  &.exito {
+    border-top: 6px solid #00e676;
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+  }
+
+  &.error {
+    border-top: 6px solid #ff5252;
+    box-shadow: 0 0 20px rgba(255, 82, 82, 0.4);
+  }
+
+  &.info {
+    border-top: 6px solid #40c4ff;
+    box-shadow: 0 0 20px rgba(64, 196, 255, 0.4);
+  }
+}
+
+.modal-icono {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+
+  .icono-exito {
+    color: #00e676;
+    text-shadow: 0 0 10px rgba(0, 230, 118, 0.6);
+  }
+
+  .icono-error {
+    color: #ff5252;
+    text-shadow: 0 0 10px rgba(255, 82, 82, 0.6);
+  }
+
+  .icono-info {
+    color: #40c4ff;
+    text-shadow: 0 0 10px rgba(64, 196, 255, 0.6);
+  }
+}
+
+.modal-mensaje {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  color: #f5f6fa;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+
+  button {
+    min-width: 100px;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .btn-si {
+    background: linear-gradient(135deg, #00e676, #00c853);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.4);
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.6);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .btn-no {
+    background: linear-gradient(135deg, #ff5252, #d50000);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 82, 82, 0.6);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -3,10 +3,11 @@ import { AnuncioRegistradoDTO } from '../../../models/anuncios/anuncio-registrad
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
 import { CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
+import { ModalService } from '../../../shared/modal.service';
 
 @Component({
   selector: 'app-anuncios-registrados-sistema-cards',
-  imports: [CommonModule, NgClass,NgIf,DatePipe],
+  imports: [CommonModule, NgClass, NgIf, DatePipe],
   templateUrl: './anuncios-registrados-sistema-cards.component.html',
   styleUrl: './anuncios-registrados-sistema-cards.component.scss'
 })
@@ -14,7 +15,10 @@ export class AnunciosRegistradosSistemaCardsComponent {
 
   @Input() anuncio!: AnuncioRegistradoDTO;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(
+    private sanitizer: DomSanitizer,
+    private modalService: ModalService,
+  ) { }
 
   //Metodo que permite obtener la imagen de tipo base64
   getImagenBase64(): SafeUrl | null {
@@ -24,6 +28,36 @@ export class AnunciosRegistradosSistemaCardsComponent {
     const base64 = `data:image/png;base64,${this.anuncio.foto}`;
     return this.sanitizer.bypassSecurityTrustUrl(base64);
   }
+
+  async cambiarEstado() {
+
+    const estaActivo = this.anuncio.estado === true;
+
+    const mensaje = estaActivo
+      ? '¿Seguro que deseas desactivar este anuncio?'
+      : '¿Seguro que deseas activar este anuncio?';
+
+    const tipoModal = estaActivo ? 'error' : 'exito';
+
+    const confirmado = await this.modalService.confirmar(mensaje, tipoModal);
+
+    if (confirmado) {
+      if (estaActivo) {
+        console.log('Anuncio desactivado correctamente');
+
+        // Aquí puedes llamar a tu servicio para desactivar el anuncio
+        
+      } else {
+        console.log('Anuncio activado correctamente');
+        // Aquí puedes llamar a tu servicio para activar el anuncio
+      }
+    } else {
+      console.log('Acción cancelada por el usuario');
+    }
+
+  }
+
+
 
   //Metodo que sirve para colocar los videos si end dado caso existen y verificar que la url sea segura
   getVideoUrl(): SafeResourceUrl {
@@ -73,10 +107,7 @@ export class AnunciosRegistradosSistemaCardsComponent {
     return this.anuncio.codigoTipo === 3;
   }
 
-  //Metodo que sirve para cambiar el estado del anuncio 
-  cambiarEstado(){
-    
-  }
+
 
 
 }
