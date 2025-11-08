@@ -2,14 +2,16 @@ import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TipoAnuncioEnum } from '../../../models/anuncios/tipo-anuncios-enum';
-import { Anuncio } from '../../../models/anuncios/anuncio';
 import { Popup } from '../../../shared/popup/popup';
 import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
 import { VigenciaAnuncioEnum } from '../../../models/anuncios/vigencia-anuncio-enum';
+import { ConfiguracionAnuncioDTO } from '../../../models/anuncios/configuracion-anuncio-dto';
+import { ConfiguracionAnunciosService } from '../../../services/anuncios-service/configuracion-anuncios.service';
+import { ConfiguracionAnunciosCardsComponent } from "../configuracion-anuncios-cards/configuracion-anuncios-cards.component";
 
 @Component({
   selector: 'app-comprar-anuncio',
-  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf],
+  imports: [ReactiveFormsModule, CommonModule, NgFor, SharedPopupComponent, NgIf, ConfiguracionAnunciosCardsComponent],
   templateUrl: './comprar-anuncio.component.html',
   styleUrl: './comprar-anuncio.component.scss',
   providers: [Popup],
@@ -20,6 +22,7 @@ export class ComprarAnuncioComponent implements OnInit {
   anuncioForm!: FormGroup;
   pagoForm!: FormGroup;
 
+  configuracionesAnuncios: ConfiguracionAnuncioDTO[] = [];
 
   tipoSeleccionado: number | null = null;
   tiposAnuncio: { codigo: number, label: string }[] = [];
@@ -45,9 +48,26 @@ export class ComprarAnuncioComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private popUp: Popup,
-    private formBuilder: FormBuilder,) { }
+    private formBuilder: FormBuilder,
+    private configuracionAnunciosService: ConfiguracionAnunciosService) { }
 
   ngOnInit(): void {
+
+    this.configuracionAnunciosService.listadoConfiguraciones().subscribe({
+      next: (response: ConfiguracionAnuncioDTO[]) => {
+
+
+        this.configuracionesAnuncios = response;
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
+
     // Cargar los tipos de anuncio desde el enum
     this.tiposAnuncio = [
       { codigo: 1, label: TipoAnuncioEnum.ANUNCIO_TEXTO },

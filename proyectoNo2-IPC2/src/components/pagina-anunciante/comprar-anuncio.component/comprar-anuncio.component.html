@@ -100,13 +100,12 @@
 
     </section>
 
+
     <section class="side-card">
         <h2 class="titulo">Tipos de anuncios disponibles</h2>
 
-        @for (tipo of tiposAnuncio; track $index) {
-        <div class="mini-card">
-            <p>{{ tipo.label }}</p>
-        </div>
+        @for (cfg of configuracionesAnuncios; track cfg.codigo) {
+        <app-configuracion-anuncios-cards [config]="cfg"></app-configuracion-anuncios-cards>
         }
     </section>
 
