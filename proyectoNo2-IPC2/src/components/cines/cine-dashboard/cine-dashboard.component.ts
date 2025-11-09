@@ -1,23 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { CinesCardComponent } from "../../cines/cines-card.component/cines-card.component";
-import { Cine } from '../../../models/cines/cine';
-import { AnunciosCardsPaginaComponent } from "../anuncios-cards-pagina/anuncios-cards-pagina.component";
+import { AnunciosCardsPaginaComponent } from "../../usuario-paginas/anuncios-cards-pagina/anuncios-cards-pagina.component";
 import { AnuncioPublicidadDTO } from '../../../models/anuncios/anuncio-publicidad-dto';
 import { PublicidadPincipalService } from '../../../services/principal-service/publicidad-principal.service';
-import { FormsModule, NgModel } from '@angular/forms';
 import { CineInformacionService } from '../../../services/cine-service/cine-informacion.service';
 import { CineInformacionDTO } from '../../../models/cines/cine-informacion-dto';
-import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-principal-cines.component',
-  imports: [CinesCardComponent, AnunciosCardsPaginaComponent, FormsModule],
-  templateUrl: './principal-cines.component.html',
-  styleUrl: './principal-cines.component.scss'
+  selector: 'app-cine-dashboard',
+  imports: [AnunciosCardsPaginaComponent],
+  templateUrl: './cine-dashboard.component.html',
+  styleUrl: './cine-dashboard.component.scss'
 })
-export class PrincipalCinesComponent implements OnInit {
+export class CineDashboardComponent implements OnInit {
 
+  //Atributos que ayudan al cine a saber sus datos
+  codigoCine!: string;
 
+  cine!: CineInformacionDTO;
+
+  //Apartado de anuncios
   anunciosDerecha: AnuncioPublicidadDTO[] = [];
   anunciosIzquierda: AnuncioPublicidadDTO[] = [];
 
@@ -26,16 +28,18 @@ export class PrincipalCinesComponent implements OnInit {
   constructor(
     private publicidadService: PublicidadPincipalService,
     private cineInformacionServic: CineInformacionService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) { }
 
   //Atributos que permiten manejar las busquedas filtradas de cines
   terminoBusqueda: string = '';
-  cinesFiltrados: CineInformacionDTO[] = [];
-
-
+  /*cinesFiltrados: CineInformacionDTO[] = [];
+ 
+ 
   cinesMostrados: CineInformacionDTO[] = [];
-
-
+ 
+*/
 
   //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
@@ -49,22 +53,24 @@ export class PrincipalCinesComponent implements OnInit {
 
     this.cargarAnunciosAleatorios();
 
-    this.cinesFiltrados = this.cinesMostrados;
 
-    this.cargarCinesRegistrados();
+    this.codigoCine = this.route.snapshot.params['codigo'];
+
+    this.cargarDatosCine(this.codigoCine);
+
+    //  this.cinesFiltrados = this.cinesMostrados;
+
+    this.cargarPeliculasRegistradas();
   }
 
-  //Metodo que sirve para cargar la cantidad de cines necesarios
-  cargarCinesRegistrados() {
+  //Metodo que permite cargar el service para cargar los atributos del cine
+  cargarDatosCine(id: string): void {
 
-    this.cineInformacionServic.cantidadRegistros().subscribe({
-      next: (cantidadDTO: CantidadRegistrosDTO) => {
-        this.totalReportes = cantidadDTO.cantidad;
-        this.indiceActual = 0;
-        this.cinesMostrados = [];
-        this.todosCargados = false;
+    this.cineInformacionServic.informacionCinePorCodigo(id).subscribe({
+      next: (response: CineInformacionDTO) => {
 
-        this.cargarMasRegistros();
+        this.cine = response;
+
       },
       error: (error: any) => {
 
@@ -75,13 +81,36 @@ export class PrincipalCinesComponent implements OnInit {
 
   }
 
+  //Metodo que sirve para cargar la cantidad de cines necesarios
+  cargarPeliculasRegistradas() {
+    /*
+        this.cineInformacionServic.cantidadRegistros().subscribe({
+          next: (cantidadDTO: CantidadRegistrosDTO) => {
+            this.totalReportes = cantidadDTO.cantidad;
+            this.indiceActual = 0;
+            this.cinesMostrados = [];
+            this.todosCargados = false;
+    
+            this.cargarMasRegistros();
+          },
+          error: (error: any) => {
+    
+            //this.mostrarError(error);
+    
+          }
+        });*/
+
+  }
+
 
   //Metodo que sirve para ir cargando mas cines dinamicamente
   cargarMasCines(): void {
 
-    if (this.todosCargados || this.cinesMostrados.length === 0) {
-      return;
-    }
+    //Pendiente mostrar peliculas
+
+    /* if (this.todosCargados || this.cinesMostrados.length === 0) {
+       return;
+     }*/
 
     this.cargarMasRegistros();
   }
@@ -89,46 +118,32 @@ export class PrincipalCinesComponent implements OnInit {
 
   //Carga dinamicamente la cantidad establecida de anuncios para no saturar la web
   cargarMasRegistros(): void {
-
-    this.cineInformacionServic.listadoRegistrosPrincipal(this.cantidadPorCarga, this.indiceActual).subscribe({
-      next: (response: CineInformacionDTO[]) => {
-
-        if (!response || response.length === 0) {
-          this.todosCargados = true;
-          return;
-        }
-
-        this.cinesMostrados.push(...response);
-        this.indiceActual += response.length;
-
-        if (this.indiceActual >= this.totalReportes) {
-          this.todosCargados = true;
-        }
-
-
-      },
-      error: (error: any) => {
-
-        // this.mostrarError(error);
-
-      }
-    });
+    /*
+        this.cineInformacionServic.listadoRegistrosPrincipal(this.cantidadPorCarga, this.indiceActual).subscribe({
+          next: (response: CineInformacionDTO[]) => {
+    
+            if (!response || response.length === 0) {
+              this.todosCargados = true;
+              return;
+            }
+    
+            this.cinesMostrados.push(...response);
+            this.indiceActual += response.length;
+    
+            if (this.indiceActual >= this.totalReportes) {
+              this.todosCargados = true;
+            }
+    
+    
+          },
+          error: (error: any) => {
+    
+            // this.mostrarError(error);
+    
+          }
+        });*/
   }
 
-
-  //Metodo que sirve para poder buscar a los cines 
-  buscarCines(): void {
-    const termino = this.terminoBusqueda.toLowerCase().trim();
-
-    if (!termino) {
-      this.cinesFiltrados = [...this.cinesMostrados]; 
-      return;
-    }
-
-    this.cinesFiltrados = this.cinesMostrados.filter(cine =>
-      cine.nombre.toLowerCase().includes(termino)
-    );
-  }
 
   //Método para generar número random entre min y max 
   private generarNumeroAleatorio(min: number, max: number): number {
@@ -167,6 +182,10 @@ export class PrincipalCinesComponent implements OnInit {
     });
   }
 
+  //Metodo que permite regresar 
+  regresar(){
 
+    this.router.navigateByUrl('/menu-principal');
+  }
 
 }

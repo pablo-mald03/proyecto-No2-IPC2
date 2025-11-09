@@ -1,0 +1,55 @@
+.cine-interior-container {
+  background: radial-gradient(circle at top, #290229 0%, #271b01 90%);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+}
+
+.cine-header {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, #000 100%);
+  z-index: 1;
+}
+
+.glow-title {
+  text-shadow: 0 0 10px #ffd54f, 0 0 15px #ffb300;
+}
+
+.descripcion {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.cartelera {
+  backdrop-filter: blur(8px);
+}
+
+.pelicula-placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.pelicula-placeholder:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: scale(1.03);
+}
+
+.anuncios-col app-anuncio-card {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+footer {
+  background-color: rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.5px;
+}

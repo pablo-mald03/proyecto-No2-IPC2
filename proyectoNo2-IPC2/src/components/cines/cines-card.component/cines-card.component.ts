@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Cine } from '../../../models/cines/cine';
 import { CommonModule } from '@angular/common';
 import { CineInformacionDTO } from '../../../models/cines/cine-informacion-dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cines-card',
@@ -13,6 +14,11 @@ export class CinesCardComponent {
 
   @Input() cine!: CineInformacionDTO;
 
+  constructor(
+    private router: Router,
+  ) {
+
+  }
 
   private palette = [
     ['#ff7a7a', '#ffb86b'],
@@ -39,14 +45,16 @@ export class CinesCardComponent {
     return `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
   }
 
+  //Metodo que permite poner la inical del cine en grande
   getInicial(name?: string) {
     return name ? name.trim().charAt(0).toUpperCase() : '';
   }
 
 
-   visitarCine(codigo: string) {
-    //PENDIENTE REEMPLAZAR CON UN GET
-    console.log('Visitar cine con código:', codigo);
+  //Metodo que permite poder viajar al interior de la pagina de cine
+  visitarCine(codigo: string):void{
+
+    this.router.navigateByUrl(`/menu-principal/cine/${codigo}`);
 
   }
 

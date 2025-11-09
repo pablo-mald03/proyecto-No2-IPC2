@@ -1,0 +1,71 @@
+@if (cine) {
+<div class="cine-interior-container">
+
+    <header class="cine-header text-center text-light py-5 position-relative">
+        <div class="header-overlay"></div>
+        <div class="position-relative z-2">
+
+            <button class="btn btn-outline-warning position-absolute top-0 start-0 m-4 fw-semibold"
+                (click)="regresar()">
+                <i class="bi bi-arrow-left-circle me-2"></i> Regresar
+            </button>
+
+
+            <h1 class="fw-bold display-4 text-warning glow-title">{{ cine.nombre }}</h1>
+            <p class="lead text-light mt-3">
+                <i class="bi bi-geo-alt-fill text-warning"></i> {{ cine.ubicacion }}
+            </p>
+            <p class="descripcion mt-2 text-white-50 w-75 mx-auto">{{ cine.descripcion }}</p>
+        </div>
+    </header>
+
+    <main class="container-fluid mt-5 mb-5">
+        <div class="row justify-content-center">
+
+            <div class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
+                <div class="anuncios-col">
+                    @for (anuncio of anunciosIzquierda; track anuncio.nombre) {
+                    <app-anuncios-cards-pagina [anuncio]="anuncio"></app-anuncios-cards-pagina>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-8 col-12">
+                <div class="cartelera p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
+                    <h2 class="fw-bold mb-4 fs-1 text-warning"> Cartelera Actual</h2>
+                    <p class="text-white fs-6 mb-4">
+                        Disfruta nuestras películas exclusivas en pantalla grande 
+                    </p>
+
+                    <div class="row g-4 justify-content-center">
+
+                        <!--  @for (pelicula of peliculas; track pelicula.titulo) {
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="pelicula-placeholder rounded-4 p-5 d-flex align-items-center justify-content-center text-white-50 border border-warning border-opacity-25">
+                  <i class="bi bi-film fs-1 me-2"></i> Película pendiente
+                </div>
+              </div>
+            }-->
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
+                <div class="anuncios-col">
+                    @for (anuncio of anunciosDerecha; track anuncio.nombre) {
+                    <app-anuncios-cards-pagina [anuncio]="anuncio"></app-anuncios-cards-pagina>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center text-light py-4 border-top border-warning border-opacity-50">
+        <small>© 2025 {{ cine.nombre }}. Vive la experiencia del cine real desde tu pantalla.</small>
+    </footer>
+
+</div>
+}

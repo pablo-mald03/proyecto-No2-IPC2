@@ -43,6 +43,7 @@ import { ConfigurarPreciosComponent } from '../components/administrador-sistema/
 import { EditarConfiguracionPrecioComponent } from '../components/administrador-sistema/editar-configuracion-precio/editar-configuracion-precio.component';
 import { ConfigurarTarifasComponent } from '../components/administrador-sistema/configurar-tarifas/configurar-tarifas.component';
 import { EditarTarifasPrecioComponent } from '../components/administrador-sistema/editar-tarifas-precio/editar-tarifas-precio.component';
+import { CineDashboardComponent } from '../components/cines/cine-dashboard/cine-dashboard.component';
 
 
 export const routes: Routes = [
@@ -96,6 +97,10 @@ export const routes: Routes = [
             {
                 path: 'billetera',
                 component: BilleteraDigitalComponent,
+            },
+            {
+                path: 'cine/:codigo',
+                component: CineDashboardComponent,
             },
             {
                 path: '',
