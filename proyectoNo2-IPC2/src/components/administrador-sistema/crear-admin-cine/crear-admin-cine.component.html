@@ -220,3 +220,7 @@
         (cerrarEvent)="mostrarPopup = false">
     </app-shared-popup>
 </ng-container>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>

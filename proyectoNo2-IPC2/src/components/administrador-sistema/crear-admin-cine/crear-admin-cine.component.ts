@@ -7,10 +7,12 @@ import { Popup } from '../../../shared/popup/popup';
 import { CineInformacionService } from '../../../services/cine-service/cine-informacion.service';
 import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
+import { UsuarioAdminCineService } from '../../../services/admin-sistema-service/admin-cine.service';
+import { FullscreenModalComponent } from "../../../shared/fullscreen-modal/fullscreen-modal.component";
 
 @Component({
   selector: 'app-crear-admin-cine',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, RouterLinkActive, CommonModule, NgFor, SharedPopupComponent],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, RouterLinkActive, CommonModule, NgFor, SharedPopupComponent, FullscreenModalComponent],
   templateUrl: './crear-admin-cine.component.html',
   styleUrl: './crear-admin-cine.component.scss',
   providers: [Popup],
@@ -38,6 +40,14 @@ export class CrearAdminCineComponent implements OnInit {
   popupKey = 0;
 
 
+
+  //Atributos del modal 
+  mostrarModal = false;
+  mensajeModal = '';
+  urlRedireccion = '/menu-admin-sistema/admins-cine';
+  tipoModal: 'exito' | 'error' | 'info' = 'info';
+
+
   //Cines que se envian via llave valor
   cinesSeleccionados: CinesAsociadosDTO[] = [];
 
@@ -45,6 +55,7 @@ export class CrearAdminCineComponent implements OnInit {
     private fb: FormBuilder,
     private popUp: Popup,
     private cineInformacionService: CineInformacionService,
+    private administradorSistemaService: UsuarioAdminCineService,
   ) { }
 
   ngOnInit(): void {
@@ -207,6 +218,15 @@ export class CrearAdminCineComponent implements OnInit {
     this.fotoSeleccionada = null;
   }
 
+
+   //Metodo utilizado para abrir el modal
+  abrirModal(mensaje: string, tipo: 'exito' | 'error' | 'info' = 'info') {
+    this.mensajeModal = mensaje;
+    this.tipoModal = tipo;
+    this.mostrarModal = true;
+  }
+
+
   //Metodo que envia el formulario
   submit(): void {
     if (this.nuevoRegistroForm.valid) {
@@ -220,8 +240,16 @@ export class CrearAdminCineComponent implements OnInit {
         }
       });
 
-      console.log('Datos enviados:', this.nuevoRegistroForm.value);
-      // this.adminService.crearAdministrador(formData).subscribe(...)
+       this.administradorSistemaService.crearAdministradorCine(formData).subscribe({
+        next: () => {
+
+          this.reiniciar();
+          this.abrirModal('Se ha creado correctamente el nuevo administrador de cine', 'exito');
+        },
+        error: (err) => {
+          this.mostrarError(err);
+        }
+      });
     } else {
       this.nuevoRegistroForm.markAllAsTouched();
     }
