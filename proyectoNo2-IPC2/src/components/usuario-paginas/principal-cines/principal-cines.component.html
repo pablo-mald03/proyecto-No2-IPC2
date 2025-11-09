@@ -11,6 +11,17 @@
     <main class="col-12 col-lg-8 px-3">
       <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
 
+
+        <div class="d-flex justify-content-center mb-4">
+          <div class="input-group w-75 w-md-50">
+            <span class="input-group-text bg-warning text-dark border-0">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control bg-component text-dark border-0" placeholder="Buscar cine..."
+               (input)="buscarCines()" />
+          </div>
+        </div>
+
         <h2 class="fw-bold mb-4 fs-1 text-warning">Cines Asociados</h2>
         <p class="text-white fs-5">Visita nuestras mejores compañías de cine</p>
 

@@ -10,6 +10,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineAsociadoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineInformacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.database.CostoCineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.models.CostoCine;
@@ -50,7 +51,7 @@ public class CineDB {
 
     //Constante que permite obtener el nombre de un cine en base a codigo
     private final String CONSULTAR_NOMBRE_CINE = "SELECT nombre FROM cine WHERE nombre = ? LIMIT 1";
-    
+
     //Constante que permite obtener el nombre en base al codigo y el nombre
     private final String CONSULTAR_NOMBRE_CINE_END = "SELECT nombre FROM cine WHERE nombre = ? AND codigo = ? LIMIT 1";
 
@@ -59,8 +60,8 @@ public class CineDB {
     private final String CONSULTAR_CINE_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine ORDER BY fecha_creacion DESC";
 
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
-    private final String CONSULTAR_CINE_CODIGO_DASHBOARD = "SELECT nombre, descripcion, ubicacion FROM cine WHERE codigo = ?";
-   
+    private final String CONSULTAR_CINE_CODIGO_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine WHERE codigo = ?";
+
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
     private final String CONSULTAR_CINE_CODIGO_VALOR = "SELECT codigo, nombre FROM cine LIMIT ? OFFSET ?";
 
@@ -180,7 +181,7 @@ public class CineDB {
             throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener el nombre del cine");
         }
     }
-    
+
     //Metodo delegado para obtener el nombre del cine en base a un nombre
     public boolean nombrePerteneciente(String nombre, String codigoCine) throws ErrorInesperadoException, DatosNoEncontradosException {
 
@@ -195,7 +196,7 @@ public class CineDB {
             if (result.next()) {
                 return true;
             } else {
-                return false; 
+                return false;
             }
 
         } catch (SQLException e) {
@@ -338,20 +339,14 @@ public class CineDB {
             }
         }
     }
-    
-    
-    
-   //==================================== APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
-   
-    
+
+    //==================================== APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
     //Metodo que permite obtener el listado de cines llave-valor
     public List<CineAsociadoDTOResponse> obtenerListadoCinesLlaveValor(CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (cargaRequest == null) {
             throw new FormatoInvalidoException("La referencia de request esta vacia");
         }
-
-        CostoCineDB costoCineDb = new CostoCineDB();
 
         List<CineAsociadoDTOResponse> listadoCines = new ArrayList<>();
 
@@ -368,7 +363,6 @@ public class CineDB {
                 CineAsociadoDTOResponse cineAsociado = new CineAsociadoDTOResponse(
                         resultSet.getString("codigo"),
                         resultSet.getString("nombre")
-                       
                 );
 
                 listadoCines.add(cineAsociado);
@@ -381,6 +375,77 @@ public class CineDB {
         return listadoCines;
     }
 
+    //Metodo que permite obtener el listado de cines llave-valor
+    public List<CineInformacionDTO> obtenerListadoCinesPrincipal(CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (cargaRequest == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        List<CineInformacionDTO> listadoCines = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINE_DASHBOARD);) {
+
+            query.setInt(1, cargaRequest.getLimit());
+            query.setInt(2, cargaRequest.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                CineInformacionDTO cineAsociado = new CineInformacionDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("ubicacion")
+                );
+
+                listadoCines.add(cineAsociado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los cines registrados en el sistema para el menu principal");
+        }
+
+        return listadoCines;
+    }
+
+    //Metodo que permite retornar un cine en especifico
+    public CineInformacionDTO obtenerCinesPrincipalCodigo(String codigoCine) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(codigoCine)) {
+            throw new FormatoInvalidoException("El id del cine esta vacio");
+        }
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINE_CODIGO_DASHBOARD);) {
+
+            query.setString(1, codigoCine.trim());
+
+            ResultSet resultSet = query.executeQuery();
+
+            if (resultSet.next()) {
+                CineInformacionDTO cineAsociado = new CineInformacionDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("ubicacion")
+                );
+
+                return cineAsociado;
+
+            } else {
+
+                throw new DatosNoEncontradosException("No se ha encontrado informacion sobre el cine solicitado");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los cines registrados en el sistema para el menu principal");
+        }
+
+    }
+
     //==================================== FIN DEL APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
-    
 }

@@ -4,10 +4,11 @@ import { Cine } from '../../../models/cines/cine';
 import { AnunciosCardsPaginaComponent } from "../anuncios-cards-pagina/anuncios-cards-pagina.component";
 import { AnuncioPublicidadDTO } from '../../../models/anuncios/anuncio-publicidad-dto';
 import { PublicidadPincipalService } from '../../../services/principal-service/publicidad-principal.service';
+import { FormsModule, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-principal-cines.component',
-  imports: [CinesCardComponent, AnunciosCardsPaginaComponent],
+  imports: [CinesCardComponent, AnunciosCardsPaginaComponent, FormsModule],
   templateUrl: './principal-cines.component.html',
   styleUrl: './principal-cines.component.scss'
 })
@@ -23,13 +24,9 @@ export class PrincipalCinesComponent implements OnInit {
     private publicidadService: PublicidadPincipalService,
   ) { }
 
-  //Pendiente jugar con las peticiones hacia el back
-  showAd1 = true;
-  showAd2 = false;
-  showAd3 = false;
-  showAd4 = true;
-  showAd5 = false;
-  showAd6 = true;
+  //Atributos que permiten manejar las busquedas filtradas de cines
+  terminoBusqueda: string = '';
+  cinesFiltrados: Cine[] = [];
 
 
 
@@ -44,7 +41,7 @@ export class PrincipalCinesComponent implements OnInit {
 
     this.cargarAnunciosAleatorios();
 
-    this.cines = [
+    this.cinesMostrados = [
       {
         codigo: 'CIN001',
         nombre: 'Cinemark Oakland',
@@ -83,6 +80,9 @@ export class PrincipalCinesComponent implements OnInit {
       }
     ];
 
+
+    this.cinesFiltrados = this.cinesMostrados;
+
     this.cargarMasCines();
   }
 
@@ -99,6 +99,18 @@ export class PrincipalCinesComponent implements OnInit {
     if (this.indiceActual >= this.cines.length) {
       this.todosCargados = true;
     }
+  }
+
+
+  buscarCines() {
+    const termino = this.terminoBusqueda.toLowerCase().trim();
+    if (!termino) {
+      this.cinesFiltrados = this.cinesMostrados;
+      return;
+    }
+    this.cinesFiltrados = this.cinesMostrados.filter(cine =>
+      cine.nombre.toLowerCase().includes(termino)
+    );
   }
 
   //Método para generar número random entre min y max 

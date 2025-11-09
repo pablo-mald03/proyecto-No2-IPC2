@@ -6,6 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.cines;
 
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineAsociadoDTOResponse;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineInformacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CineCrudService;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CinesInformacionService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
@@ -66,6 +67,53 @@ public class CineInformacionResource {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (ErrorInesperadoException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+
+    //Endpoint que sirve para obtener la informacion de cines para el menu principal
+    @GET
+    @Path("principal/limit/{limite}/offset/{inicio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerCinesPrincipal(
+            @PathParam("limite") String limite,
+            @PathParam("inicio") String inicio) {
+
+        CinesInformacionService cinesInformacionService = new CinesInformacionService();
+
+        try {
+            List<CineInformacionDTO> listadoCines = cinesInformacionService.obtenerCinesPrincipal(limite, inicio);
+
+            return Response.ok(listadoCines).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+
+    //Endpoint que sirve para obtener la informacion de un cine en especifico para el menu principal
+    @GET
+    @Path("principal/cine/{idCine}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerCinePrincipalCodigo(
+            @PathParam("idCine") String idCine) {
+
+        CinesInformacionService cinesInformacionService = new CinesInformacionService();
+
+        try {
+            CineInformacionDTO cineCodigo = cinesInformacionService.obtenerCinePrincipalCodigo(idCine);
+
+            return Response.ok(cineCodigo).build();
+
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }

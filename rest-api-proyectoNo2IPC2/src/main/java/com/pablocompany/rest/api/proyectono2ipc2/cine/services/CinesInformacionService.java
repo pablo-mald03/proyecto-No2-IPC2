@@ -8,7 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.Can
 import com.pablocompany.rest.api.proyectono2ipc2.cine.database.CineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineAsociadoDTOResponse;
-import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineInformacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -72,6 +72,34 @@ public class CinesInformacionService {
     public CantidadRegistrosDTO obtenerCantidadCines() throws ErrorInesperadoException, DatosNoEncontradosException {
         CineDB cineDb = new CineDB();
         return new CantidadRegistrosDTO(cineDb.cantidadCinesRegistrados());
+    }
+
+    //Metodo que retorna los datos de informacion para la pagina principal de usuarios
+    public List<CineInformacionDTO> obtenerCinesPrincipal(String limite, String offset) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        CantidadCargaRequest cantidadCargaRequest = extraerLimites(limite, offset);
+
+        if (cantidadCargaRequest.validarRequest()) {
+
+            CineDB cineDb = new CineDB();
+
+            return cineDb.obtenerListadoCinesPrincipal(cantidadCargaRequest);
+
+        }
+        throw new ErrorInesperadoException("No se ha podido obtener el listado de cines asociados llave valor");
+    }
+
+    //Metodo que retorna los datos de informacion de un cine en especifico
+    public CineInformacionDTO obtenerCinePrincipalCodigo(String idCine) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(idCine)) {
+            throw new FormatoInvalidoException("El id del cine esta vacio");
+        }
+
+        CineDB cineDb = new CineDB();
+
+        return cineDb.obtenerCinesPrincipalCodigo(idCine);
+
     }
 
 }
