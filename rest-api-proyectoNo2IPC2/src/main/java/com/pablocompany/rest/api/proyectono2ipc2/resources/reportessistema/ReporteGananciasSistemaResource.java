@@ -6,9 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportessistema;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.GananciasSistemaDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarGananciasSistemaService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasSistemaService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,15 +14,14 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.StreamingOutput;
 import java.util.Map;
 
 /**
  *
  * @author pablo
  */
-@Path("reportes/sistema/ganancias/sistema/exportar")
-public class ExportarReporteGananciasSistema {
+@Path("reportes/sistema/ganancias/sistema")
+public class ReporteGananciasSistemaResource {
 
     //Endpoint que permite obtener las ganancias del sistema
     @GET
@@ -37,27 +34,9 @@ public class ExportarReporteGananciasSistema {
         ReporteGananciasSistemaService reporteGananciasSistemaService = new ReporteGananciasSistemaService();
 
         try {
-
             GananciasSistemaDTO reporteGananciasDto = reporteGananciasSistemaService.obtenerReporteGanancias(fechaInicio, fechaFin);
 
-            ExportarGananciasSistemaService exportarReporteService = new ExportarGananciasSistemaService();
-
-            byte[] pdfData = exportarReporteService.getReporteGanancias(reporteGananciasDto);
-
-            StreamingOutput stream = output -> {
-
-                output.write(pdfData);
-                output.flush();
-            };
-
-            NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
-
-            String nombreReporte = nombreReporteRandomService.getNombre("ReporteGanancias");
-
-            return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
-                    .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
-                    .header("Access-Control-Expose-Headers", "Content-Disposition")
-                    .build();
+            return Response.ok(reporteGananciasDto).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
