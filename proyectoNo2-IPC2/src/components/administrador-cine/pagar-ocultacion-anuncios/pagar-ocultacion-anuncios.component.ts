@@ -4,10 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Popup } from '../../../shared/popup/popup';
 import { CommonModule, NgIf } from '@angular/common';
 import { CinesAsociadosService } from '../../../services/cine-service/cines-asociados.sercive';
+import { PagoOcultacionAnunciosDTO } from '../../../models/admins-cine/pago-anuncio-dto';
+import { FullscreenModalComponent } from "../../../shared/fullscreen-modal/fullscreen-modal.component";
+import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-pagar-ocultacion-anuncios.component',
-  imports: [NgIf, CommonModule],
+  imports: [NgIf, CommonModule, FullscreenModalComponent, SharedPopupComponent, ReactiveFormsModule],
   templateUrl: './pagar-ocultacion-anuncios.component.html',
   styleUrl: './pagar-ocultacion-anuncios.component.scss',
   providers: [Popup],
@@ -17,10 +21,12 @@ export class PagarOcultacionAnunciosComponent {
   codigoCine!: string;
   cine!: CineDTO;
 
+  pagoForm!: FormGroup;
+
   //Atributos del modal 
   mostrarModal = false;
   mensajeModal = '';
-  urlRedireccion = '/menu-admin-sistema/cines';
+  urlRedireccion = '/menu-admin-sistema/cines/asociados';
   tipoModal: 'exito' | 'error' | 'info' = 'info';
 
   //Atributos para mostrar el popup cuando haya un error
@@ -31,6 +37,7 @@ export class PagarOcultacionAnunciosComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
     private cinesAsociadosService: CinesAsociadosService,
     private router: Router,
     private popUp: Popup
@@ -39,6 +46,12 @@ export class PagarOcultacionAnunciosComponent {
   ngOnInit(): void {
 
     this.codigoCine = this.route.snapshot.params['codigo'];
+
+
+    // Form reactivo
+    this.pagoForm = this.formBuilder.group({
+      fechaPago: ['', Validators.required]
+    });
 
     this.cinesAsociadosService.cinePorCodigo(this.codigoCine).subscribe({
       next: (response: CineDTO) => {
@@ -92,16 +105,29 @@ export class PagarOcultacionAnunciosComponent {
 
   //Metodo que ejecuta la transaccion par poder realizar el pago
   confirmarPago(): void {
-    /*this.cineService.realizarPago(this.cine.codigo).subscribe({
+    if (this.pagoForm.invalid) {
+      this.pagoForm.markAllAsTouched();
+      return;
+    }
+
+    const fechaSeleccionada = this.pagoForm.get('fechaPago')?.value;
+    const fechaISO = new Date(fechaSeleccionada).toISOString().split('T')[0];
+
+    const pagoOcultacion: PagoOcultacionAnunciosDTO = {
+      monto: this.cine.montoOcultacion,
+      codigoCine: this.cine.codigo,
+      fechaPago: new Date(fechaISO)
+    };
+
+    this.cinesAsociadosService.pagarOcultacionCine(pagoOcultacion).subscribe({
       next: () => {
-
-        this.abrirModal(`Pago realizado exitosamente por Q${this.cine.montoOcultacion.toFixed(2)}.`, 'exito');
-
+        this.abrirModal(
+          `Pago realizado exitosamente por Q${this.cine.montoOcultacion.toFixed(2)}.`,
+          'exito'
+        );
       },
-      error: (error: any) => {
-        this.popUp.mostrar('Ocurrió un error al procesar el pago.', 'error');
-      }
-    });*/
+      error: (error: any) => this.mostrarError(error)
+    });
   }
 
   regresar(): void {

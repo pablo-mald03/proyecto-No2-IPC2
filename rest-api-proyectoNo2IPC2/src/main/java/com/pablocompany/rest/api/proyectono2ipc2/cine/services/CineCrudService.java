@@ -9,12 +9,12 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.database.CineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CineRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.EditarCineRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.PagoOcultacionAnunciosRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import java.time.LocalDate;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -228,6 +228,14 @@ public class CineCrudService {
                 cinePorCodigo.getUbicacion(),
                 cinePorCodigo.getMontoOcultacion());
 
+    }
+    
+    
+    //Metodo que retorna el visto bueno para confirmar el pago
+    public boolean ejcutarTransaccionOcultacion(PagoOcultacionAnunciosRequest request) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException{
+        
+        return true;
+        
     }
 
 }
