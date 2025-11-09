@@ -66,10 +66,13 @@ public class CineDB {
     private final String CONSULTAR_CINE_CODIGO_VALOR = "SELECT codigo, nombre FROM cine LIMIT ? OFFSET ?";
 
     //=============================APARTADO DONDE SE MUESTRAN LOS DATOS DE LOS CINES A LOS ADMINISTRADORES DE CINES==========================
-    
     //Constante que permite retornar los cines en los que se encuentra asignado el adminstrador de cine
     private final String CINES_ASOCIADOS_CODIGO = "SELECT c.codigo, c.nombre, c.estado_anuncios, c.monto_ocultacion, c.fecha_creacion, c.descripcion, c.ubicacion FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ? LIMIT ? OFFSET ?";
 
+       //Constante que permite obtener la cantidad de cines a los que esta asociado un administrador de cine
+    private final String CANTIDAD_CINES_ASOCIADOS = "SELECT COUNT AS `cantidad` FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ?";
+
+    
     
     
     //Metodo que sirve para poder registrar un nuevo cine en el sistema
@@ -457,7 +460,7 @@ public class CineDB {
     //==================================== FIN DEL APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
     //===================================== APARTADO DE CONSULTAS QUE PERMITEN INTERACTUAR CON LOS CINES ASOCIADOS DE UN ADMINISTRADOR===============
     //Metodo que permite obtener el listado completo de cines asociados a un administrador de cine
-    public List<CineDTO> cinesAsociadosAdministradorCine(String idUsuario, CantidadCargaRequest CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+    public List<CineDTO> cinesAsociadosAdministradorCine(String idUsuario, CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
 
         if (StringUtils.isBlank(idUsuario)) {
             throw new FormatoInvalidoException("El id del usuario esta vacio");
@@ -471,7 +474,7 @@ public class CineDB {
 
         try (PreparedStatement query = connection.prepareStatement(CINES_ASOCIADOS_CODIGO);) {
 
-            query.setString(1,idUsuario.trim());
+            query.setString(1, idUsuario.trim());
             query.setInt(2, cargaRequest.getLimit());
             query.setInt(3, cargaRequest.getOffset());
 
@@ -501,6 +504,30 @@ public class CineDB {
         }
 
         return listadoCines;
+    }
+
+    //Metodo delegado para obtener la cantidad de cines a los que se encuentra asignado el administrador de cine
+    public int cantidadCinesAsignados(String idUsuario) throws ErrorInesperadoException, DatosNoEncontradosException, FormatoInvalidoException {
+
+        if (StringUtils.isBlank(idUsuario)) {
+            throw new FormatoInvalidoException("El id del usuario esta vacio");
+        }
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CANTIDAD_CINES_ASOCIADOS);) {
+
+            query.setString(1, idUsuario.trim());
+            ResultSet result = query.executeQuery();
+            if (result.next()) {
+                return result.getInt("cantidad");
+            } else {
+
+                throw new DatosNoEncontradosException("No hay registros de cines asignados para el administador");
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se ha podido conectar con la base de datos para obtener la cantidad de cines asignados");
+        }
     }
 
 }

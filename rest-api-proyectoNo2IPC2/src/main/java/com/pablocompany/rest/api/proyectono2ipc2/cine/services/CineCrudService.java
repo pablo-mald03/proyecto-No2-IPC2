@@ -183,5 +183,31 @@ public class CineCrudService {
         }
 
     }
+    
+    
+    
+      //Metodo que permite retornar la cantidad de cines asociados a un administrador de cine 
+    public CantidadRegistrosDTO obtenerCantidadAsignacionesAdmin(String idUsuario) throws ErrorInesperadoException, DatosNoEncontradosException, FormatoInvalidoException {
+        CineDB cineDb = new CineDB();
+        
+        return new CantidadRegistrosDTO(cineDb.cantidadCinesAsignados(idUsuario));
+    }
+
+    //Metodo utilizado para obtener la informacion de los cines que tiene asociado el administrador de cine
+    
+    //Metodo delegado para retornar todo el listado de cines asociados en el sistema
+    public List<CineDTO> obtenerCantidadAsociadaAdmin(String limite, String offset, String idUsuario) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        CantidadCargaRequest cantidadCargaRequest = extraerLimites(limite, offset);
+
+        if (cantidadCargaRequest.validarRequest()) {
+
+            CineDB cineDb = new CineDB();
+
+            return cineDb.cinesAsociadosAdministradorCine(idUsuario, cantidadCargaRequest);
+
+        }
+        throw new ErrorInesperadoException("No se ha podido obtener el listado de cines asociados");
+    }
 
 }
