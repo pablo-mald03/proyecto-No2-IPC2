@@ -1,16 +1,16 @@
 .card {
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(57, 5, 70, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 input, select, textarea {
-  background-color: rgba(129, 69, 28, 0.05);
+  background-color: rgba(255, 255, 255, 0.05);
   color: #f8f9fa;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 input:focus, select:focus, textarea:focus {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(228, 217, 217, 0.527);
   border-color: #ffc107;
   box-shadow: 0 0 5px #ffc10780;
 }

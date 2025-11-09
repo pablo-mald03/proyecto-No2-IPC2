@@ -13,6 +13,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoExce
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.peliculas.models.Pelicula;
 import com.pablocompany.rest.api.proyectono2ipc2.peliculas.models.PeliculaDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.peliculas.service.ConvertirBase64ServicePeliculas;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ConvertirBase64Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,7 +130,7 @@ public class PeliculaDB {
     //Metodo que sirve para poder consultar el listado de peliculas
     public List<PeliculaDTO> peliculasRegistradas() throws ErrorInesperadoException, FormatoInvalidoException {
 
-        ConvertirBase64Service convertirBase64Service = new ConvertirBase64Service();
+        ConvertirBase64ServicePeliculas convertirBase64Service = new ConvertirBase64ServicePeliculas();
 
         List<PeliculaDTO> listadoAnuncios = new ArrayList<>();
 
@@ -143,7 +144,7 @@ public class PeliculaDB {
                 PeliculaDTO peliculaEncontrada = new PeliculaDTO(
                         resultSet.getString("codigo"),
                         resultSet.getString("nombre"),
-                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("poster")),
                         resultSet.getString("sinopsis"),
                         resultSet.getString("casteo"),
                         resultSet.getDate("fecha_estreno").toLocalDate(),
