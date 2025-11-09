@@ -71,5 +71,28 @@ public class AdministrarCinesResource {
         }
 
     }
+    
+    
+    //Enpoint que permite obtener la cantidad de cines que tiene asociados el administrador de cine
+    @GET
+    @Path("/cine/codigo/{codigoCine}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerCinePorCodigo(@PathParam("codigoCine") String codigoCine) {
+
+        CineCrudService cineCrudService = new CineCrudService();
+
+        try {
+           CineDTO cineDto = cineCrudService.obtenerCineCodigo(codigoCine);
+            return Response.ok(cineDto).build();
+
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+           return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
 
 }

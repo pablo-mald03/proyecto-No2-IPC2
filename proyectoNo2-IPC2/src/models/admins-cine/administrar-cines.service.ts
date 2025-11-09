@@ -25,4 +25,9 @@ export class CineInformacionService {
         return this.httpClient.get<CineDTO[]>(`${this.restConstants.getApiURL()}administrador/cine/gestion/limit/${limite}/offset/${inicio}/id/${idUsuario}`);
     }
 
+    //Endpoint que retorna la instancia de un objeto de cine
+    public obtenerCinePorCodigo(idCine: string): Observable<CineDTO> {
+        return this.httpClient.get<CineDTO>(`${this.restConstants.getApiURL()}administrador/cine/gestion/cine/codigo/${idCine}`);
+    }
+
 }

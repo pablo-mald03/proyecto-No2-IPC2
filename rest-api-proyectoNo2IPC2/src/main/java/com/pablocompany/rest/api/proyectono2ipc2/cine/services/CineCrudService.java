@@ -14,6 +14,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import java.time.LocalDate;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -151,7 +152,7 @@ public class CineCrudService {
             String nombreBuscado = cineDb.verificarNombreDuplicado(cineEditado.getNombre());
 
             if (StringUtils.isNotBlank(nombreBuscado) && nombreBuscado.equals(cineEditado.getNombre()) && !cineDb.nombrePerteneciente(nombreBuscado, cineEditado.getCodigo())) {
-                
+
                 throw new FormatoInvalidoException("Este nombre de cine ya existe");
             }
 
@@ -183,18 +184,15 @@ public class CineCrudService {
         }
 
     }
-    
-    
-    
-      //Metodo que permite retornar la cantidad de cines asociados a un administrador de cine 
+
+    //Metodo que permite retornar la cantidad de cines asociados a un administrador de cine 
     public CantidadRegistrosDTO obtenerCantidadAsignacionesAdmin(String idUsuario) throws ErrorInesperadoException, DatosNoEncontradosException, FormatoInvalidoException {
         CineDB cineDb = new CineDB();
-        
+
         return new CantidadRegistrosDTO(cineDb.cantidadCinesAsignados(idUsuario));
     }
 
     //Metodo utilizado para obtener la informacion de los cines que tiene asociado el administrador de cine
-    
     //Metodo delegado para retornar todo el listado de cines asociados en el sistema
     public List<CineDTO> obtenerCantidadAsociadaAdmin(String limite, String offset, String idUsuario) throws FormatoInvalidoException, ErrorInesperadoException {
 
@@ -208,6 +206,28 @@ public class CineCrudService {
 
         }
         throw new ErrorInesperadoException("No se ha podido obtener el listado de cines asociados");
+    }
+
+    //Metodo delegado para retornar el valor de un solo cine
+    public CineDTO obtenerCineCodigo(String idCine) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+
+        if (StringUtils.isBlank(idCine)) {
+            throw new FormatoInvalidoException("El codigo del cine esta vacio");
+        }
+        CineDB cineDb = new CineDB();
+
+        Cine cinePorCodigo = cineDb.obtenerCine(idCine);
+
+        return new CineDTO(
+                cinePorCodigo.getCodigo(),
+                cinePorCodigo.getNombre(),
+                cinePorCodigo.isEstadoAnuncio(),
+                cinePorCodigo.getMontoOcultacion(),
+                cinePorCodigo.getFechaCreacion(),
+                cinePorCodigo.getDescripcion(),
+                cinePorCodigo.getUbicacion(),
+                cinePorCodigo.getMontoOcultacion());
+
     }
 
 }

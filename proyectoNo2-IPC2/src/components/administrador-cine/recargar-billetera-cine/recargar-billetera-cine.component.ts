@@ -129,7 +129,7 @@ export class RecargarBilleteraCineComponent implements OnInit {
 
   // Redirige o regresa a la lista
   regresar() {
-    this.routerBack.navigateByUrl('/menu-admin-cine/billetera');
+    this.routerBack.navigateByUrl('/menu-admin-cine/cines/billetera');
   }
 
 

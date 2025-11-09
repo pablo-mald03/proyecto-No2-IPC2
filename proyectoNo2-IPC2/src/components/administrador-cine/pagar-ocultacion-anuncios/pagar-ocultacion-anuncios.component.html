@@ -1,0 +1,56 @@
+<main class="mx-auto admin-sistema-container">
+
+  <div *ngIf="cine" class="pago-card">
+
+    <div class="button-wrapper">
+      <button class="btn-regresar" (click)="regresar()">
+        <i class="bi bi-arrow-left-circle me-2"></i>
+        Regresar
+      </button>
+    </div>
+
+    <div class="header-section text-center mb-4">
+      <h2 class="fw-bold text-warning"> Pago de ocultacion de anuncios</h2>
+      <p class="text-light opacity-75">Confirma el pago para ocultar los anuncios en tu pagina de cine.</p>
+    </div>
+
+    <div class="cine-info-box">
+      <label>Código del Cine</label>
+      <p class="codigo">{{ cine.codigo }}</p>
+    </div>
+
+    <div class="info-group">
+      <label>Nombre del Cine</label>
+      <p>{{ cine.nombre }}</p>
+    </div>
+
+    <div class="info-group">
+      <label>Ubicación</label>
+      <p>{{ cine.ubicacion }}</p>
+    </div>
+
+    <div class="info-group">
+      <label>Descripción</label>
+      <p>{{ cine.descripcion }}</p>
+    </div>
+
+    <div class="info-group">
+      <label>Fecha de Creación</label>
+      <p>{{ cine.fechaCreacion | date:'dd/MM/yyyy' }}</p>
+    </div>
+
+    <div class="monto-pago-box text-center mt-5 mb-4">
+      <h3 class="text-light mb-2">Monto a pagar</h3>
+      <h1 class="display-3 text-warning fw-bold glow-text">Q {{ cine.montoOcultacion | number:'1.2-2' }}</h1>
+      <p class="text-white-50">El monto se descontará automáticamente al confirmar el pago.</p>
+    </div>
+
+    <div class="text-center">
+      <button class="btn-pagar" (click)="confirmarPago()">
+        <i class="bi bi-credit-card-fill me-2"></i> Confirmar Pago
+      </button>
+    </div>
+
+  </div>
+
+</main>

@@ -25,5 +25,10 @@ export class CinesAsociadosService {
         return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}administrador/cine/gestion/cantidad/${idUsuario}`);
     }
 
+    //Endpoint que ayuda a obtener la cantidad total de registros de cines asociados en el sistema del administrador de cine
+    public cinePorCodigo(idCine: string): Observable<CineDTO> {
+        return this.httpClient.get<CineDTO>(`${this.restConstants.getApiURL()}administrador/cine/gestion/cine/codigo/${idCine}`);
+    }
+
 
 }
