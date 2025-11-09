@@ -1,0 +1,124 @@
+.recarga-billetera-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: radial-gradient(circle at top, #1a1a1a, #000);
+  color: #fff;
+}
+
+.recarga-card {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.15);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+.recarga-card:hover {
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.25);
+  transform: translateY(-5px);
+}
+
+.button-wrapper {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.btn-regresar {
+  background: transparent;
+  border: none;
+  color: #ffc107;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-regresar:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+}
+
+.codigo-box {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.codigo-box label {
+  font-size: 0.9rem;
+  color: #ffc107;
+}
+
+.codigo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 0.2rem;
+}
+
+.input-group {
+  margin-bottom: 1.3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 0.3rem;
+  color: #ffc107;
+  font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+  background-color: #111;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #ffc107;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.readonly-input {
+  background: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
+.saldo-actual {
+  font-weight: bold;
+  color: #ffc107;
+  text-align: right;
+}
+
+.error-msg {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.btn-recargar {
+  background: #ffc107;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  width: 100%;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-recargar:hover {
+  background: #ffcd39;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+}

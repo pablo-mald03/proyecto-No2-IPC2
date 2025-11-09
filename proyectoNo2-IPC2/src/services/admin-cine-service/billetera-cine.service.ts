@@ -25,5 +25,16 @@ export class BilleteraCineService {
         return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}cines/billetera/cantidad/${idUsuario}`);
     }
 
+    //Endpoint que retorna el valor de una billetera
+    public billeteraPorCodigo(codigoCine: string): Observable<BilleteraCineDTO> {
+        return this.httpClient.get<BilleteraCineDTO>(`${this.restConstants.getApiURL()}cines/billetera/codigo/${codigoCine}`);
+    }
+
+
+    //Endpoint que permite realizar la transaccion
+    public recargarSaldo(billetera: BilleteraCineDTO): Observable<void> {
+        return this.httpClient.put<void>(`${this.restConstants.getApiURL()}cines/billetera`, billetera);
+    }
+
 
 }

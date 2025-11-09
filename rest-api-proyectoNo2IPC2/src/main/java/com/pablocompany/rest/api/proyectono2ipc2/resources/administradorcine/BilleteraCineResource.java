@@ -5,6 +5,7 @@
 package com.pablocompany.rest.api.proyectono2ipc2.resources.administradorcine;
 
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.dtos.BilleteraCineRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.services.BilleteraCineCrudService;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineInformacionDTO;
@@ -13,7 +14,10 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CinesInformacionS
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.TransaccionInvalidaException;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -73,7 +77,57 @@ public class BilleteraCineResource {
         } catch (ErrorInesperadoException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (FormatoInvalidoException ex) {
-          return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+
+    //Enpoint que permite obtener la referencia de la billetera digital 
+    @GET
+    @Path("/codigo/{codigoCine}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerBilleteraCodigo(
+            @PathParam("codigoCine") String codigoCine
+    ) {
+
+        BilleteraCineCrudService billeteraCine = new BilleteraCineCrudService();
+
+        try {
+            CantidadRegistrosDTO cantidadRegistros = billeteraCine.obtenerCantidadBilleteras(codigoCine);
+            return Response.ok(cantidadRegistros).build();
+
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
+
+    }
+
+    //Enpoint que permite recargar la billetera digital del cine
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response recargarBilleteraDigital(BilleteraCineRequest request) {
+
+        BilleteraCineCrudService billeteraCine = new BilleteraCineCrudService();
+
+        try {
+            if (billeteraCine.recargarBilletera(request)) {
+                return Response.ok().build();
+            } else {
+                throw new TransaccionInvalidaException("No se ha podido generar la recarga del saldo de la billetera digital de cine");
+            }
+
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (TransaccionInvalidaException ex) {
+            return Response.status(Response.Status.PAYMENT_REQUIRED).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }

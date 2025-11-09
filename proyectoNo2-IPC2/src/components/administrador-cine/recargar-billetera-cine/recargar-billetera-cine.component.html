@@ -1,0 +1,59 @@
+<main class="mx-auto recarga-billetera-container">
+
+  <div *ngIf="billetera" class="recarga-card">
+
+    <div class="button-wrapper">
+      <button class="btn-regresar" (click)="regresar()">
+        <i class="bi bi-arrow-left-circle me-2"></i>
+        Regresar
+      </button>
+    </div>
+
+    <div class="codigo-box">
+      <label>Código del Cine</label>
+      <p class="codigo">{{ billetera.codigoCine }}</p>
+    </div>
+
+    <form [formGroup]="billeteraForm" (ngSubmit)="recargarSaldo()">
+
+      <div class="input-group">
+        <label>Nombre del Cine</label>
+        <input type="text" [value]="billetera.nombre" readonly class="readonly-input" />
+      </div>
+
+      <div class="input-group">
+        <label>Saldo Actual</label>
+        <input type="text" [value]="(billetera.saldo | currency:'GTQ')" readonly class="readonly-input saldo-actual" />
+      </div>
+
+      <div class="input-group">
+        <label>Monto a Recargar (Q)</label>
+        <input
+          type="number"
+          formControlName="saldo"
+          placeholder="Ingrese el monto a recargar"
+          [class.error]="billeteraForm.get('saldo')?.invalid && billeteraForm.get('saldo')?.touched"
+        />
+
+        @if (billeteraForm.get('saldo')?.invalid && billeteraForm.get('saldo')?.touched) {
+        <p class="error-msg">Debe ingresar un monto válido mayor a 0.</p>
+        }
+      </div>
+
+      <button class="btn-recargar" [disabled]="billeteraForm.invalid">
+        <i class="bi bi-wallet2 me-2"></i> Recargar Saldo
+      </button>
+
+    </form>
+  </div>
+</main>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
