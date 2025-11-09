@@ -46,6 +46,7 @@ import { EditarTarifasPrecioComponent } from '../components/administrador-sistem
 import { CineDashboardComponent } from '../components/cines/cine-dashboard/cine-dashboard.component';
 import { GestionCinesAdminCineComponent } from '../components/administrador-cine/gestion-cines-admin-cine/gestion-cines-admin-cine.component';
 import { BilleterasDigitalesCineComponent } from '../components/administrador-cine/billeteras-digitales-cine/billeteras-digitales-cine.component';
+import { RecargarBilleteraCineComponent } from '../components/administrador-cine/recargar-billetera-cine/recargar-billetera-cine.component';
 
 
 export const routes: Routes = [
@@ -264,6 +265,10 @@ export const routes: Routes = [
             {
                 path: 'cines/billetera',
                 component: BilleterasDigitalesCineComponent,
+            },
+            {
+                path: 'recargar/billetera/cine/:codigo',
+                component: RecargarBilleteraCineComponent,
             },
             {
                 path: 'reportes/salas/comentadas',

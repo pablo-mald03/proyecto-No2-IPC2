@@ -27,7 +27,7 @@ export class BilleteraCineService {
 
     //Endpoint que retorna el valor de una billetera
     public billeteraPorCodigo(codigoCine: string): Observable<BilleteraCineDTO> {
-        return this.httpClient.get<BilleteraCineDTO>(`${this.restConstants.getApiURL()}cines/billetera/codigo/${codigoCine}`);
+        return this.httpClient.get<BilleteraCineDTO>(`${this.restConstants.getApiURL()}cines/billetera/registrar/codigo/${codigoCine}`);
     }
 
 

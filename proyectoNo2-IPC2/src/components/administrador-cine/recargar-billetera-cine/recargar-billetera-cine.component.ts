@@ -48,7 +48,7 @@ export class RecargarBilleteraCineComponent implements OnInit {
   //Ejecuta la lectura de datos para poder especificar el monto
   ngOnInit(): void {
     // Obtener el código del cine desde la ruta
-    this.codigoCine = this.router.snapshot.params['codigoCine'];
+    this.codigoCine = this.router.snapshot.params['codigo'];
 
     // Llamar al servicio para obtener los datos de la billetera
     this.billeteraCineService.billeteraPorCodigo(this.codigoCine).subscribe({

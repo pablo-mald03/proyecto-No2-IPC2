@@ -84,7 +84,7 @@ public class BilleteraCineResource {
 
     //Enpoint que permite obtener la referencia de la billetera digital 
     @GET
-    @Path("/codigo/{codigoCine}")
+    @Path("registrar/codigo/{codigoCine}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerBilleteraCodigo(
             @PathParam("codigoCine") String codigoCine
@@ -93,8 +93,8 @@ public class BilleteraCineResource {
         BilleteraCineCrudService billeteraCine = new BilleteraCineCrudService();
 
         try {
-            CantidadRegistrosDTO cantidadRegistros = billeteraCine.obtenerCantidadBilleteras(codigoCine);
-            return Response.ok(cantidadRegistros).build();
+             BilleteraCineDTO billeteraDto = billeteraCine.obtenerReferenciaBilletera(codigoCine);
+            return Response.ok(billeteraDto).build();
 
         } catch (DatosNoEncontradosException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();

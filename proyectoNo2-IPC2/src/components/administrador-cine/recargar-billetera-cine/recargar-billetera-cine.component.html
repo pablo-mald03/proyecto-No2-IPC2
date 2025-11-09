@@ -18,12 +18,12 @@
 
       <div class="input-group">
         <label>Nombre del Cine</label>
-        <input type="text" [value]="billetera.nombre" readonly class="readonly-input" />
+        <input type="text" [value]="billetera.nombre" readonly class="readonly-input text-center" />
       </div>
 
       <div class="input-group">
         <label>Saldo Actual</label>
-        <input type="text" [value]="(billetera.saldo | currency:'GTQ')" readonly class="readonly-input saldo-actual" />
+        <input type="text" [value]="(billetera.saldo | currency:'GTQ')" readonly class="readonly-input saldo-actua text-center" />
       </div>
 
       <div class="input-group">

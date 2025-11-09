@@ -37,7 +37,7 @@ public class BilleteraCineDB {
     private final String CONSULTAR_BILLETERA_CINE_ASOCIADO = "SELECT bc.codigo_cine, bc.saldo, ci.nombre FROM billetera_cine AS `bc` JOIN cine AS `ci` ON bc.codigo_cine = ci.codigo JOIN gestion_cine AS `gc` ON bc.codigo_cine = gc.codigo_cine WHERE gc.id_usuario = ? LIMIT ? OFFSET ?";
 
     //Constante que permite mostrar la billetera de cine
-    private final String CONSULTAR_BILLETERA_CINE = "SELECT bc.codigo_cine, bc.saldo, ci.nombre FROM billetera_cine AS `bc` JOIN cine AS `ci` ON bc.codigo_cine = ci.codigo JOIN gestion_cine AS `gc` ON bc.codigo_cine = gc.codigo_cine WHERE ci.codigo_cine = ? ";
+    private final String CONSULTAR_BILLETERA_CINE = "SELECT bc.codigo_cine, bc.saldo, ci.nombre FROM billetera_cine AS `bc` JOIN cine AS `ci` ON bc.codigo_cine = ci.codigo JOIN gestion_cine AS `gc` ON bc.codigo_cine = gc.codigo_cine WHERE ci.codigo = ? ";
 
     //Constante que permite indicarle al usuario la cantidad de billetearas digitales que tiene
     private final String CONSULTAR_BILLETERA_CANTIDAD = "SELECT COUNT(*) AS `cantidad` FROM billetera_cine AS `bc` JOIN cine AS `ci` ON bc.codigo_cine = ci.codigo JOIN gestion_cine AS `gc` ON bc.codigo_cine = gc.codigo_cine WHERE gc.id_usuario = ?";
@@ -83,7 +83,7 @@ public class BilleteraCineDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de la billetera digital de cine");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de la billetera digital de cine" + e.getMessage());
         }
 
     }

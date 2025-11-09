@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BilleteraCineDTO } from '../../../models/admins-cine/billetera-cine-dto';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-billetera-digital-card',
@@ -13,11 +14,16 @@ export class BilleteraDigitalCardComponent {
 
   @Input() billetera!: BilleteraCineDTO;
 
+  constructor(
+    private router: Router,
+  ) {
+
+  }
 
   //metodo utilizado para poder recargar saldo
-  recargarSaldo(codigo:string){
+  recargarSaldo(codigo: string) {
 
-
+    this.router.navigateByUrl(`/menu-admin-cine/recargar/billetera/cine/${codigo}`);
 
   }
 }
