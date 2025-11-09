@@ -5,6 +5,8 @@
 package com.pablocompany.rest.api.proyectono2ipc2.resources.administradorcine;
 
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCineDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.services.BilleteraCineCrudService;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineInformacionDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CineCrudService;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.services.CinesInformacionService;
@@ -29,18 +31,20 @@ public class BilleteraCineResource {
 
     //Endpoint que sirve para obtener la informacion de cines para el menu principal
     @GET
-    @Path("asociada/limit/{limite}/offset/{inicio}")
+    @Path("asociada/limit/{limite}/offset/{inicio}/usuario/{idUsuario}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerCinesPrincipal(
             @PathParam("limite") String limite,
-            @PathParam("inicio") String inicio) {
+            @PathParam("inicio") String inicio,
+            @PathParam("idUsuario") String idUsuario
+    ) {
 
-        CinesInformacionService cinesInformacionService = new CinesInformacionService();
+        BilleteraCineCrudService billeteraCine = new BilleteraCineCrudService();
 
         try {
-            List<CineInformacionDTO> listadoCines = cinesInformacionService.obtenerCinesPrincipal(limite, inicio);
+            List<BilleteraCineDTO> listadoBilleteras = billeteraCine.obtenerCinesAsociados(limite, inicio, idUsuario);
 
-            return Response.ok(listadoCines).build();
+            return Response.ok(listadoBilleteras).build();
 
         } catch (FormatoInvalidoException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
@@ -52,20 +56,24 @@ public class BilleteraCineResource {
 
     //Enpoint que permite obtener la cantidad de billeteras digitales que posee el administrador de cine
     @GET
-    @Path("/cantidad")
+    @Path("/cantidad/{idUsuario}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerCantidadCines() {
+    public Response obtenerCantidadCines(
+            @PathParam("idUsuario") String idUsuario
+    ) {
 
-        CineCrudService cineCrudService = new CineCrudService();
+        BilleteraCineCrudService billeteraCine = new BilleteraCineCrudService();
 
         try {
-            CantidadRegistrosDTO cantidadRegistros = cineCrudService.obtenerCantidadCines();
+            CantidadRegistrosDTO cantidadRegistros = billeteraCine.obtenerCantidadBilleteras(idUsuario);
             return Response.ok(cantidadRegistros).build();
 
         } catch (DatosNoEncontradosException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
         } catch (ErrorInesperadoException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+          return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
         }
 
     }

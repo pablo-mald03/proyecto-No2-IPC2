@@ -9,7 +9,7 @@ import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-d
     providedIn: 'root'
 })
 
-export class CinesAsociadosService {
+export class BilleteraCineService {
 
     restConstants = new RestConstants();
 
@@ -17,12 +17,12 @@ export class CinesAsociadosService {
 
     //Endpoint que retorna dinamicamente la cantidad dde billeteras que pose el cine donde el usuario esta relacionado
     public listadoBilleteras(limite: number, inicio: number, idUsuario: string): Observable<BilleteraCineDTO[]> {
-        return this.httpClient.get<BilleteraCineDTO[]>(`${this.restConstants.getApiURL()}administrador/cine/gestion/limit/${limite}/offset/${inicio}/id/${idUsuario}`);
+        return this.httpClient.get<BilleteraCineDTO[]>(`${this.restConstants.getApiURL()}cines/billetera/asociada/limit/${limite}/offset/${inicio}/usuario/${idUsuario}`);
     }
 
     //Endpoint que ayuda a obtener la cantidad total de registros de cines asociados en el sistema del administrador de cine
     public cantidadRegistros(idUsuario: string): Observable<CantidadRegistrosDTO> {
-        return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}administrador/cine/gestion/cantidad/${idUsuario}`);
+        return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}cines/billetera/cantidad/${idUsuario}`);
     }
 
 

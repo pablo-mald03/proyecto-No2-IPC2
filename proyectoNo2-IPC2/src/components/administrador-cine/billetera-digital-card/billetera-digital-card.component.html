@@ -1,0 +1,23 @@
+<div class="billetera-card rounded-4 shadow-lg overflow-hidden bg-dark bg-opacity-75 border border-warning border-opacity-25 text-light p-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold text-warning mb-0">
+      <i class="bi bi-house-door-fill me-2"></i>{{ billetera.nombre }}
+    </h4>
+    <span class="badge bg-secondary">{{ billetera.codigoCine }}</span>
+  </div>
+
+  <div class="saldo-section my-3 p-3 rounded-3 bg-black bg-opacity-50 border-start border-3 border-warning">
+    <h6 class="text-white-50 mb-1">Saldo disponible</h6>
+    <h2 class="text-warning fw-bold mb-0">{{ billetera.saldo | currency:'GTQ' }}</h2>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <button 
+      class="btn btn-warning fw-semibold px-4 py-2 recargar-btn"
+      (click)="recargarSaldo(billetera.codigoCine)">
+      <i class="bi bi-wallet2 me-2"></i>Recargar
+    </button>
+  </div>
+
+</div>

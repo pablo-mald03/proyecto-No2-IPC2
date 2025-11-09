@@ -1,15 +1,13 @@
-<p>billeteras-digitales-cine.component works!</p>
 <main class="mis-anuncios-page">
 
     <section class="mis-anuncios-container">
         <h1 class="titulo text-info"> <i class="bi bi-award me-2"></i> Billeteras Digitales pertenecientes</h1>
         <p class="descripcion mt-4 mb-3 ">Gestiona el saldo de las cuentas de los cines a los que perteneces</p>
 
-        <div class="reportes-grid d-flex flex-column gap-4">
-             @for (cine of cinesMostrados; track cine.codigo) {
+        <div class="reportes-grid d-flex flex-column gap-4 align-items-center">
+            @for (billetera of billeterasMostradas; track billetera.codigoCine) {
 
-            <app-cines-admin-cine-cards
-                [cine]="cine" [cine]="cine"></app-cines-admin-cine-cards>
+            <app-billetera-digital-card [billetera]="billetera"></app-billetera-digital-card>
             }
             @empty {
             <div class="text-center text-light mt-5">

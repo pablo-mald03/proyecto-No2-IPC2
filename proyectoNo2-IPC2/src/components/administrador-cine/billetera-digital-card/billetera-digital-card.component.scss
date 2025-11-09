@@ -1,0 +1,30 @@
+.billetera-card {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  min-width: 450px;
+}
+
+.billetera-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+}
+
+.saldo-section {
+  transition: background-color 0.3s ease;
+}
+
+.saldo-section:hover {
+  background-color: rgba(255, 193, 7, 0.05);
+}
+
+.recargar-btn {
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.recargar-btn:hover {
+  background-color: #ffcd39;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+}
