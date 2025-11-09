@@ -1,81 +1,60 @@
-<div class="container-fluid position-relative py-4 text-white" style="min-height: 100vh; background-color: #0e0e0e;">
+<div class="container-fluid py-4 text-white" style="background-color: #0e0e0e;">
 
-  <div class="ad-column position-absolute top-0 start-0 h-100 d-none d-lg-flex flex-column p-2">
+  <div class="row justify-content-center position-relative">
 
-    @if(showAd1){
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-1">
-    </div>
-    }
-
-    @if (showAd2) {
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-2">
-    </div>
-    }
-    @if(showAd3){
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-3">
-    </div>
-    }
-
-
-  </div>
-
-  <div class="ad-column position-absolute top-0 end-0 h-100 d-none d-lg-flex flex-column p-2">
-
-    @if (showAd4) {
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-4">
-    </div>
-    }
-    @if(showAd5){
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-5">
+    <!-- Columna izquierda de anuncios -->
+    <div class="col-lg-2 d-none d-lg-flex flex-column align-items-center p-2 ads-col">
+      @if(showAd1){
+      <div class="ad-box">
+        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-1">
+      </div>
+      }
+      @if(showAd2){
+      <div class="ad-box">
+        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-2">
+      </div>
+      }
+      @if(showAd3){
+      <div class="ad-box">
+        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-3">
+      </div>
+      }
     </div>
 
-    }
-    @if(showAd6){
-    <div class="ad-box">
-      <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-6">
-    </div>
+    <!-- Contenido central -->
+    <main class="col-12 col-lg-8 px-3">
+      <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
 
-    }
-
-  </div>
-
-
-  <main class="mx-auto" style="max-width: 820px;">
-
-
-    <div class="p-2 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
         <h2 class="fw-bold mb-4 fs-1 text-warning">Cines Asociados</h2>
         <p class="text-white fs-5">Visita nuestras mejores compañías de cine</p>
 
-        <div class="d-flex flex-column align-items-center mt-5 cines-container">
-            @for (cine of cinesMostrados; track cine.codigo) {
-            <app-cines-card class="w-100" [cine]="cine"></app-cines-card>
-            }
-            @empty {
-            <div class="text-center text-light mt-5">
-                <h5>No hay cines registrados actualmente</h5>
-            </div>
-            }
+        <div class="cines-container mt-5">
+          @for (cine of cinesMostrados; track cine.codigo) {
+          <app-cines-card class="w-100" [cine]="cine"></app-cines-card>
+          }
+          @empty {
+          <div class="text-center text-light mt-5">
+            <h5>No hay cines registrados actualmente</h5>
+          </div>
+          }
         </div>
 
         <div class="text-center mt-4">
-            <button class="btn btn-outline-light px-4 py-2 rounded-pill" (click)="cargarMasCines()"
-                [disabled]="todosCargados">
-                {{ todosCargados ? 'No hay más cines' : 'Cargar más' }}
-            </button>
+          <button class="btn btn-outline-light px-4 py-2 rounded-pill" (click)="cargarMasCines()"
+            [disabled]="todosCargados">
+            {{ todosCargados ? 'No hay más cines' : 'Cargar más' }}
+          </button>
         </div>
+
+      </div>
+    </main>
+
+
+    <div class="col-lg-2 d-none d-lg-flex flex-column align-items-center p-2 ads-col">
+      <!--@for (anuncio of anunciosLadoIzquierdo; track anuncio.codigo) {
+      <app-anuncios-cards-pagina [anuncio]="anuncio"></app-anuncios-cards-pagina>
+    }-->
     </div>
 
-
-    
-</main>
-
-
-
+  </div>
 </div>
-

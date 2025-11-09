@@ -8,6 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistrado
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CantidadAnunciosClienteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.Anuncio;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnuncioRegistradoDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.AnunciosPublicidadDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.models.CambiarEstadoDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.billetera.database.BilleteraDigitalDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
@@ -60,6 +61,11 @@ public class AnunciosDB {
     //Constante que permite cambiar el estado de los anuncios independientemente quien lo ejecute 
     private final String CAMBIAR_ESTADO_ANUNCIOS = "UPDATE anuncio SET estado = ? WHERE codigo = ?";
 
+    //Constante que permite retornar anuncios para mostrar en la pagina de cine
+    private final String ANUNCIOS_MOSTRADOS_SISTEMA = "SELECT a.nombre, a.url, a.texto, a.foto,  ca.codigo AS `codigoTipo`"
+            + "FROM anuncio AS `a` JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo JOIN usuario AS `us` ON us.id = a.id_usuario "
+            + "WHERE a.id IN ( SELECT id FROM anuncio ORDER BY RAND() LIMIT ? );";
+
     //Metodo que sirve para poder cambiar el estado de un anuncio
     public boolean cambiarEstado(CambiarEstadoDTO cambioEstado) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
 
@@ -104,7 +110,7 @@ public class AnunciosDB {
                 conexion.setAutoCommit(true);
 
             } catch (SQLException ex) {
-                System.out.println("Error al reactivar la autoconfirmacion al cambiar el estado del anuncio");
+                throw new ErrorInesperadoException("Error al reactivar la autoconfirmacion al cambiar el estado del anuncio");
             }
         }
     }
@@ -313,6 +319,7 @@ public class AnunciosDB {
         }
     }
 
+    //Metodo que permite generar la transaccion del anuncio
     private int insertarAnuncio(Anuncio anuncioNuevo, Connection conexion) throws ErrorInesperadoException {
 
         try (PreparedStatement preparedStmt = conexion.prepareStatement(COMPRAR_ANUNCIO);) {
@@ -338,6 +345,39 @@ public class AnunciosDB {
             throw new ErrorInesperadoException("No se ha podido generar la transaccion para crear un nuevo usuario");
         }
 
+    }
+
+    //Metodo que sirve para poder consultar los anuncios que se van a retornar a la pagina principal
+    public List<AnunciosPublicidadDTO> anunciosPublicidad(int cantidad) throws ErrorInesperadoException, FormatoInvalidoException {
+
+        ConvertirBase64Service convertirBase64Service = new ConvertirBase64Service();
+
+        List<AnunciosPublicidadDTO> listadoAnuncios = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(ANUNCIOS_MOSTRADOS_SISTEMA);) {
+
+            query.setInt(1, cantidad);
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                AnunciosPublicidadDTO anuncioEncontrado = new AnunciosPublicidadDTO(
+                        resultSet.getString("nombre"),
+                        resultSet.getString("url"),
+                        convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
+                        resultSet.getInt("codigoTipo")
+                );
+
+                listadoAnuncios.add(anuncioEncontrado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los anuncios comprados en el sistema");
+        }
+
+        return listadoAnuncios;
     }
 
 }
