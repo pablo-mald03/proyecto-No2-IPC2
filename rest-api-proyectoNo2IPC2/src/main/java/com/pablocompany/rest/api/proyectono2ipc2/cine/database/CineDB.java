@@ -70,7 +70,7 @@ public class CineDB {
     private final String CINES_ASOCIADOS_CODIGO = "SELECT c.codigo, c.nombre, c.estado_anuncios, c.monto_ocultacion, c.fecha_creacion, c.descripcion, c.ubicacion FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ? LIMIT ? OFFSET ?";
 
        //Constante que permite obtener la cantidad de cines a los que esta asociado un administrador de cine
-    private final String CANTIDAD_CINES_ASOCIADOS = "SELECT COUNT AS `cantidad` FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ?";
+    private final String CANTIDAD_CINES_ASOCIADOS = "SELECT COUNT(*) AS `cantidad` FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ?";
 
     
     

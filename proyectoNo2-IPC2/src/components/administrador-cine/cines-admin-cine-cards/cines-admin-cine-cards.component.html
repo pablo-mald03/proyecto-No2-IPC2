@@ -1,0 +1,32 @@
+<div
+    class="cine-gestion-card rounded-4 shadow-lg overflow-hidden position-relative bg-dark bg-opacity-75 border border-warning border-opacity-25">
+
+    <div class="cine-card-header p-4 d-flex justify-content-between align-items-center">
+        <h3 class="fw-bold text-warning m-0">{{ cine.nombre }}</h3>
+        <span class="badge" [ngClass]="cine.estadoAnuncio ? 'bg-success' : 'bg-danger'">
+            {{ cine.estadoAnuncio ? 'Activo' : 'Inactivo' }}
+        </span>
+    </div>
+
+    <div class="cine-card-body text-light p-4">
+        <p class="descripcion text-white-50 mb-3">{{ cine.descripcion }}</p>
+
+        <div class="cine-info mb-3">
+            <p class="mb-1"><i class="bi bi-geo-alt-fill text-warning me-2"></i>{{ cine.ubicacion }}</p>
+            <p class="mb-1"><i class="bi bi-currency-dollar text-warning me-2"></i><strong>{{ cine.costoCine |
+                    currency:'GTQ' }}</strong></p>
+            <p class="mb-1"><i class="bi bi-clock text-warning me-2"></i> Creado: {{ cine.fechaCreacion |
+                date:'dd/MM/yyyy' }}</p>
+            <p class="mb-1"><i class="bi bi-eye-slash text-warning me-2"></i> Monto Ocultación: <strong>{{
+                    cine.montoOcultacion | currency:'GTQ' }}</strong></p>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+
+            <button class="btn btn-warning btn-sm px-4 ocultar-btn" [disabled]="!cine.estadoAnuncio"
+                (click)="ocultarAnuncios(cine.codigo)">
+                <i class="bi bi-eye-slash me-2"></i>Ocultar Anuncios
+            </button>
+        </div>
+    </div>
+</div>

@@ -5,20 +5,20 @@
         <p class="descripcion mt-4 mb-3 ">Gestiona los cines a los que fuiste asignado</p>
 
         <div class="reportes-grid d-flex flex-column gap-4">
-            <!--   @for (anuncio of anunciosMostrados; track anuncio.codigo) {
+             @for (cine of cinesMostrados; track cine.codigo) {
 
-            <app-anuncios-comprados-anunciante-cards
-                [anuncio]="anuncio" [idUsuario]="idUsuario"></app-anuncios-comprados-anunciante-cards>
+            <app-cines-admin-cine-cards
+                [cine]="cine" [cine]="cine"></app-cines-admin-cine-cards>
             }
             @empty {
             <div class="text-center text-light mt-5">
                 <h5>No tienes anuncios comprados</h5>
             </div>
-            }-->
+            }
         </div>
 
         <div class="text-center mt-4">
-            <button class="btn btn-cargar-mas" (click)="mostrarMasCines()" [disabled]="todosCargados">
+            <button class="btn btn-cargar-mas" (click)="mostrarMasAnuncios()" [disabled]="todosCargados">
                 {{ todosCargados ? 'No hay más Anuncios' : 'Cargar más' }}
             </button>
         </div>
