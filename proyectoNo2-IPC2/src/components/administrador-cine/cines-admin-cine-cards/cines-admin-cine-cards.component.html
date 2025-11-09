@@ -9,16 +9,16 @@
     </div>
 
     <div class="cine-card-body text-light p-4">
-        <p class="descripcion text-white-50 mb-3">{{ cine.descripcion }}</p>
+        <p class="descripcion text-white-50 mb-3 fs-5">{{ cine.descripcion }}</p>
 
         <div class="cine-info mb-3">
-            <p class="mb-1"><i class="bi bi-geo-alt-fill text-warning me-2"></i>{{ cine.ubicacion }}</p>
-            <p class="mb-1"><i class="bi bi-currency-dollar text-warning me-2"></i><strong>{{ cine.costoCine |
+            <p class="mb-1"><i class="bi bi-geo-alt-fill text-warning me-2 mt-2"></i>{{ cine.ubicacion }}</p>
+            <p class="mb-1"><i class="bi bi-currency-dollar text-warning me-2  mt-2 mt-4"></i><strong>{{ cine.costoCine |
                     currency:'GTQ' }}</strong></p>
-            <p class="mb-1"><i class="bi bi-clock text-warning me-2"></i> Creado: {{ cine.fechaCreacion |
+            <p class="mb-1"><i class="bi bi-clock text-warning me-2 mt-4"></i> Creado: {{ cine.fechaCreacion |
                 date:'dd/MM/yyyy' }}</p>
-            <p class="mb-1"><i class="bi bi-eye-slash text-warning me-2"></i> Monto Ocultación: <strong>{{
-                    cine.montoOcultacion | currency:'GTQ' }}</strong></p>
+            <p class="mb-1 text-info mt-4"><i class="bi bi-eye-slash text-warning me-2"></i> Monto Ocultación: <strong>{{
+                    cine.montoOcultacion | currency:' GTQ' }}</strong></p>
         </div>
 
         <div class="d-flex justify-content-between mt-4">
