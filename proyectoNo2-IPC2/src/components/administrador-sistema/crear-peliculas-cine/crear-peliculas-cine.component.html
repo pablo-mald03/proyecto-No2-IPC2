@@ -75,3 +75,13 @@
     </form>
   </div>
 </main>
+
+<app-fullscreen-modal [mensaje]="mensajeModal" [tipo]="tipoModal" [mostrar]="mostrarModal"
+    [redireccionarA]="urlRedireccion" (cerrarEvent)="mostrarModal = false">
+</app-fullscreen-modal>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>

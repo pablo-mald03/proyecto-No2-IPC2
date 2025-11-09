@@ -31,6 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
  *
  * @author pablo
  */
+@Path("peliculas")
 public class PeliculaResource {
 
     @POST
@@ -69,12 +70,11 @@ public class PeliculaResource {
     }
 
     @GET
+    @Path("/todo")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response anunciosRegistrados(
-            @PathParam("limite") String limite,
-            @PathParam("inicio") String inicio) {
+    public Response peliculasRegistradas() {
 
-        PeliculaCurdService peliculaCrudService  = new PeliculaCurdService();
+        PeliculaCurdService peliculaCrudService = new PeliculaCurdService();
 
         try {
             List<PeliculaDTO> peliculasRegistradas = peliculaCrudService.obtenerPeliculas();
