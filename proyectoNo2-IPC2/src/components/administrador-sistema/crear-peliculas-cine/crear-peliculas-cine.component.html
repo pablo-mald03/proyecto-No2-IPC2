@@ -1,0 +1,77 @@
+<main class="container my-5 d-flex justify-content-center align-items-center">
+  <div class="card bg-dark text-light shadow-lg rounded-4 p-4" style="max-width: 700px; width: 100%;">
+    <h3 class="text-center text-warning mb-4">
+      <i class="bi bi-film me-2"></i>Registrar Nueva Película
+    </h3>
+
+    <form [formGroup]="peliculaForm" (ngSubmit)="crearPelicula()" novalidate>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Nombre</label>
+        <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre de la película">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Sinopsis</label>
+        <textarea class="form-control" formControlName="sinopsis" rows="3"
+          placeholder="Describe brevemente la trama"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Reparto</label>
+        <input type="text" class="form-control" formControlName="cast"
+          placeholder="Ej: Robert Downey Jr, Chris Evans...">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Director</label>
+        <input type="text" class="form-control" formControlName="director" placeholder="Director de la película">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Fecha de Estreno</label>
+        <input type="date" class="form-control" formControlName="fechaEstreno">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Clasificación</label>
+        <select class="form-select" formControlName="clasificacion">
+          <option value="">Seleccione una clasificación</option>
+          <option value="ATP">ATP (Todo Público)</option>
+          <option value="+13">+13</option>
+          <option value="+16">+16</option>
+          <option value="+18">+18</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Duración</label>
+        <input type="text" class="form-control" formControlName="duracion" placeholder="Ej: 2h 15min">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Precio</label>
+        <input type="number" class="form-control" formControlName="precio" placeholder="Precio del ticket">
+      </div>
+
+      <div class="mb-3 text-center">
+        <label class="form-label fw-semibold d-block">Poster de la película</label>
+        <input type="file" class="form-control bg-dark text-light" accept="image/*" (change)="onFileSelected($event)">
+        <div *ngIf="posterPreview" class="mt-3">
+          <img [src]="posterPreview" alt="Vista previa" class="img-fluid rounded shadow" style="max-height: 250px;">
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn btn-warning fw-semibold px-4 rounded-pill"
+          [disabled]="peliculaForm.invalid">
+          <i class="bi bi-save2 me-2"></i>Guardar Película
+        </button>
+
+        <button type="button" class="btn btn-outline-light rounded-pill px-4" (click)="cancelar()">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</main>

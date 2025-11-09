@@ -1,0 +1,39 @@
+<main class="mx-auto admin-sistema-container">
+
+  <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
+
+    <div class="d-flex justify-content-between flex-column align-items-center mb-5">
+      <h2 class="fw-bold fs-2 mb-2 text-warning">
+        <i class="bi bi-film me-2"></i> Películas en CinemaApp
+      </h2>
+
+      <button class="btn btn-warning fw-semibold rounded-pill px-4 mt-4 mb-2"
+
+        routerLink="/menu-admin-sistema/peliculas/crear"
+      
+        routerLinkActive="active">
+        <i class="bi bi-plus-circle-fill me-2"></i> Crear Película
+      </button>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center gap-4 mt-4 admin-cards-container">
+      @for (pelicula of peliculasMostradas; track pelicula.codigo) {
+        <app-peliculas-cards-registradas [pelicula]="pelicula"></app-peliculas-cards-registradas>
+      }
+      @empty {
+        <div class="text-center text-light mt-5">
+          <h5>No hay películas registradas en la aplicación</h5>
+        </div>
+      }
+    </div>
+
+    <button class="btn btn-outline-light btn-load-more px-4 py-2 rounded-pill mt-3"
+      (click)="cargarMasPeliculas()"
+      [disabled]="todosCargados">
+      {{ todosCargados ? 'No hay más películas' : 'Cargar más' }}
+    </button>
+
+  </div>
+
+
+</main>

@@ -1,0 +1,25 @@
+.pelicula-card {
+  width: 300px;
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pelicula-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+}
+
+.card-img-top {
+  height: 400px;
+  object-fit: cover;
+}
+
+.sinopsis-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

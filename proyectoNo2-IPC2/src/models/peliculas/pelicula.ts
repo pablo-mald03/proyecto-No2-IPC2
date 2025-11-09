@@ -5,7 +5,7 @@ export interface Pelicula{
     poster: string,
     sinopsis: string, 
     cast: string, 
-    fechaEstreno: Date,
+    fechaEstreno: string,
     director: string,
     precio: number,
     clasificacion: string,

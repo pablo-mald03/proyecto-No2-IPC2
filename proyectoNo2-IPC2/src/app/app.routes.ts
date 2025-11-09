@@ -48,6 +48,8 @@ import { GestionCinesAdminCineComponent } from '../components/administrador-cine
 import { BilleterasDigitalesCineComponent } from '../components/administrador-cine/billeteras-digitales-cine/billeteras-digitales-cine.component';
 import { RecargarBilleteraCineComponent } from '../components/administrador-cine/recargar-billetera-cine/recargar-billetera-cine.component';
 import { PagarOcultacionAnunciosComponent } from '../components/administrador-cine/pagar-ocultacion-anuncios/pagar-ocultacion-anuncios.component';
+import { PeliculasRegistradasComponent } from '../components/administrador-sistema/peliculas-registradas/peliculas-registradas.component';
+import { CrearPeliculasCineComponent } from '../components/administrador-sistema/crear-peliculas-cine/crear-peliculas-cine.component';
 
 
 export const routes: Routes = [
@@ -169,6 +171,14 @@ export const routes: Routes = [
             {
                 path: 'cines',
                 component: CinesAsociadosComponent,
+            },
+            {
+                path: 'peliculas',
+                component: PeliculasRegistradasComponent,
+            },
+            {
+                path: 'peliculas/crear',
+                component: CrearPeliculasCineComponent,
             },
             {
                 path: 'cines/crear',

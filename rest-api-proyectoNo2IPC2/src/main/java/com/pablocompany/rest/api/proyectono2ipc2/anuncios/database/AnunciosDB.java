@@ -65,7 +65,7 @@ public class AnunciosDB {
     private final String ANUNCIOS_MOSTRADOS_SISTEMA
             = "SELECT a.nombre, a.url, a.texto, a.foto, ca.codigo AS codigoTipo "
             + "FROM ( "
-            + "   SELECT * FROM anuncio ORDER BY RAND() LIMIT ? "
+            + "   SELECT * FROM anuncio WHERE estado = TRUE  ORDER BY RAND() LIMIT ? "
             + ") AS a "
             + "JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo "
             + "JOIN usuario AS us ON us.id = a.id_usuario";
