@@ -2,35 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.pablocompany.rest.api.proyectono2ipc2.cine.dtos;
+package com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 
 /**
  *
  * @author pablo
  */
-
-//Clase delegada para poder recibir los datos requeridos para realizar una trancsaccion en el cine 
-public class PagoOcultacionAnunciosRequest {
+//Clase delegada para poder procesar el objeto de pago de ocultacion de anuncios
+public class PagoOcultacionAnuncios {
     
-    private String monto;
+    private double monto;
     private String codigoCine;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate fechaPago;
 
-    public PagoOcultacionAnunciosRequest() {
+    public PagoOcultacionAnuncios(double monto, String codigoCine, LocalDate fechaPago) {
+        this.monto = monto;
+        this.codigoCine = codigoCine;
+        this.fechaPago = fechaPago;
     }
 
-    public String getMonto() {
+    public double getMonto() {
         return monto;
     }
 
-    public void setMonto(String monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
 
@@ -49,6 +46,5 @@ public class PagoOcultacionAnunciosRequest {
     public void setFechaPago(LocalDate fechaPago) {
         this.fechaPago = fechaPago;
     }
-    
     
 }

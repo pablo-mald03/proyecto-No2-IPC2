@@ -5,6 +5,9 @@
 package com.pablocompany.rest.api.proyectono2ipc2.cine.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.PagoOcultacionAnuncios;
+import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.database.BilleteraCineDB;
+import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.database.CineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CineRequest;
@@ -15,6 +18,8 @@ import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.TransaccionInvalidaException;
+import java.time.LocalDate;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -232,10 +237,41 @@ public class CineCrudService {
     
     
     //Metodo que retorna el visto bueno para confirmar el pago
-    public boolean ejcutarTransaccionOcultacion(PagoOcultacionAnunciosRequest request) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException{
+    public boolean ejcutarTransaccionOcultacion(PagoOcultacionAnunciosRequest request) throws FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException, TransaccionInvalidaException{
+        
+        BilleteraCineDB billeteraCineDb = new BilleteraCineDB();
+        
+        PagoOcultacionAnuncios pagoOcultacion = extraerDatos(request);
+        
+        
+        BilleteraCineDTO billeteraCineDto = billeteraCineDb.billeteraPorCodigo(pagoOcultacion.getCodigoCine());
+        
+        if(billeteraCineDto.getSaldo() < pagoOcultacion.getMonto()){
+            throw  new TransaccionInvalidaException("EL saldo del cine " + billeteraCineDto.getNombre()+" es insuficiente para Realizar el pago");
+        }
+        
+        double totalBilletera = billeteraCineDto.getSaldo() - pagoOcultacion.getMonto();
+        
+        
+        
+        
         
         return true;
         
+    }
+    
+    private PagoOcultacionAnuncios extraerDatos(PagoOcultacionAnunciosRequest request) throws FormatoInvalidoException{
+        try {
+ 
+        return new PagoOcultacionAnuncios(
+                Double.parseDouble(request.getMonto()), 
+                request.getCodigoCine(), 
+                request.getFechaPago());
+        
+        } catch (Exception e) {
+            throw  new FormatoInvalidoException("El formato de los campos no es valido");
+            
+        }
     }
 
 }

@@ -66,6 +66,34 @@
   color: #ffffffd9;
   font-size: 1rem;
 }
+.input-group {
+  margin: 25px 0;
+  text-align: left;
+}
+
+.input-group label {
+  color: #ffc107;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-group input[type="date"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input[type="date"]:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
 
 .codigo {
   font-family: monospace;
