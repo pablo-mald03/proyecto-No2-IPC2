@@ -65,6 +65,13 @@ public class CineDB {
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
     private final String CONSULTAR_CINE_CODIGO_VALOR = "SELECT codigo, nombre FROM cine LIMIT ? OFFSET ?";
 
+    //=============================APARTADO DONDE SE MUESTRAN LOS DATOS DE LOS CINES A LOS ADMINISTRADORES DE CINES==========================
+    
+    //Constante que permite retornar los cines en los que se encuentra asignado el adminstrador de cine
+    private final String CINES_ASOCIADOS_CODIGO = "SELECT c.codigo, c.nombre, c.estado_anuncios, c.monto_ocultacion, c.fecha_creacion, c.descripcion, c.ubicacion FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ? LIMIT ? OFFSET ?";
+
+    
+    
     //Metodo que sirve para poder registrar un nuevo cine en el sistema
     public boolean crearNuevoCine(CineDTO cineNuevo) throws ErrorInesperadoException, FormatoInvalidoException {
 
@@ -448,4 +455,52 @@ public class CineDB {
     }
 
     //==================================== FIN DEL APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
+    //===================================== APARTADO DE CONSULTAS QUE PERMITEN INTERACTUAR CON LOS CINES ASOCIADOS DE UN ADMINISTRADOR===============
+    //Metodo que permite obtener el listado completo de cines asociados a un administrador de cine
+    public List<CineDTO> cinesAsociadosAdministradorCine(String idUsuario, CantidadCargaRequest CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (StringUtils.isBlank(idUsuario)) {
+            throw new FormatoInvalidoException("El id del usuario esta vacio");
+        }
+
+        CostoCineDB costoCineDb = new CostoCineDB();
+
+        List<CineDTO> listadoCines = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CINES_ASOCIADOS_CODIGO);) {
+
+            query.setString(1,idUsuario.trim());
+            query.setInt(2, cargaRequest.getLimit());
+            query.setInt(3, cargaRequest.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                CineDTO cineEncontrado = new CineDTO(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getBoolean("estado_anuncios"),
+                        resultSet.getBigDecimal("monto_ocultacion").doubleValue(),
+                        resultSet.getDate("fecha_creacion").toLocalDate(),
+                        resultSet.getString("descripcion"),
+                        resultSet.getString("ubicacion")
+                );
+
+                listadoCines.add(cineEncontrado);
+            }
+
+            for (CineDTO cine : listadoCines) {
+                double costoActual = costoCineDb.obtenerCostoActual(cine.getCodigo());
+                cine.setCostoCine(costoActual);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los cines asociados al sistema");
+        }
+
+        return listadoCines;
+    }
+
 }

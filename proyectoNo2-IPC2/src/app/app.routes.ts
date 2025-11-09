@@ -44,6 +44,7 @@ import { EditarConfiguracionPrecioComponent } from '../components/administrador-
 import { ConfigurarTarifasComponent } from '../components/administrador-sistema/configurar-tarifas/configurar-tarifas.component';
 import { EditarTarifasPrecioComponent } from '../components/administrador-sistema/editar-tarifas-precio/editar-tarifas-precio.component';
 import { CineDashboardComponent } from '../components/cines/cine-dashboard/cine-dashboard.component';
+import { GestionCinesAdminCineComponent } from '../components/administrador-cine/gestion-cines-admin-cine/gestion-cines-admin-cine.component';
 
 
 export const routes: Routes = [
@@ -256,6 +257,10 @@ export const routes: Routes = [
         //Directorios de funcionalidades dentro de la pagina de administradores de cine
         children: [
             {
+                path: 'cines/asociados',
+                component: GestionCinesAdminCineComponent,
+            },
+            {
                 path: 'reportes/salas/comentadas',
                 component: ReporteComentariosSalasComentadasComponent,
             },
@@ -274,6 +279,11 @@ export const routes: Routes = [
             {
                 path: 'perfil',
                 component: VerPerfilComponent,
+            },
+             {
+                path: '',
+                redirectTo: 'cines/asociados',
+                pathMatch: 'full'
             },
 
         ]

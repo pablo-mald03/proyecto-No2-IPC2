@@ -1,0 +1,27 @@
+<main class="mis-anuncios-page">
+
+    <section class="mis-anuncios-container">
+        <h1 class="titulo text-info"> <i class="bi bi-award me-2"></i> Cines Asignados</h1>
+        <p class="descripcion mt-4 mb-3 ">Gestiona los cines a los que fuiste asignado</p>
+
+        <div class="reportes-grid d-flex flex-column gap-4">
+            <!--   @for (anuncio of anunciosMostrados; track anuncio.codigo) {
+
+            <app-anuncios-comprados-anunciante-cards
+                [anuncio]="anuncio" [idUsuario]="idUsuario"></app-anuncios-comprados-anunciante-cards>
+            }
+            @empty {
+            <div class="text-center text-light mt-5">
+                <h5>No tienes anuncios comprados</h5>
+            </div>
+            }-->
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-cargar-mas" (click)="mostrarMasCines()" [disabled]="todosCargados">
+                {{ todosCargados ? 'No hay más Anuncios' : 'Cargar más' }}
+            </button>
+        </div>
+
+    </section>
+</main>

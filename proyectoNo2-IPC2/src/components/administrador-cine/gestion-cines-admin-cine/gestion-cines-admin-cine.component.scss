@@ -1,0 +1,88 @@
+.mis-anuncios-page {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 4rem;
+    background: linear-gradient(135deg, #070707, #806202);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    padding-bottom: 4rem;
+}
+
+.titulo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #f9d423;
+}
+
+.mis-anuncios-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 2rem 3rem;
+    width: 90%;
+    max-width: 900px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+
+.descripcion {
+    font-size: 1rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+}
+
+.anuncios-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-cargar-mas:hover {
+    background-position: right center;
+    color: #fff;
+    box-shadow: 0 6px 25px rgba(255, 201, 10, 0.5);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.btn-cargar-mas {
+    position: relative;
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #6b0899, #f39c12, #9b59b6);
+    background-size: 200% 200%;
+    transition: all 0.4s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-cargar-mas:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #4e193c;
+    box-shadow: none;
+    color: #ccc;
+}
