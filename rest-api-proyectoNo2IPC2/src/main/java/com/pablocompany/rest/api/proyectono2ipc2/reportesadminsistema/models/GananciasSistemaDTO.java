@@ -30,6 +30,12 @@ public class GananciasSistemaDTO {
         this.pagoBloqueoAnuncios = new ArrayList<>();
         this.anunciosComprados = new ArrayList<>();
     }
+    
+    public GananciasSistemaDTO() {
+        this.costosCine = new ArrayList<>();
+        this.pagoBloqueoAnuncios = new ArrayList<>();
+        this.anunciosComprados = new ArrayList<>();
+    }
 
     public List<CineCostoDTO> getCostosCine() {
         return costosCine;
