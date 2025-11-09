@@ -69,12 +69,12 @@ public class CineDB {
     //Constante que permite retornar los cines en los que se encuentra asignado el adminstrador de cine
     private final String CINES_ASOCIADOS_CODIGO = "SELECT c.codigo, c.nombre, c.estado_anuncios, c.monto_ocultacion, c.fecha_creacion, c.descripcion, c.ubicacion FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ? LIMIT ? OFFSET ?";
 
-       //Constante que permite obtener la cantidad de cines a los que esta asociado un administrador de cine
+    //Constante que permite obtener la cantidad de cines a los que esta asociado un administrador de cine
     private final String CANTIDAD_CINES_ASOCIADOS = "SELECT COUNT(*) AS `cantidad` FROM cine c JOIN gestion_cine gc ON gc.codigo_cine = c.codigo WHERE gc.id_usuario = ?";
 
-    
-    
-    
+    //Constante que representa el estado de anuncios del cine 
+    private final String DESACTIVAR_ANUNCIOS = "UPDATE cine SET estado_anuncios = ? WHERE codigo = ?";
+
     //Metodo que sirve para poder registrar un nuevo cine en el sistema
     public boolean crearNuevoCine(CineDTO cineNuevo) throws ErrorInesperadoException, FormatoInvalidoException {
 
@@ -151,7 +151,25 @@ public class CineDB {
 
     }
 
-    //Metodo delegado para obtener la cantidad de cines registrados en el sistema
+    //Metodo que sirve para poder generar la transaccion para insertar cine
+    public int cambiarEstadoAnuncios(Connection conexion, boolean estado, String idCine) throws ErrorInesperadoException {
+
+        try (PreparedStatement preparedStmt = conexion.prepareStatement(DESACTIVAR_ANUNCIOS);) {
+
+            preparedStmt.setBoolean(1, estado);
+            preparedStmt.setString(2, idCine.trim());
+
+            int filasAfectadas = preparedStmt.executeUpdate();
+
+            return filasAfectadas;
+
+        } catch (SQLException ex) {
+            throw new ErrorInesperadoException("No se ha podido crear el nuevo registro de cine.");
+        }
+
+    }
+
+    //Metodo delegado para cambiar el estado de los anuncios del cine
     public int cantidadCinesRegistrados() throws ErrorInesperadoException, DatosNoEncontradosException {
 
         Connection connection = DBConnectionSingleton.getInstance().getConnection();

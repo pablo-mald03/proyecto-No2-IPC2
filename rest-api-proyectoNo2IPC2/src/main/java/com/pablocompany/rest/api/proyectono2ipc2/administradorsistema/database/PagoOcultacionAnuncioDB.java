@@ -8,6 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.Pag
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.PagoOcultacionAnuncios;
 import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.database.BilleteraCineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCineDTO;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.database.CineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
@@ -41,6 +42,7 @@ public class PagoOcultacionAnuncioDB {
             
             BilleteraCineDB billeteraCine = new BilleteraCineDB();
             PagoBloqueoAnunciosDB pagoBloqueoAnunciosDb = new PagoBloqueoAnunciosDB();
+            CineDB cineDb = new CineDB();
 
             int filasAfectadas = generarPago(pagoOcultacion, conexion);
             
@@ -48,8 +50,9 @@ public class PagoOcultacionAnuncioDB {
             
             int filasAfectadasBilletera = billeteraCine.modificarSaldo(conexion, new BilleteraCineDTO(pagoOcultacion.getCodigoCine(), saldoActual, "null"));
             
+            int filasAfectadasCine = cineDb.cambiarEstadoAnuncios(conexion, false, pagoOcultacion.getCodigoCine());
 
-            if (filasAfectadas > 0 && filasAfectadasBilletera > 0 && filasAfectadasBloqueo > 0) {
+            if (filasAfectadas > 0 && filasAfectadasBilletera > 0 && filasAfectadasBloqueo > 0 && filasAfectadasCine > 0) {
 
                 conexion.commit();
                 return true;

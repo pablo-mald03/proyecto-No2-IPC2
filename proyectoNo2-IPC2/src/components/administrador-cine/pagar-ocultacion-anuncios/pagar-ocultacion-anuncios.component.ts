@@ -26,7 +26,7 @@ export class PagarOcultacionAnunciosComponent {
   //Atributos del modal 
   mostrarModal = false;
   mensajeModal = '';
-  urlRedireccion = '/menu-admin-sistema/cines/asociados';
+  urlRedireccion = '/menu-admin-cine/cines/asociados';
   tipoModal: 'exito' | 'error' | 'info' = 'info';
 
   //Atributos para mostrar el popup cuando haya un error
@@ -116,7 +116,7 @@ export class PagarOcultacionAnunciosComponent {
     const pagoOcultacion: PagoOcultacionAnunciosDTO = {
       monto: this.cine.montoOcultacion,
       codigoCine: this.cine.codigo,
-      fechaPago: new Date(fechaISO)
+      fechaPago: fechaISO,
     };
 
     this.cinesAsociadosService.pagarOcultacionCine(pagoOcultacion).subscribe({
