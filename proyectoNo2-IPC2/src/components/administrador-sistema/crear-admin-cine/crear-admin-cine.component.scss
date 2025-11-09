@@ -6,6 +6,22 @@
     background: radial-gradient(circle at center, #1b002b, #000);
 }
 
+.selectable-card {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.selectable-card:hover {
+  border-color: #ffc107;
+  transform: scale(1.05);
+}
+
+.selectable-card.selected {
+  border-color: #00ff91;
+  background: rgba(0, 255, 145, 0.15);
+}
+
 .form-container {
     width: 90%;
     max-width: 900px;

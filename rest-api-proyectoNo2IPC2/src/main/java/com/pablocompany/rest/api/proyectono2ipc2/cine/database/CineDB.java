@@ -8,6 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.database.Billeter
 import com.pablocompany.rest.api.proyectono2ipc2.billeteracine.models.BilleteraCine;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.dtos.CantidadCargaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.Cine;
+import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineAsociadoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.cine.models.CineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.connectiondb.DBConnectionSingleton;
 import com.pablocompany.rest.api.proyectono2ipc2.costocine.database.CostoCineDB;
@@ -59,6 +60,9 @@ public class CineDB {
 
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
     private final String CONSULTAR_CINE_CODIGO_DASHBOARD = "SELECT nombre, descripcion, ubicacion FROM cine WHERE codigo = ?";
+   
+    //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
+    private final String CONSULTAR_CINE_CODIGO_VALOR = "SELECT codigo, nombre FROM cine LIMIT ? OFFSET ?";
 
     //Metodo que sirve para poder registrar un nuevo cine en el sistema
     public boolean crearNuevoCine(CineDTO cineNuevo) throws ErrorInesperadoException, FormatoInvalidoException {
@@ -334,4 +338,49 @@ public class CineDB {
             }
         }
     }
+    
+    
+    
+   //==================================== APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
+   
+    
+    //Metodo que permite obtener el listado de cines llave-valor
+    public List<CineAsociadoDTOResponse> obtenerListadoCinesLlaveValor(CantidadCargaRequest cargaRequest) throws FormatoInvalidoException, ErrorInesperadoException {
+
+        if (cargaRequest == null) {
+            throw new FormatoInvalidoException("La referencia de request esta vacia");
+        }
+
+        CostoCineDB costoCineDb = new CostoCineDB();
+
+        List<CineAsociadoDTOResponse> listadoCines = new ArrayList<>();
+
+        Connection connection = DBConnectionSingleton.getInstance().getConnection();
+
+        try (PreparedStatement query = connection.prepareStatement(CONSULTAR_CINE_CODIGO_VALOR);) {
+
+            query.setInt(1, cargaRequest.getLimit());
+            query.setInt(2, cargaRequest.getOffset());
+
+            ResultSet resultSet = query.executeQuery();
+
+            while (resultSet.next()) {
+                CineAsociadoDTOResponse cineAsociado = new CineAsociadoDTOResponse(
+                        resultSet.getString("codigo"),
+                        resultSet.getString("nombre")
+                       
+                );
+
+                listadoCines.add(cineAsociado);
+            }
+
+        } catch (SQLException e) {
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los cines asociados al sistema");
+        }
+
+        return listadoCines;
+    }
+
+    //==================================== FIN DEL APARTADO DE METODOS QUE PRODUCEN INFORMACION PARA LOS MENUS =========================
+    
 }

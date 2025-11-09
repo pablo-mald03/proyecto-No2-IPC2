@@ -1,99 +1,230 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TipoUsuarioEnum } from '../../../models/usuarios/tipo-usuario-enum';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { UsuarioService } from '../../../services/usuarios-service/usuario.service';
+import { CinesAsociadosDTO } from '../../../models/cines/cines-asociados-dto';
+import { CommonModule, NgFor } from '@angular/common';
+import { Popup } from '../../../shared/popup/popup';
+import { CineInformacionService } from '../../../services/cine-service/cine-informacion.service';
+import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
+import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
 
 @Component({
   selector: 'app-crear-admin-cine',
-  imports: [FormsModule, ReactiveFormsModule,RouterLink,RouterLinkActive],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, RouterLinkActive, CommonModule, NgFor, SharedPopupComponent],
   templateUrl: './crear-admin-cine.component.html',
-  styleUrl: './crear-admin-cine.component.scss'
+  styleUrl: './crear-admin-cine.component.scss',
+  providers: [Popup],
 })
-export class CrearAdminCineComponent implements OnInit{
+export class CrearAdminCineComponent implements OnInit {
 
 
-
-  //Atributos para crear un nuevo usuario
   nuevoRegistroForm!: FormGroup;
-  tipoUsuarioEnum = TipoUsuarioEnum;
+  fotoSeleccionada: string | null = null;
 
-  archivoSeleccionado!: File | null;
+  //Arreglo de cines asociados
+  cinesDisponibles: CinesAsociadosDTO[] = [];
 
-  router = inject(Router);
+
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
+  indiceActual = 0;
+  cantidadPorCarga = 2;
+  totalReportes = 0;
+  todosCargados = false;
+
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
+
+
+  //Cines que se envian via llave valor
+  cinesSeleccionados: CinesAsociadosDTO[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
-
-    //Pendiente cambiar el service
-    private usuarioService: UsuarioService
-  ) {
-
-  }
+    private fb: FormBuilder,
+    private popUp: Popup,
+    private cineInformacionService: CineInformacionService,
+  ) { }
 
   ngOnInit(): void {
 
-    this.nuevoRegistroForm = this.formBuilder.group(
-      {
-        nombre: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
-        identificacion: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
-        id: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
-        password: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
-        confirmpassword: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(5)]],
-        correo: [null, [Validators.required, Validators.maxLength(150), Validators.email,  Validators.pattern(/^[a-zA-Z0-9._%+-]+@cinema\.com$/)]],
-        telefono: [null, [Validators.required, Validators.maxLength(150), Validators.pattern('^[0-9]+$')]],
-        codigoRol: [TipoUsuarioEnum.ADMINISTRADOR_CINE, Validators.required],
-        pais: [null, [Validators.required, Validators.maxLength(150), Validators.minLength(2)]],
+    this.indiceActual = 0;
+    this.cinesDisponibles = [];
+    this.todosCargados = true;
+
+
+    this.nuevoRegistroForm = this.fb.group({
+      nombre: ['', Validators.required],
+      identificacion: ['', Validators.required],
+      id: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(5)]],
+      confirmpassword: ['', [Validators.required, Validators.minLength(5)]],
+      correo: ['', [Validators.required, Validators.email]],
+      telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
+      pais: ['', Validators.required],
+      foto: [null],
+      codigosCine: [[], this.tieneUnCine.bind(this)]
+    });
+
+
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
+
+      this.mostrarPopup = false;
+
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
+
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
       }
-    )
+    });
+
+
+
+    this.cineInformacionService.cantidadRegistros().subscribe({
+      next: (cantidadDTO: CantidadRegistrosDTO) => {
+
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.cinesDisponibles = [];
+        this.todosCargados = false;
+
+        this.cargarMasCines();
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+  }
+
+  //Metodo util para mostrar errors
+  mostrarError(error: any): void {
+
+    let mensaje = 'Ocurrió un error';
+
+    if (error.error && error.error.mensaje) {
+      mensaje = error.error.mensaje;
+    } else if (error.message) {
+      mensaje = error.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+  }
+
+  //Metodo que permite ir cargando dinamicamente los cines
+  cargarMasCines(): void {
+
+    if (this.todosCargados) return;
+
+    this.cineInformacionService.listadoRegistros(this.cantidadPorCarga, this.indiceActual).subscribe({
+      next: (response: CinesAsociadosDTO[]) => {
+        this.ampliarResultados(response);
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
 
   }
 
+  //Metodo encargado de ir ampliando dinamicamente los cines registrados o asociados en el sistema
+  ampliarResultados(response: CinesAsociadosDTO[]): void {
+
+    if (!response || response.length === 0) {
+      this.todosCargados = true;
+      return;
+    }
+
+    this.cinesDisponibles.push(...response);
+    this.indiceActual += response.length;
+
+    if (this.indiceActual >= this.totalReportes) {
+      this.todosCargados = true;
+    }
+
+  }
+
+  //Metodo que permite verificar que tenga al menos un cine
+  tieneUnCine(control: FormControl) {
+    const value = control.value;
+    if (Array.isArray(value) && value.length > 0) {
+      return null;
+    }
+    return { sinCines: true };
+  }
+
+
+  // Toggle (agregar o quitar) cines seleccionados
+  toggleSeleccion(cine: CinesAsociadosDTO): void {
+    const index = this.cinesSeleccionados.findIndex(c => c.codigo === cine.codigo);
+    if (index >= 0) {
+      this.cinesSeleccionados.splice(index, 1);
+    } else {
+      this.cinesSeleccionados.push(cine);
+    }
+
+    const codigos = this.cinesSeleccionados.map(c => c.codigo);
+    this.nuevoRegistroForm.patchValue({ codigosCine: codigos });
+  }
+
+
+  // Saber si una card ya está seleccionada
+  estaSeleccionado(cine: CinesAsociadosDTO): boolean {
+    return this.cinesSeleccionados.some(c => c.codigo === cine.codigo);
+  }
+
+  //Cargar imagen y convertirla a Base64
+  seleccionHecha(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fotoSeleccionada = reader.result as string;
+        this.nuevoRegistroForm.patchValue({ foto: this.fotoSeleccionada });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+
+  //Metodo que permite reiniciar formulario y selección
+  reiniciar(): void {
+    this.nuevoRegistroForm.reset();
+    this.cinesSeleccionados = [];
+    this.fotoSeleccionada = null;
+  }
+
+  //Metodo que envia el formulario
   submit(): void {
     if (this.nuevoRegistroForm.valid) {
-
       const formData = new FormData();
 
       Object.entries(this.nuevoRegistroForm.value).forEach(([key, value]) => {
-        formData.append(key, value as string);
+        if (key === 'codigosCine') {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value as any);
+        }
       });
 
-      formData.append('codigoRol', 'ADMINISTRADOR_CINE');
-
-      if (this.archivoSeleccionado) {
-        formData.append('foto', this.archivoSeleccionado);
-      }
-
-      //Pendiente conectar al backend
-      /*this.usuarioService.crearNuevoUsuario(formData).subscribe({
-        next: () => {
-          console.log('Usuario creado correctamente');
-          this.reiniciar();
-        },
-        error: (err) => {
-          console.error('Error al crear usuario:', err);
-        }
-      });*/
-
-
-
-      this.router.navigateByUrl('/menu-admin-sistema/admins-cine');
-
+      console.log('Datos enviados:', this.nuevoRegistroForm.value);
+      // this.adminService.crearAdministrador(formData).subscribe(...)
+    } else {
+      this.nuevoRegistroForm.markAllAsTouched();
     }
-  }
-
-  seleccionHecha(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.archivoSeleccionado = input.files[0];
-    }
-  }
-
-  reiniciar(): void {
-    this.nuevoRegistroForm.reset({
-      TipoUsuario: TipoUsuarioEnum.USUARIO,
-    });
-    this.archivoSeleccionado = null;
   }
 
 }

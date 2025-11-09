@@ -6,9 +6,7 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.anunciante;
 
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.AnuncioRegistradoDTOResponse;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoClienteRequest;
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.dtos.CambiarEstadoRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegistradosClienteService;
-import com.pablocompany.rest.api.proyectono2ipc2.anuncios.services.AnunciosRegistradosService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;

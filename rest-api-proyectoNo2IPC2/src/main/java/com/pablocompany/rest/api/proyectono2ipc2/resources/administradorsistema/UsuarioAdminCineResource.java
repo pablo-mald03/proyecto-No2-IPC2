@@ -4,22 +4,26 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.resources.administradorsistema;
 
+import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.AdministradorCineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.services.UsuarioAdministradoresCineService;
-import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.services.UsuariosAdministradoresSistemaService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UsuarioDatosResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -29,10 +33,24 @@ import java.util.Map;
 public class UsuarioAdminCineResource {
 
     //Endpont que comunica al administrador de sistema para poder crear administradores de cine
-    @GET
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response crearAdministrador() {
+    public Response crearAdministrador(
+            @FormDataParam("telefono") String telefono,
+            @FormDataParam("password") String password,
+            @FormDataParam("pais") String pais,
+            @FormDataParam("nombre") String nombre,
+            @FormDataParam("identificacion") String identificacion,
+            @FormDataParam("id") String id,
+            @FormDataParam("correo") String correo,
+            @FormDataParam("foto") InputStream foto,
+            @FormDataParam("foto") FormDataContentDisposition fotoDetalle,
+            @FormDataParam("confirmpassword") String confirmpassword,
+            @FormDataParam("codigosCine") String codigosCine) {
 
+        
+        AdministradorCineDTO administradorCineDTO = new AdministradorCineDTO(telefono, password, pais, nombre, identificacion, id, correo, foto, fotoDetalle, confirmpassword, codigosCine);
+        
         return Response.ok("").build();
     }
 

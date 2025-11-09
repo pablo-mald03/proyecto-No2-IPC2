@@ -7,7 +7,6 @@ package com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.services;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.database.UsuarioSistemaDB;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.dtos.AdministradoresRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.billetera.models.BilleteraDigital;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;

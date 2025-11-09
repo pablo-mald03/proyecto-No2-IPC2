@@ -76,7 +76,7 @@
                     nuevoRegistroForm.controls['password'].touched) {
                     <div class="invalid-feedback">
                         <div>
-                            Ingrese una contraseña con 8 caracteres minimo
+                            Ingrese una contraseña con 5 caracteres minimo
                         </div>
                     </div>
                     }
@@ -93,7 +93,7 @@
                     nuevoRegistroForm.controls['confirmpassword'].touched) {
                     <div class="invalid-feedback">
                         <div>
-                            Ingrese una contraseña con 8 caracteres minimo
+                            Ingrese una contraseña con 5 caracteres minimo
                         </div>
                     </div>
                     }
@@ -151,7 +151,8 @@
 
                 <div class="col-12">
                     <label class="form-label">Foto de Perfil</label>
-                    <input class="form-control form-control-lg" type="file" accept=".png, .jpg, .jpeg, image/png, image/jpeg" id="foto" name="foto"
+                    <input class="form-control form-control-lg" type="file"
+                        accept=".png, .jpg, .jpeg, image/png, image/jpeg" id="foto" name="foto"
                         (change)="seleccionHecha($event)">
                 </div>
 
@@ -159,10 +160,53 @@
 
             <hr class="my-4 border-secondary">
 
+
+            <div class="row g-3 mt-3">
+                <div class="col-md-6">
+                    <h5 class="text-warning">Cines Disponibles</h5>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
+                        <div *ngFor="let cine of cinesDisponibles" class="card bg-dark text-light p-3 selectable-card"
+                            [class.selected]="estaSeleccionado(cine)" (click)="toggleSeleccion(cine)"
+                            style="width: 12rem; cursor: pointer;">
+                            <h6 class="text-warning">{{ cine.nombre }}</h6>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button class="btn btn-outline-success btn-sm" (click)="cargarMasCines()"
+                            [disabled]="todosCargados">
+                            <i class="bi bi-plus-circle"></i> Cargar más
+                        </button>
+
+                        <div *ngIf="todosCargados" class="mt-2 text-secondary small">
+                            <i class="bi bi-check-circle"></i> Todos los cines han sido cargados
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="text-warning">Cines Asignados</h5>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
+                        <div *ngFor="let cine of cinesSeleccionados"
+                            class="card bg-secondary bg-opacity-50 text-light p-3" style="width: 12rem;">
+                            <h6>{{ cine.nombre }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-danger text-center mt-2" *ngIf="nuevoRegistroForm.get('codigosCine')?.hasError('sinCines') 
+            && nuevoRegistroForm.get('codigosCine')?.touched">
+                Debes asignar al menos un cine al administrador.
+            </div>
+
+            <hr class="my-4 border-secondary">
+
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <button type="button" class="btn btn-outline-light px-4 py-2 rounded-pill"
                     (click)="reiniciar()">Limpiar</button>
-                <button type="submit" class="btn btn-gradient text-black px-4 py-2 rounded-pill fw-semibold" [disabled]="nuevoRegistroForm.invalid" >
+                <button type="submit" class="btn btn-gradient text-black px-4 py-2 rounded-pill fw-semibold"
+                    [disabled]="nuevoRegistroForm.invalid">
                     <i class="bi bi-check-circle me-2"></i> Registrar Administrador
                 </button>
             </div>
@@ -170,3 +214,9 @@
         </form>
     </div>
 </main>
+
+<ng-container *ngIf="mostrarPopup">
+    <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+        (cerrarEvent)="mostrarPopup = false">
+    </app-shared-popup>
+</ng-container>
