@@ -4,8 +4,10 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.services;
 
+import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.database.UsuarioCineDB;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.database.UsuarioSistemaDB;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.dtos.AdministradoresRequest;
+import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.AdministradorCineDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.billetera.models.BilleteraDigital;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
@@ -29,16 +31,21 @@ import org.apache.commons.lang3.StringUtils;
 public class UsuarioAdministradoresCineService {
 
     //MUY PENDIENTE
-    
     //Metodo delegado para poder crear los administradores de cine 
-    public boolean crearAdministrador(Usuario usuarioNuevo, String confirmPassword) throws EntidadExistenteException, FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
+    public boolean crearAdministrador(AdministradorCineDTO usuarioAdministrador, String confirmPassword) throws EntidadExistenteException, FormatoInvalidoException, ErrorInesperadoException, DatosNoEncontradosException {
 
-        if (usuarioNuevo.esUsuarioValido(confirmPassword, 0)) {
+        Usuario usuarioNuevo = extraerDatos(usuarioAdministrador, confirmPassword);
+
+        if (usuarioNuevo.esUsuarioValido(confirmPassword, 1)) {
 
             RolDB rolDb = new RolDB();
 
             try {
 
+                if(!correoValido(usuarioNuevo.getCorreo())){
+                     throw new FormatoInvalidoException("El correo del administrador de cine debe ser @cinema.com");
+                }
+                
                 TipoUsuarioEnum tipoUsuario = TipoUsuarioEnum.ADMINISTRADOR_CINE;
 
                 String codigoRol = rolDb.obtenerCodigoRol(tipoUsuario);
@@ -52,8 +59,10 @@ public class UsuarioAdministradoresCineService {
                 }
 
                 if (!usuarioDb.exiteUsuario(usuarioNuevo)) {
-                    BilleteraDigital billetera = new BilleteraDigital(0, usuarioNuevo.getId());
-                    return usuarioDb.insertarUsuario(usuarioNuevo, fotoPerfil, codigoRol, billetera);
+
+                    UsuarioCineDB usuarioCineDb = new UsuarioCineDB();
+
+                    return usuarioCineDb.crearAdministradorCine(usuarioNuevo,usuarioAdministrador.getListadoCinesAsociados() ,fotoPerfil, codigoRol);
                 }
 
             } catch (IllegalArgumentException e) {
@@ -66,9 +75,28 @@ public class UsuarioAdministradoresCineService {
 
         throw new ErrorInesperadoException("No se ha podido registrar al administrador de sistema");
     }
-    
-    
-    
+
+    //Restringe el correo del usuario
+    private boolean correoValido(String correoEntrante) {
+        String regex = "^[\\w.-]+@cinema\\.com$";
+        return correoEntrante.matches(regex);
+    }
+
+    //Metodo encargado de extraer los datos para crear el nuevo usuario
+    private Usuario extraerDatos(AdministradorCineDTO usuarioAdministrador, String password) {
+
+        return new Usuario(
+                usuarioAdministrador.getId(),
+                usuarioAdministrador.getCorreo(),
+                usuarioAdministrador.getNombre(),
+                usuarioAdministrador.getPassword(),
+                usuarioAdministrador.getTelefono(),
+                usuarioAdministrador.getPais(),
+                usuarioAdministrador.getIdentificacion(),
+                TipoUsuarioEnum.ADMINISTRADOR_CINE.toString(),
+                usuarioAdministrador.getFoto(),
+                usuarioAdministrador.getFotoDetalle());
+    }
 
     //Metodo delegado para poder validar y extraer la solicitud de request
     private AdministradoresRequest extraerDatos(String limit, String offset) throws FormatoInvalidoException {

@@ -8,6 +8,7 @@ import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.Adm
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.models.CantidadRegistrosDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.administradorsistema.services.UsuarioAdministradoresCineService;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
+import com.pablocompany.rest.api.proyectono2ipc2.excepciones.EntidadExistenteException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.usuarios.dtos.UsuarioDatosResponse;
@@ -45,13 +46,33 @@ public class UsuarioAdminCineResource {
             @FormDataParam("correo") String correo,
             @FormDataParam("foto") InputStream foto,
             @FormDataParam("foto") FormDataContentDisposition fotoDetalle,
-            @FormDataParam("confirmpassword") String confirmpassword,
+            @FormDataParam("confirmpassword") String confirmPassword,
             @FormDataParam("codigosCine") String codigosCine) {
 
         
-        AdministradorCineDTO administradorCineDTO = new AdministradorCineDTO(telefono, password, pais, nombre, identificacion, id, correo, foto, fotoDetalle, confirmpassword, codigosCine);
+        AdministradorCineDTO administradorCineDTO = new AdministradorCineDTO(telefono, password, pais, nombre, identificacion, id, correo, foto, fotoDetalle, confirmPassword, codigosCine);
         
-        return Response.ok("").build();
+        UsuarioAdministradoresCineService usuarioAdministradoresCineService = new UsuarioAdministradoresCineService();
+
+        try {
+
+            if (usuarioAdministradoresCineService.crearAdministrador(administradorCineDTO, confirmPassword)) {
+                return Response.status(Response.Status.CREATED).build();
+            } else {
+
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", "No se pudo crear el adminisitrador de cine")).build();
+            }
+
+        } catch (EntidadExistenteException ex) {
+
+            return Response.status(Response.Status.CONFLICT).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (FormatoInvalidoException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (ErrorInesperadoException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Map.of("mensaje", ex.getMessage())).build();
+        } catch (DatosNoEncontradosException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(Map.of("mensaje", ex.getMessage())).build();
+        }
     }
 
     //Endpoint que ayuda a obtener el listado general de administradores de cine
