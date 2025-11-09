@@ -5,6 +5,9 @@ import { AnunciosCardsPaginaComponent } from "../anuncios-cards-pagina/anuncios-
 import { AnuncioPublicidadDTO } from '../../../models/anuncios/anuncio-publicidad-dto';
 import { PublicidadPincipalService } from '../../../services/principal-service/publicidad-principal.service';
 import { FormsModule, NgModel } from '@angular/forms';
+import { CineInformacionService } from '../../../services/cine-service/cine-informacion.service';
+import { CineInformacionDTO } from '../../../models/cines/cine-informacion-dto';
+import { CantidadRegistrosDTO } from '../../../models/usuarios/cantidad-registros-dto';
 
 @Component({
   selector: 'app-principal-cines.component',
@@ -22,92 +25,106 @@ export class PrincipalCinesComponent implements OnInit {
 
   constructor(
     private publicidadService: PublicidadPincipalService,
+    private cineInformacionServic: CineInformacionService,
   ) { }
 
   //Atributos que permiten manejar las busquedas filtradas de cines
   terminoBusqueda: string = '';
-  cinesFiltrados: Cine[] = [];
+  cinesFiltrados: CineInformacionDTO[] = [];
+
+
+  cinesMostrados: CineInformacionDTO[] = [];
 
 
 
-  cines: Cine[] = [];
-  cinesMostrados: Cine[] = [];
+  //Apartado de atributos que sirven para cargar dinamicamente los atributos
   indiceActual = 0;
-  cantidadPorCarga = 2;
+  cantidadPorCarga = 3;
+  totalReportes = 0;
   todosCargados = false;
 
 
+  //Metodo que permite cargar los datos para poder motrar en la pagina
   ngOnInit(): void {
 
     this.cargarAnunciosAleatorios();
 
-    this.cinesMostrados = [
-      {
-        codigo: 'CIN001',
-        nombre: 'Cinemark Oakland',
-        estadoAnuncio: true,
-        montoOcultacion: 1500,
-        fechaCreacion: '2024-02-01T00:00:00',
-        descripcion: 'Uno de los cines más modernos de la ciudad con sonido Dolby Atmos.',
-        ubicacion: 'Zona 10, Ciudad de Guatemala'
-      },
-      {
-        codigo: 'CIN002',
-        nombre: 'Cine Capitol',
-        estadoAnuncio: false,
-        montoOcultacion: 800,
-        fechaCreacion: '2023-07-15T00:00:00',
-        descripcion: 'Histórico cine restaurado con encanto clásico y proyecciones independientes.',
-        ubicacion: 'Centro Histórico, Ciudad de Guatemala'
-      },
-      {
-        codigo: 'CIN003',
-        nombre: 'Cine Pradera Xela',
-        estadoAnuncio: true,
-        montoOcultacion: 1200,
-        fechaCreacion: '2022-12-10T00:00:00',
-        descripcion: 'Sala premium con butacas reclinables y pantalla gigante.',
-        ubicacion: 'Quetzaltenango, Guatemala'
-      },
-      {
-        codigo: 'CIN004',
-        nombre: 'Cine Portales',
-        estadoAnuncio: true,
-        montoOcultacion: 1300,
-        fechaCreacion: '2022-10-01T00:00:00',
-        descripcion: 'Un cine con amplia oferta gastronómica y salas confortables.',
-        ubicacion: 'Zona 17, Ciudad de Guatemala'
-      }
-    ];
-
-
     this.cinesFiltrados = this.cinesMostrados;
 
-    this.cargarMasCines();
+    this.cargarAnunciosRegistrados();
   }
+
+  //Metodo que sirve para cargar la cantidad de cines necesarios
+  cargarAnunciosRegistrados() {
+
+    this.cineInformacionServic.cantidadRegistros().subscribe({
+      next: (cantidadDTO: CantidadRegistrosDTO) => {
+        this.totalReportes = cantidadDTO.cantidad;
+        this.indiceActual = 0;
+        this.cinesMostrados = [];
+        this.todosCargados = false;
+
+        this.cargarMasRegistros();
+      },
+      error: (error: any) => {
+
+        //this.mostrarError(error);
+
+      }
+    });
+
+  }
+
 
   //Metodo que sirve para ir cargando mas cines dinamicamente
   cargarMasCines(): void {
-    const siguienteBloque = this.cines.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
 
-    this.cinesMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
-
-    if (this.indiceActual >= this.cines.length) {
-      this.todosCargados = true;
+    if (this.todosCargados || this.cinesMostrados.length === 0) {
+      return;
     }
+
+    this.cargarMasRegistros();
   }
 
 
-  buscarCines() {
+  //Carga dinamicamente la cantidad establecida de anuncios para no saturar la web
+  cargarMasRegistros(): void {
+
+    this.cineInformacionServic.listadoRegistrosPrincipal(this.cantidadPorCarga, this.indiceActual).subscribe({
+      next: (response: CineInformacionDTO[]) => {
+
+        if (!response || response.length === 0) {
+          this.todosCargados = true;
+          return;
+        }
+
+        this.cinesMostrados.push(...response);
+        this.indiceActual += response.length;
+
+        if (this.indiceActual >= this.totalReportes) {
+          this.todosCargados = true;
+        }
+
+
+      },
+      error: (error: any) => {
+
+        // this.mostrarError(error);
+
+      }
+    });
+  }
+
+
+  //Metodo que sirve para poder buscar a los cines 
+  buscarCines(): void {
     const termino = this.terminoBusqueda.toLowerCase().trim();
+
     if (!termino) {
-      this.cinesFiltrados = this.cinesMostrados;
+      this.cinesFiltrados = [...this.cinesMostrados]; 
       return;
     }
+
     this.cinesFiltrados = this.cinesMostrados.filter(cine =>
       cine.nombre.toLowerCase().includes(termino)
     );
@@ -129,7 +146,6 @@ export class PrincipalCinesComponent implements OnInit {
   // Cargar anuncios aleatorios desde backend
   private cargarAnunciosAleatorios(): void {
     const cantidad = this.generarNumeroAleatorio(3, 6);
-    console.log('Cantidad aleatoria solicitada:', cantidad);
 
     this.publicidadService.listadoPublicidad(cantidad).subscribe({
       next: (anuncios: AnuncioPublicidadDTO[]) => {
@@ -144,8 +160,6 @@ export class PrincipalCinesComponent implements OnInit {
           }
         });
 
-        console.log('Anuncios izquierda:', this.anunciosIzquierda);
-        console.log('Anuncios derecha:', this.anunciosDerecha);
       },
       error: (err) => {
         console.error('Error al obtener anuncios aleatorios:', err);

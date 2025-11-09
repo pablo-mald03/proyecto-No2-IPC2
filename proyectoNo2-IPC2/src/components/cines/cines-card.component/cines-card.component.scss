@@ -16,7 +16,6 @@
   box-shadow: 0 14px 40px rgba(0,0,0,0.6);
 }
 
-/* ---- imagen como fondo CSS ---- */
 .cine-img {
   position: relative;
   height: 180px;
@@ -26,13 +25,11 @@
   justify-content: flex-start;
   padding: 12px;
   color: white;
-  /* background image is set inline via ngStyle (linear-gradient) */
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
-/* subtle texture: diagonal lines using repeating-linear-gradient over the gradient */
 .cine-img::before {
   content: "";
   position: absolute;
@@ -48,7 +45,6 @@
   mix-blend-mode: overlay;
 }
 
-/* initial circle top-left */
 .cine-img::after {
   content: attr(data-initial);
   position: absolute;
@@ -68,14 +64,13 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
-/* overlay content (name short + icon) bottom-left */
 .cine-img-overlay {
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-left: 72px; /* leave space for initial */
+  padding-left: 72px; 
 }
 
 .cine-icon {
@@ -97,12 +92,10 @@
   color: #fff;
 }
 
-/* hover effects (subtle) */
 .cine-card:hover .cine-icon {
   transform: translateY(-4px) scale(1.04);
 }
 
-/* cuerpo de la card */
 .cine-body {
   padding: 1rem;
   color: #fff;

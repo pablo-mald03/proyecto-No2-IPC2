@@ -57,7 +57,7 @@ public class CineDB {
 
     //-------------FIN DEL APARTADO DE EDICION----------------------
     //Constante que permite obtener los cines registrados en la aplicacion para el dashboard del usuario 
-    private final String CONSULTAR_CINE_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine ORDER BY fecha_creacion DESC";
+    private final String CONSULTAR_CINE_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine ORDER BY fecha_creacion DESC LIMIT ? OFFSET ?";
 
     //Constante que permite obtener el cine seleccionado para el dashboard del usuario 
     private final String CONSULTAR_CINE_CODIGO_DASHBOARD = "SELECT codigo, nombre, descripcion, ubicacion FROM cine WHERE codigo = ?";

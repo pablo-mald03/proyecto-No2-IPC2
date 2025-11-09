@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { CinesAsociadosDTO } from "../../models/cines/cines-asociados-dto";
 import { Observable } from "rxjs";
 import { CantidadRegistrosDTO } from "../../models/usuarios/cantidad-registros-dto";
+import { CineInformacionDTO } from "../../models/cines/cine-informacion-dto";
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +26,16 @@ export class CineInformacionService {
         return this.httpClient.get<CantidadRegistrosDTO>(`${this.restConstants.getApiURL()}cines/informacion/cantidad`);
     }
 
-  
+    //Endpoint que retorna dinamicamente la cantidad de cines asociados para el menu principal
+    public listadoRegistrosPrincipal(limite: number, inicio: number): Observable<CineInformacionDTO[]> {
+        return this.httpClient.get<CineInformacionDTO[]>(`${this.restConstants.getApiURL()}cines/informacion/principal/limit/${limite}/offset/${inicio}`);
+    }
+
+    //Endpoint que retorna la informacion de un cine en especifico
+    public informacionCinePorCodigo(idCine: string): Observable<CineInformacionDTO> {
+        return this.httpClient.get<CineInformacionDTO>(`${this.restConstants.getApiURL()}cines/informacion/principal/cine/${idCine}`);
+    }
+
+    
 
 }

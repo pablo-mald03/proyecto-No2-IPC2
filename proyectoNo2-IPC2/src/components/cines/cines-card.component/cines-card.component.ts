@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Cine } from '../../../models/cines/cine';
 import { CommonModule } from '@angular/common';
+import { CineInformacionDTO } from '../../../models/cines/cine-informacion-dto';
 
 @Component({
   selector: 'app-cines-card',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CinesCardComponent {
 
-  @Input() cine!: Cine;
+  @Input() cine!: CineInformacionDTO;
 
 
   private palette = [
