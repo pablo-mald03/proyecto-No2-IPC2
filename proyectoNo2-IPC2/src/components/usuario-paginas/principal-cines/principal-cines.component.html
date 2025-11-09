@@ -2,26 +2,12 @@
 
   <div class="row justify-content-center position-relative">
 
-    <!-- Columna izquierda de anuncios -->
     <div class="col-lg-2 d-none d-lg-flex flex-column align-items-center p-2 ads-col">
-      @if(showAd1){
-      <div class="ad-box">
-        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-1">
-      </div>
-      }
-      @if(showAd2){
-      <div class="ad-box">
-        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-2">
-      </div>
-      }
-      @if(showAd3){
-      <div class="ad-box">
-        <img src="imgs-app/bussiness-cinemaimg.png" class="ad-img" alt="Ad-3">
-      </div>
+      @for (anuncio of anunciosIzquierda; track anuncio.nombre) {
+      <app-anuncios-cards-pagina [anuncio]="anuncio"></app-anuncios-cards-pagina>
       }
     </div>
 
-    <!-- Contenido central -->
     <main class="col-12 col-lg-8 px-3">
       <div class="p-4 bg-dark bg-opacity-75 rounded-4 shadow-lg text-light text-center">
 
@@ -51,9 +37,9 @@
 
 
     <div class="col-lg-2 d-none d-lg-flex flex-column align-items-center p-2 ads-col">
-      <!--@for (anuncio of anunciosLadoIzquierdo; track anuncio.codigo) {
+      @for (anuncio of anunciosDerecha; track anuncio.nombre) {
       <app-anuncios-cards-pagina [anuncio]="anuncio"></app-anuncios-cards-pagina>
-    }-->
+      }
     </div>
 
   </div>

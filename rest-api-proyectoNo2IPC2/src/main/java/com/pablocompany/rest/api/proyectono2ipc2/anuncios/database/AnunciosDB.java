@@ -62,9 +62,13 @@ public class AnunciosDB {
     private final String CAMBIAR_ESTADO_ANUNCIOS = "UPDATE anuncio SET estado = ? WHERE codigo = ?";
 
     //Constante que permite retornar anuncios para mostrar en la pagina de cine
-    private final String ANUNCIOS_MOSTRADOS_SISTEMA = "SELECT a.nombre, a.url, a.texto, a.foto,  ca.codigo AS `codigoTipo`"
-            + "FROM anuncio AS `a` JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo JOIN usuario AS `us` ON us.id = a.id_usuario "
-            + "WHERE a.id IN ( SELECT id FROM anuncio ORDER BY RAND() LIMIT ? );";
+    private final String ANUNCIOS_MOSTRADOS_SISTEMA
+            = "SELECT a.nombre, a.url, a.texto, a.foto, ca.codigo AS codigoTipo "
+            + "FROM ( "
+            + "   SELECT * FROM anuncio ORDER BY RAND() LIMIT ? "
+            + ") AS a "
+            + "JOIN configuracion_anuncio AS ca ON a.codigo_tipo = ca.codigo "
+            + "JOIN usuario AS us ON us.id = a.id_usuario";
 
     //Metodo que sirve para poder cambiar el estado de un anuncio
     public boolean cambiarEstado(CambiarEstadoDTO cambioEstado) throws ErrorInesperadoException, FormatoInvalidoException, DatosNoEncontradosException {
@@ -366,6 +370,7 @@ public class AnunciosDB {
                 AnunciosPublicidadDTO anuncioEncontrado = new AnunciosPublicidadDTO(
                         resultSet.getString("nombre"),
                         resultSet.getString("url"),
+                        resultSet.getString("texto"),
                         convertirBase64Service.convertirImagenAPngBase64(resultSet.getBytes("foto"), resultSet.getInt("codigoTipo")),
                         resultSet.getInt("codigoTipo")
                 );
@@ -374,7 +379,7 @@ public class AnunciosDB {
             }
 
         } catch (SQLException e) {
-            throw new ErrorInesperadoException("No se han podido obtener los datos de los anuncios comprados en el sistema");
+            throw new ErrorInesperadoException("No se han podido obtener los datos de los anuncios comprados en el sistema" + e.getMessage());
         }
 
         return listadoAnuncios;

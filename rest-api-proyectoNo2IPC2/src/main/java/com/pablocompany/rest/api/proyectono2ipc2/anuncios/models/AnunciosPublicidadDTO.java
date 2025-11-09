@@ -14,16 +14,19 @@ public class AnunciosPublicidadDTO {
     
     private String nombre;
     private String url;
+    private String texto;
     private String foto;
     private int codigoTipo;
 
-    public AnunciosPublicidadDTO(String nombre, String url, String foto, int codigoTipo) {
+    public AnunciosPublicidadDTO(String nombre, String url, String texto, String foto, int codigoTipo) {
         this.nombre = nombre;
         this.url = url;
+        this.texto = texto;
         this.foto = foto;
         this.codigoTipo = codigoTipo;
     }
 
+    
     public String getNombre() {
         return nombre;
     }
@@ -38,6 +41,14 @@ public class AnunciosPublicidadDTO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
     }
 
     public String getFoto() {
@@ -55,6 +66,9 @@ public class AnunciosPublicidadDTO {
     public void setCodigoTipo(int codigoTipo) {
         this.codigoTipo = codigoTipo;
     }
+
+   
+    
     
     
     

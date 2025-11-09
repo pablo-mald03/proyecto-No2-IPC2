@@ -1,17 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { CinesCardComponent } from "../../cines/cines-card.component/cines-card.component";
 import { Cine } from '../../../models/cines/cine';
+import { AnunciosCardsPaginaComponent } from "../anuncios-cards-pagina/anuncios-cards-pagina.component";
+import { AnuncioPublicidadDTO } from '../../../models/anuncios/anuncio-publicidad-dto';
+import { PublicidadPincipalService } from '../../../services/principal-service/publicidad-principal.service';
 
 @Component({
   selector: 'app-principal-cines.component',
-  imports: [CinesCardComponent],
+  imports: [CinesCardComponent, AnunciosCardsPaginaComponent],
   templateUrl: './principal-cines.component.html',
   styleUrl: './principal-cines.component.scss'
 })
 export class PrincipalCinesComponent implements OnInit {
 
 
+  anunciosDerecha: AnuncioPublicidadDTO[] = [];
+  anunciosIzquierda: AnuncioPublicidadDTO[] = [];
 
+
+
+  constructor(
+    private publicidadService: PublicidadPincipalService,
+  ) { }
 
   //Pendiente jugar con las peticiones hacia el back
   showAd1 = true;
@@ -31,6 +41,9 @@ export class PrincipalCinesComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.cargarAnunciosAleatorios();
+
     this.cines = [
       {
         codigo: 'CIN001',
@@ -70,7 +83,7 @@ export class PrincipalCinesComponent implements OnInit {
       }
     ];
 
-    this.cargarMasCines(); // carga inicial
+    this.cargarMasCines();
   }
 
   //Metodo que sirve para ir cargando mas cines dinamicamente
@@ -86,6 +99,46 @@ export class PrincipalCinesComponent implements OnInit {
     if (this.indiceActual >= this.cines.length) {
       this.todosCargados = true;
     }
+  }
+
+  //Método para generar número random entre min y max 
+  private generarNumeroAleatorio(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Método para mezclar aleatoriamente un arreglo
+  private shuffleArray<T>(array: T[]): T[] {
+    return array
+      .map(item => ({ item, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ item }) => item);
+  }
+
+  // Cargar anuncios aleatorios desde backend
+  private cargarAnunciosAleatorios(): void {
+    const cantidad = this.generarNumeroAleatorio(3, 6);
+    console.log('Cantidad aleatoria solicitada:', cantidad);
+
+    this.publicidadService.listadoPublicidad(cantidad).subscribe({
+      next: (anuncios: AnuncioPublicidadDTO[]) => {
+        const anunciosBarajados = this.shuffleArray(anuncios);
+
+        // Dividimos aleatoriamente en izquierda y derecha
+        anunciosBarajados.forEach((anuncio, index) => {
+          if (Math.random() < 0.5) {
+            this.anunciosIzquierda.push(anuncio);
+          } else {
+            this.anunciosDerecha.push(anuncio);
+          }
+        });
+
+        console.log('Anuncios izquierda:', this.anunciosIzquierda);
+        console.log('Anuncios derecha:', this.anunciosDerecha);
+      },
+      error: (err) => {
+        console.error('Error al obtener anuncios aleatorios:', err);
+      }
+    });
   }
 
 
