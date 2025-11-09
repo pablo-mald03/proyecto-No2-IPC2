@@ -7,9 +7,12 @@ package com.pablocompany.rest.api.proyectono2ipc2.resources.reportessistema;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.services.NombreReporteRandomService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.GananciasSistemaDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarGananciasAnuncianteService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ExportarGananciasSistemaService;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasAnuncianteService;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services.ReporteGananciasSistemaService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -27,24 +30,23 @@ import java.util.Map;
 @Path("reportes/sistema/ganancias/sistema/exportar")
 public class ExportarReporteGananciasSistema {
 
-    //Endpoint que sirve para exportar a pdf el listado de reporte de ganancias de todo el sistema
+    //Endpoint que permite obtener las ganancias del sistema
     @GET
-    @Path("/inicio/{fechaInicio}/fin/{fechaFin}/limit/{limite}/offset/{inicio}")
-    @Produces("application/pdf")
-    public Response reporteGananciasSistema(
+    @Path("/inicio/{fechaInicio}/fin/{fechaFin}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reporteAnunciantesSinFiltro(
             @PathParam("fechaInicio") String fechaInicio,
-            @PathParam("fechaFin") String fechaFin,
-            @PathParam("limite") String limite,
-            @PathParam("inicio") String inicio) {
+            @PathParam("fechaFin") String fechaFin) {
 
-        ReporteGananciasAnuncianteService reporteGananciasAnuncianteService = new ReporteGananciasAnuncianteService();
+        ReporteGananciasSistemaService reporteGananciasSistemaService = new ReporteGananciasSistemaService();
 
         try {
-            List<ReporteAnuncianteDTO> reporteGananciasDto = reporteGananciasAnuncianteService.obtenerReporteSinFiltro(fechaInicio, fechaFin, limite, inicio);
 
-            ExportarGananciasAnuncianteService exportarReporteService = new ExportarGananciasAnuncianteService();
+            GananciasSistemaDTO reporteGananciasDto = reporteGananciasSistemaService.obtenerReporteGanancias(fechaInicio, fechaFin);
 
-            byte[] pdfData = exportarReporteService.getReporteGananciaAnunciate(reporteGananciasDto);
+            ExportarGananciasSistemaService exportarReporteService = new ExportarGananciasSistemaService();
+
+            byte[] pdfData = exportarReporteService.getReporteGanancias(reporteGananciasDto);
 
             StreamingOutput stream = output -> {
 
@@ -54,7 +56,7 @@ public class ExportarReporteGananciasSistema {
 
             NombreReporteRandomService nombreReporteRandomService = new NombreReporteRandomService();
 
-            String nombreReporte = nombreReporteRandomService.getNombre("ReporteGananciasAnunciante");
+            String nombreReporte = nombreReporteRandomService.getNombre("ReporteGanancias");
 
             return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + nombreReporte + "\"")
@@ -68,7 +70,5 @@ public class ExportarReporteGananciasSistema {
         }
 
     }
-
-   
 
 }

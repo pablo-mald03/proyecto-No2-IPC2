@@ -5,8 +5,9 @@
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services;
 
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.database.ReporteGananciasSistemaBD;
+import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.GananciasSistemaDTO;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ExportarGananciasSistemaService {
 
     //Metodo utilizado para retornar el reporte de las ganancias del sistema
-    public byte[] getReporteGanancias(List<ReporteGananciasSistemaBD> reporteGanancias) throws ErrorInesperadoException {
+    public byte[] getReporteGanancias(GananciasSistemaDTO reporteGanancias) throws ErrorInesperadoException {
 
         InputStream logoEmpresa = getClass().getClassLoader().getResourceAsStream("com/pablocompany/rest/api/reports/img/cinemaAppIcon.png");
 
@@ -38,7 +39,11 @@ public class ExportarGananciasSistemaService {
             throw new ErrorInesperadoException("No se ha podido cargar el reporte Jasper");
         }
 
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reporteGanancias);
+        List<GananciasSistemaDTO> listadoReporte = new ArrayList<>();
+
+        listadoReporte.add(reporteGanancias);
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listadoReporte);
 
         Map<String, Object> params = new HashMap<>();
 
