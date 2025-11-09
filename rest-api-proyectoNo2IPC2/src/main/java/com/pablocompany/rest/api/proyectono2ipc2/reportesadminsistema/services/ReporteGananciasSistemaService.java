@@ -4,20 +4,14 @@
  */
 package com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.services;
 
-import com.pablocompany.rest.api.proyectono2ipc2.excepciones.DatosNoEncontradosException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.ErrorInesperadoException;
 import com.pablocompany.rest.api.proyectono2ipc2.excepciones.FormatoInvalidoException;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadmincine.models.CantidadReportesDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.database.ReporteAnuncianteDB;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.database.ReporteGananciasSistemaBD;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteAnuncianteRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.dtos.ReporteSistemaRequest;
 import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.GananciasSistemaDTO;
-import com.pablocompany.rest.api.proyectono2ipc2.reportesadminsistema.models.ReporteAnuncianteDTO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -36,7 +30,7 @@ public class ReporteGananciasSistemaService {
 
         //Retorna todo el listado 
         if (reporteRequest.estaVacia()) {
-            //return reporteAnunciante.obtenerReporteTodoAnunciante(reporteRequest);
+            return reporteGananciasDb.obtenerReporteTodoGanancias();
         }
 
         if (reporteRequest.validarRequest()) {

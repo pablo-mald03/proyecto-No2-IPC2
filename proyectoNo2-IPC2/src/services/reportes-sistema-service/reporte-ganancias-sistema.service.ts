@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CantidadReportesDTO } from "../../models/reportes/cantidad-reportes-dto";
 import { ReporteAnuncianteDTO } from "../../models/reportes/anunciante-dto";
+import { GananciasSistemaDTO } from "../../models/reportes/ganancias-sistema-dto";
 
 
 @Injectable({
@@ -19,8 +20,8 @@ export class GananciasSistemaService {
     constructor(private httpClient: HttpClient) { }
 
     //Endpoint que retorna el listado de reportes de ganancias del sistema
-    public reportesGananciasSistema(fechaInicio: string, fechaFin: string, limite: number, inicio: number): Observable<ReporteAnuncianteDTO []> {
-        return this.httpClient.get<ReporteAnuncianteDTO []>(`${this.restConstants.getApiURL()}reportes/sistema/ganancias/sistema/inicio/${fechaInicio}/fin/${fechaFin}/limit/${limite}/offset/${inicio}`);
+    public reportesGananciasSistema(fechaInicio: string, fechaFin: string): Observable<GananciasSistemaDTO> {
+        return this.httpClient.get<GananciasSistemaDTO>(`${this.restConstants.getApiURL()}reportes/sistema/ganancias/sistema/inicio/${fechaInicio}/fin/${fechaFin}`);
     }
 
 

@@ -4,12 +4,16 @@
         <h4 class="fw-bold mb-0 text-white">
             <i class="bi bi-graph-up-arrow me-2"></i>Ganancias del Sistema
         </h4>
-        <span class="badge bg-success fs-6 fw-semibold px-3 py-2 mx-5">
-            Total Q{{ gananciaProcesada.totalGanancia | number: '1.2-2' }}
-        </span>
+
     </div>
 
     <div class="totales-container mt-3 d-flex flex-wrap justify-content-around text-center mb-4">
+
+        <div class="total-box bg-dark bg-opacity-75 rounded-4 p-3 shadow-sm">
+            <p class="fw-semibold text-info mb-1">Total Ganancias</p>
+            <h5 class="fw-bold text-light mb-0">Q{{ gananciaProcesada.totalGanancia | number: '1.2-2' }}</h5>
+        </div>
+
         <div class="total-box bg-dark bg-opacity-75 rounded-4 p-3 shadow-sm">
             <p class="fw-semibold text-warning mb-1">Total Ingresos</p>
             <h5 class="fw-bold text-light mb-0">Q{{ gananciaProcesada.totalIngresos | number: '1.2-2' }}</h5>
@@ -73,7 +77,7 @@
                         <th>Fecha de Pago</th>
                     </tr>
                 </thead>
-                <tbody >
+                <tbody>
                     @for (pago of gananciaProcesada.pagoBloqueoAnuncios; track pago.fechaPago) {
                     <tr>
                         <td>{{ pago.idUsuario }}</td>

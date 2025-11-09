@@ -25,7 +25,7 @@
             </div>
 
             <div class="text-center mt-md-4 d-flex gap-2">
-                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="filtrar()">
+                <button type="button" class="btn btn-filtros rounded-pill px-4 py-2 fw-semibold" (click)="generarReporte()">
                     <i class="bi bi-funnel-fill me-2"></i>Generar
                 </button>
 
@@ -42,25 +42,25 @@
             </button>
         </div>
 
+        <ng-container *ngIf="mostrarPopup">
+            <app-shared-popup [mensaje]="mensajePopup" [tipo]="tipoPopup" [mostrar]="mostrarPopup"
+                (cerrarEvent)="mostrarPopup = false">
+            </app-shared-popup>
+        </ng-container>
 
         <div class="reportes-grid d-flex flex-column justify-content-center align-items-center gap-4">
-            @for (ganancia of reportesMostrados; track ganancia.totalGanancia) {
-            <app-reporte-ganacias-cards [gananciaProcesada]="ganancia"></app-reporte-ganacias-cards >
+
+
+            @if (reportesMostrados) {
+            <app-reporte-ganacias-cards [gananciaProcesada]="reportesMostrados"></app-reporte-ganacias-cards>
             }
-            @empty {
+            @else {
             <div class="text-center text-light mt-5">
                 <h5>No hay reportes de ganancias en el intervalo</h5>
             </div>
             }
 
-
-
         </div>
 
-        <div class="text-center mt-4">
-            <button class="btn btn-cargar-mas" (click)="cargarMasReportes()" [disabled]="todosCargados">
-                {{ todosCargados ? 'No hay más Ganancias' : 'Cargar más' }}
-            </button>
-        </div>
     </div>
 </main>

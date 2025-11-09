@@ -1,9 +1,9 @@
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-shared-popup',
-  imports: [NgIf],
+  imports: [NgIf, CommonModule],
   templateUrl: './shared-popup.component.html',
   styleUrl: './shared-popup.component.scss'
 })

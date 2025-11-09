@@ -1,163 +1,204 @@
 import { Component, OnInit } from '@angular/core';
 import { GananciasSistemaDTO } from '../../../models/reportes/ganancias-sistema-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 import { ReporteGanaciasCardsComponent } from "../reporte-ganacias-cards/reporte-ganacias-cards.component";
+import { Popup } from '../../../shared/popup/popup';
+import { ExportarGananciasSistemaService } from '../../../services/reportes-sistema-service/exportar-ganancias-sistema.service';
+import { GananciasSistemaService } from '../../../services/reportes-sistema-service/reporte-ganancias-sistema.service';
+import { HttpResponse } from '@angular/common/http';
+import { SharedPopupComponent } from "../../pop-ups/shared-popup.component/shared-popup.component";
 
 @Component({
   selector: 'app-reporte-ganancias',
-  imports: [ReactiveFormsModule, NgClass, ReporteGanaciasCardsComponent],
+  imports: [ReactiveFormsModule, NgClass, ReporteGanaciasCardsComponent, SharedPopupComponent, NgIf, CommonModule],
   templateUrl: './reporte-ganancias.component.html',
-  styleUrl: './reporte-ganancias.component.scss'
+  styleUrl: './reporte-ganancias.component.scss',
+  providers: [Popup],
 })
-export class ReporteGananciasComponent implements OnInit{
+export class ReporteGananciasComponent implements OnInit {
 
   //Apartado de atributos que sirven para exponer los dto
-  reporteGanancias: GananciasSistemaDTO[] = [];
-  reportesMostrados: GananciasSistemaDTO[] = [];
+  reportesMostrados: GananciasSistemaDTO | null = null;
 
-  //Apartado de atributos que sirven para cargar dinamicamente los atributos
-  indiceActual = 0;
-  cantidadPorCarga = 2;
-  todosCargados = false;
+
+  //Atributos para mostrar el popup cuando haya un error
+  mostrarPopup: boolean = false;
+  mensajePopup: string = '';
+  tipoPopup: 'error' | 'exito' | 'info' = 'info';
+  popupKey = 0;
+
 
   //Atributos que sirven para gestionar los filtros
   filtrosForm!: FormGroup;
 
   constructor(
-    private formBuild: FormBuilder
+    private formBuild: FormBuilder,
+    private popUp: Popup,
+    private exportarReporteGananciasService: ExportarGananciasSistemaService,
+    private reporteGananciasService: GananciasSistemaService,
 
   ) { }
 
 
   ngOnInit(): void {
 
-    //Se teneran los filtros reactivos
     this.filtrosForm = this.formBuild.group({
       fechaInicio: [null],
       fechaFin: [null]
     });
 
-    this.reporteGanancias = [
-      {
-        costosCine: [
-          {
-            codigo: 'CIN-001',
-            nombre: 'Alba Cinema',
-            montoOcultacion: 2000,
-            fechaCreacion: new Date('2025-02-15'),
-            costosAsociados: [
-              {
-                costo: 300,
-                fechaModificacion: new Date('2025-03-15')
+    this.popUp.popup$.subscribe(data => {
+      this.mensajePopup = data.mensaje;
+      this.tipoPopup = data.tipo;
 
-              },
-              {
-                costo: 200,
-                fechaModificacion: new Date('2025-04-15')
+      this.mostrarPopup = false;
 
-              }
-            ]
-          },
-          {
-            codigo: 'CIN-002',
-            nombre: 'Cinepolis',
-            montoOcultacion: 1000,
-            fechaCreacion: new Date('2025-01-15'),
-            costosAsociados: [
-              {
-                costo: 400,
-                fechaModificacion: new Date('2025-03-12')
+      setTimeout(() => {
+        this.popupKey++;
+        this.mostrarPopup = true;
+      }, 10);
 
-              },
-              {
-                costo: 500,
-                fechaModificacion: new Date('2025-04-13')
-
-              }
-            ]
-          }
-        ],
-
-        anunciosComprados: [
-          {
-            codigo: 'AN-2025-001',
-            nombre: 'Campaña de Verano - CineNova',
-            fechaCompra: new Date('2025-03-12'),
-            monto: 123,
-            usuario: 'patito-01'
-          },
-          {
-            codigo: 'AN-2025-002',
-            nombre: 'Promoción Película Épica',
-            fechaCompra: new Date('2025-06-01'),
-            monto: 203,
-            usuario: 'papito-01'
-          },
-          {
-            codigo: 'AN-2025-003',
-            nombre: 'Lanzamiento Serie Animada',
-            fechaCompra: new Date('2025-08-25'),
-            monto: 153,
-            usuario: 'pepito-01'
-          }
-        ],
-
-        pagoBloqueoAnuncios: [
-          {
-            idUsuario: 'USR-001',
-            monto: 450,
-            fechaPago: new Date('2025-04-20')
-          },
-          {
-            idUsuario: 'USR-002',
-            monto: 600,
-            fechaPago: new Date('2025-07-10')
-          },
-          {
-            idUsuario: 'USR-003',
-            monto: 300,
-            fechaPago: new Date('2025-09-03')
-          }
-        ],
-
-        totalCostoCine: 30000,
-        totalIngresos: 68500,
-        totalGanancia: 38500
+      if (data.duracion) {
+        setTimeout(() => {
+          this.mostrarPopup = false;
+        }, data.duracion);
       }
-    ];
 
 
-    this.cargarMasReportes();
+    });
+
   }
 
+  //Metodo que sirve para redireccionar cuando se exporta un reporte
+  descargarReporte(respuesta: HttpResponse<Blob>) {
+    const contentDisposition = respuesta.headers.get('Content-Disposition');
 
-  //Metodo que sirve para cargar mas y no mostrar todos de golpe
-  cargarMasReportes(): void {
-    const siguienteBloque = this.reporteGanancias.slice(
-      this.indiceActual,
-      this.indiceActual + this.cantidadPorCarga
-    );
-
-    this.reportesMostrados.push(...siguienteBloque);
-    this.indiceActual += this.cantidadPorCarga;
-
-    if (this.indiceActual >= this.reporteGanancias.length) {
-      this.todosCargados = true;
+    let fileName = 'ReporteGanancias.pdf';
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match && match[1]) {
+        fileName = match[1];
+      }
     }
+
+    const url = window.URL.createObjectURL(respuesta.body!);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    this.popUp.mostrarPopup({ mensaje: 'Reporte generado correctamente', tipo: 'exito' });
+
   }
+
+  //Metodo implementado para mostrar los mensajes de errores
+  mostrarError(errorEncontrado: any) {
+    let mensaje = 'Ocurrió un error';
+
+    if (errorEncontrado.error && errorEncontrado.error.mensaje) {
+      mensaje = errorEncontrado.error.mensaje;
+    } else if (errorEncontrado.message) {
+      mensaje = errorEncontrado.message;
+    }
+
+    this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+
+  }
+
 
 
   //Metodo que sirve para mandar a exportar el reporte
   exportarReporte() {
 
 
+    if (this.reportesMostrados == null) {
+      const mensaje = 'Genera primero los reportes para poder exportarlos';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'info' });
+      return;
+    }
+
+
+    if (this.filtrosForm.invalid || this.fechaInvalida) {
+      return;
+    }
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+
+
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
+
+
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
+
+
+
+    this.exportarReporteGananciasService.exportarReporteGanancias(inicioISO, finISO).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+
+        this.descargarReporte(response);
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
   }
 
-  //Metodo get que sirve para validar si la fecha inicial antecede a la final
+  //metodo encargado para generar el reporte
+  generarReporte(): void {
+
+
+    if (this.filtrosForm.invalid || this.fechaInvalida) return;
+
+    const { fechaInicio, fechaFin } = this.filtrosForm.value;
+
+    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString().split('T')[0] : 'null';
+    const finISO = fechaFin ? new Date(fechaFin).toISOString().split('T')[0] : 'null';
+
+    if ((inicioISO === 'null' && finISO !== 'null') ||
+      (inicioISO !== 'null' && finISO === 'null')) {
+      const mensaje = 'Selecciona ambos intervalos de fecha';
+      this.popUp.mostrarPopup({ mensaje, tipo: 'error' });
+      return;
+    }
+
+
+
+    this.reporteGananciasService.reportesGananciasSistema(inicioISO, finISO).subscribe({
+      next: (response: GananciasSistemaDTO) => {
+
+        this.reportesMostrados = response;
+
+
+      },
+      error: (error: any) => {
+
+        this.mostrarError(error);
+
+      }
+    });
+
+
+  }
+
+  //Verifica si la fehca es valida 
   get fechaInvalida(): boolean {
     const inicio = this.filtrosForm.get('fechaInicio')?.value;
     const fin = this.filtrosForm.get('fechaFin')?.value;
+
     if (!inicio || !fin) return false;
     return new Date(inicio) > new Date(fin);
   }
@@ -172,26 +213,18 @@ export class ReporteGananciasComponent implements OnInit{
     }
   }
 
-  //Metodo que sirve para filtrar
-  filtrar(): void {
 
-    if (this.filtrosForm.invalid || this.fechaInvalida) return;
 
-    const { fechaInicio, fechaFin } = this.filtrosForm.value;
-
-    const inicioISO = fechaInicio ? new Date(fechaInicio).toISOString() : null;
-    const finISO = fechaFin ? new Date(fechaFin).toISOString() : null;
-
-    //Pendiente hacer la query
-    console.log('trilin');
-
-  }
-
+  //Metodo que sirve para limpiar las fechas de reporte
   limpiarFechas(): void {
     this.filtrosForm.reset();
+
+    this.filtrosForm.patchValue({
+      fechaInicio: null,
+      fechaFin: null
+    });
+
+    this.reportesMostrados = null;
   }
-
-
-
 
 }
