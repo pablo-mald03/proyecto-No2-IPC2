@@ -36,7 +36,6 @@ peliculaForm: FormGroup;
 
     this.archivoPoster = file;
 
-    // Mostrar vista previa
     const reader = new FileReader();
     reader.onload = () => {
       this.posterPreview = reader.result;

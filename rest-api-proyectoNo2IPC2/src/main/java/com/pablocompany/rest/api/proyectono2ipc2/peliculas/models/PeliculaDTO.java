@@ -10,12 +10,11 @@ import java.time.LocalDate;
  *
  * @author pablo
  */
-//Clase delegada para manejar el objeto indicado para poder crear la nueva pelicula
-public class Pelicula {
+public class PeliculaDTO {
 
     private String codigo;
     private String nombre;
-    private byte[] poster;
+    private String poster;
     private String sinopsis;
     private String cast;
     private LocalDate fechaEstreno;
@@ -24,7 +23,7 @@ public class Pelicula {
     private String clasificacion;
     private double duracion;
 
-    public Pelicula(String codigo, String nombre, byte[] poster, String sinopsis, String cast, LocalDate fechaEstreno, String pdirector, double precio, String clasificacion, double duracion) {
+    public PeliculaDTO(String codigo, String nombre, String poster, String sinopsis, String cast, LocalDate fechaEstreno, String pdirector, double precio, String clasificacion, double duracion) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.poster = poster;
@@ -37,7 +36,6 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-  
     public String getCodigo() {
         return codigo;
     }
@@ -54,11 +52,11 @@ public class Pelicula {
         this.nombre = nombre;
     }
 
-    public byte[] getPoster() {
+    public String getPoster() {
         return poster;
     }
 
-    public void setPoster(byte[] poster) {
+    public void setPoster(String poster) {
         this.poster = poster;
     }
 
@@ -117,8 +115,5 @@ public class Pelicula {
     public void setDuracion(double duracion) {
         this.duracion = duracion;
     }
-    
-    
-    
 
 }
